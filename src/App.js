@@ -29,7 +29,7 @@ const LoginForm = () => {
   useEffect(() => {
     setDocumentAttributes(
       "Login",
-      "https://cdn.iconscout.com/icon/free/png-512/free-user-1912185-1617654.png?f=webp&w=512"
+      "https://cdn.iconscout.com/icon/premium/png-512-thumb/user-239-95852.png?f=webp&w=256"
     );
   }, []);
   return (
@@ -52,7 +52,7 @@ const DoctorLogin = () => {
   useEffect(() => {
     setDocumentAttributes(
       "Doctor Login",
-      "https://cdn.iconscout.com/icon/premium/png-512-thumb/doctor-567-1118047.png?f=webp&w=512"
+      "https://cdn.iconscout.com/icon/free/png-512/free-doctor-2315657-1921402.png?f=webp&w=256"
     );
   }, []);
   return (
@@ -75,7 +75,7 @@ const AdminLogin = () => {
   useEffect(() => {
     setDocumentAttributes(
       "Admin Login",
-      "https://icons8.com/icon/52234/admin-settings-male"
+      "https://cdn.iconscout.com/icon/premium/png-512-thumb/admin-2058043-1747996.png?f=webp&w=256"
     );
   }, []);
   return (
