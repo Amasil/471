@@ -24,8 +24,18 @@ body {
 }
 
 .topnav a.active {
-  background-color: #04AA6D;
+  background-color: #04aa6d;
   color: white;
+}
+
+.topnav a.home {
+  float: left; /* Move the Home link to the left */
+  padding: 14px 16px; /* Adjust padding for alignment */
+}
+
+.topnav a.home img {
+  width: 20px; /* Adjust the width as needed */
+  height: 20px; /* Adjust the height as needed */
 }
 
 .login-container {
