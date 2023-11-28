@@ -98,7 +98,7 @@ const App = () => {
     <Router>
       <Navigation />
       <Routes>
-        <Route path="/" element={<LoginForm />} />
+        <Route path="*" element={<LoginForm />} />
         <Route path="/login-doctor" element={<DoctorLogin />} />
         <Route path="/login-admin" element={<AdminLogin />} />
       </Routes>
