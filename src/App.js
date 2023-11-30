@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import DoctorDashboard from "./DoctorDashboard";
+import AdminDashBoard from "./AdminDashboard";
+import UserDashboard from "./UserDashboard";
 import {
   BrowserRouter as Router,
   Link,
@@ -42,7 +45,7 @@ const LoginForm = () => {
     // Check if the username and password are valid (for simplicity, using admin/admin)
     if (username === "admin" && password === "admin") {
       // Navigate to the next page (you can replace this with your actual logic)
-      navigate("/dashboard");
+      navigate("/user-dashboard");
     } else {
       alert("Invalid username or password");
     }
@@ -95,7 +98,7 @@ const DoctorLogin = () => {
 
     // Check if the username and password are valid (for simplicity, using admin/admin)
     if (username === "admin" && password === "admin") {
-      // Navigate to the next page (you can replace this with your actual logic)
+      // Navigate to the doctor dashboard page
       navigate("/doctor-dashboard");
     } else {
       alert("Invalid username or password");
@@ -201,6 +204,10 @@ const App = () => {
         <Route path="*" element={<LoginForm />} />
         <Route path="/login-doctor" element={<DoctorLogin />} />
         <Route path="/login-admin" element={<AdminLogin />} />
+        <Route path="/doctor-dashboard" element={<DoctorDashboard />} />{" "}
+        <Route path="/admin-dashboard" element={<AdminDashBoard />} />{" "}
+        <Route path="/user-dashboard" element={<UserDashboard />} />{" "}
+        {/* Add this line */}
       </Routes>
     </Router>
   );
