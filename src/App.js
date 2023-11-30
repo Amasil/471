@@ -1,5 +1,11 @@
-import React, { useEffect } from "react";
-import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Link,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
 import "./App.css";
 
 const Navigation = () => {
@@ -26,21 +32,52 @@ const setDocumentAttributes = (title, faviconHref) => {
 };
 
 const LoginForm = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Check if the username and password are valid (for simplicity, using admin/admin)
+    if (username === "admin" && password === "admin") {
+      // Navigate to the next page (you can replace this with your actual logic)
+      navigate("/dashboard");
+    } else {
+      alert("Invalid username or password");
+    }
+  };
+
   useEffect(() => {
     setDocumentAttributes(
       "Login",
       "https://cdn.iconscout.com/icon/premium/png-512-thumb/user-239-95852.png?f=webp&w=256"
     );
   }, []);
+
   return (
     <div className="login-container">
       <h2>Login</h2>
-      <form action="#" method="post">
+      <form onSubmit={handleSubmit}>
         <label htmlFor="username">Username:</label>
-        <input type="text" id="username" name="username" required />
+        <input
+          type="text"
+          id="username"
+          name="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
 
         <label htmlFor="password">Password:</label>
-        <input type="password" id="password" name="password" required />
+        <input
+          type="password"
+          id="password"
+          name="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
         <button type="submit">Login</button>
       </form>
@@ -49,21 +86,52 @@ const LoginForm = () => {
 };
 
 const DoctorLogin = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Check if the username and password are valid (for simplicity, using admin/admin)
+    if (username === "admin" && password === "admin") {
+      // Navigate to the next page (you can replace this with your actual logic)
+      navigate("/doctor-dashboard");
+    } else {
+      alert("Invalid username or password");
+    }
+  };
+
   useEffect(() => {
     setDocumentAttributes(
       "Doctor Login",
       "https://cdn.iconscout.com/icon/free/png-512/free-doctor-2315657-1921402.png?f=webp&w=256"
     );
   }, []);
+
   return (
     <div className="login-container">
       <h2>Doctor Login</h2>
-      <form action="#" method="post">
+      <form onSubmit={handleSubmit}>
         <label htmlFor="username">Username:</label>
-        <input type="text" id="username" name="username" required />
+        <input
+          type="text"
+          id="username"
+          name="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
 
         <label htmlFor="password">Password:</label>
-        <input type="password" id="password" name="password" required />
+        <input
+          type="password"
+          id="password"
+          name="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
         <button type="submit">Login</button>
       </form>
@@ -72,27 +140,59 @@ const DoctorLogin = () => {
 };
 
 const AdminLogin = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Check if the username and password are valid (for simplicity, using admin/admin)
+    if (username === "admin" && password === "admin") {
+      // Navigate to the next page (you can replace this with your actual logic)
+      navigate("/admin-dashboard");
+    } else {
+      alert("Invalid username or password");
+    }
+  };
+
   useEffect(() => {
     setDocumentAttributes(
       "Admin Login",
       "https://cdn.iconscout.com/icon/premium/png-512-thumb/admin-2058043-1747996.png?f=webp&w=256"
     );
   }, []);
+
   return (
     <div className="login-container">
       <h2>Admin Login</h2>
-      <form action="#" method="post">
+      <form onSubmit={handleSubmit}>
         <label htmlFor="username">Username:</label>
-        <input type="text" id="username" name="username" required />
+        <input
+          type="text"
+          id="username"
+          name="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
 
         <label htmlFor="password">Password:</label>
-        <input type="password" id="password" name="password" required />
+        <input
+          type="password"
+          id="password"
+          name="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
         <button type="submit">Login</button>
       </form>
     </div>
   );
 };
+
 const App = () => {
   return (
     <Router>
