@@ -2,51 +2,39 @@ $(document).ready(function () {
   // Event handler for username input
   $("#register-username").on("input", function () {
     checkUsernameAvailability();
+    updateSubmitButton();
   });
 
   // Event handler for email input
   $("#register-email").on("input", function () {
     checkEmailAvailability();
+    updateSubmitButton();
   });
 
   // Event handler for phone input
   $("#register-phone").on("input", function () {
     checkPhoneAvailability();
+    updateSubmitButton();
   });
 
-  // Validation functions for different login types
-  function validateLogin(redirectPage) {
-    var username = document.getElementById("username").value;
-    var password = document.getElementById("password").value;
-
-    // Check if the credentials match the desired values
-    if (username === "admin" && password === "admin") {
-      // Redirect to the specified dashboard page
-      window.location.href = redirectPage;
-      return false; // Prevent the form from submitting
-    }
-
-    // If the credentials don't match, the form will submit as usual
-    return true;
-  }
-
-  // Event handlers for form submissions
+  // Event handler for form submission
   $("#registrationForm").submit(function () {
     // If everything is valid, the form will submit as usual
     return true;
   });
 
-  $("#userLoginForm").submit(function () {
-    return validateLogin("userDashboard.html");
-  });
+  // Function to update the submit button based on form validity
+  function updateSubmitButton() {
+    var form = $("#registrationForm")[0];
+    var submitButton = $("#registerButton")[0];
 
-  $("#doctorLoginForm").submit(function () {
-    return validateLogin("doctorDashboard.html");
-  });
-
-  $("#adminLoginForm").submit(function () {
-    return validateLogin("adminDashboard.html");
-  });
+    // Check if the form is valid
+    if (form.checkValidity()) {
+      submitButton.disabled = false;
+    } else {
+      submitButton.disabled = true;
+    }
+  }
 
   // Function to check username availability
   function checkUsernameAvailability() {

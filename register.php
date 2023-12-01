@@ -14,6 +14,9 @@ if ($conn->connect_error) {
 
 // Process user registration
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $firstName = mysqli_real_escape_string($conn, $_POST["register-firstName"]);
+    $middleName = mysqli_real_escape_string($conn, $_POST["register-middleName"]);
+    $lastName = mysqli_real_escape_string($conn, $_POST["register-lastName"]);
     $username = mysqli_real_escape_string($conn, $_POST["register-username"]);
     $password = mysqli_real_escape_string($conn, $_POST["register-password"]);
     $email = mysqli_real_escape_string($conn, $_POST["register-email"]);
@@ -25,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     // Insert data into User table
-    $sql = "INSERT INTO User (Username, Password, Email, Phone_No, Blood_Group, Last_Donation_Date) VALUES ('$username', '$hashedPassword', '$email', '$phone', '$bloodGroup', '$lastDonationDate')";
+    $sql = "INSERT INTO User (First_Name, Middle_Name, Last_Name, Username, Password, Email, Phone_No, Blood_Group, Last_Donation_Date) VALUES ('$firstName', '$middleName', '$lastName', '$username', '$hashedPassword', '$email', '$phone', '$bloodGroup', '$lastDonationDate')";
 
     if ($conn->query($sql) === TRUE) {
         echo "<script type=\"text/javascript\">" .

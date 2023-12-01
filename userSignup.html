@@ -17,6 +17,15 @@
   <div class="login-container">
     <h2>User Registration</h2>
     <form id="registrationForm" action="register.php" method="post">
+      <label for="firstName" class="required">First Name:</label>
+      <input type="text" id="register-firstName" name="register-firstName" required /><br />
+
+      <label for="middleName">Middle Name:</label>
+      <input type="text" id="register-middleName" name="register-middleName" /><br />
+
+      <label for="lastName" class="required">Last Name:</label>
+      <input type="text" id="register-lastName" name="register-lastName" required /><br />
+
       <label for="username" class="required">Username:</label>
       <input type="text" id="register-username" name="register-username" required />
       <span id="usernameAvailability"></span><br />
@@ -48,7 +57,7 @@
       <label for="lastDonationDate">Last Donation Date:</label>
       <input type="date" id="register-lastDonationDate" name="register-lastDonationDate" />
       <p class="note">Leave empty if unsure</p>
-      <button type="submit">Register</button>
+      <button type="submit" id="registerButton">Register</button>
       <p class="note-asterisk">Note: Fields marked with <span style="font-size: 1.2em;">(*)</span> are mandatory</p>
 
     </form>
