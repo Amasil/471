@@ -1,44 +1,50 @@
-function validateUserLogin() {
-  var username = document.getElementById("username").value;
-  var password = document.getElementById("password").value;
+$(document).ready(function () {
+  $("#username").on("input", function () {
+    var username = $(this).val();
+    $.post("check_username.php", { username: username }, function (data) {
+      if (data === "taken") {
+        $("#usernameAvailability")
+          .text("Username not available")
+          .css("color", "red");
+      } else {
+        $("#usernameAvailability")
+          .text("Username available")
+          .css("color", "green");
+      }
+    });
+  });
 
-  // Check if the credentials match the desired values
-  if (username === "admin" && password === "admin") {
-    // Redirect to the dashboard page
-    window.location.href = "userDashboard.html";
-    return false; // Prevent the form from submitting
+  // Validation functions for different login types
+  function validateLogin(redirectPage) {
+    var username = document.getElementById("username").value;
+    var password = document.getElementById("password").value;
+
+    // Check if the credentials match the desired values
+    if (username === "admin" && password === "admin") {
+      // Redirect to the specified dashboard page
+      window.location.href = redirectPage;
+      return false; // Prevent the form from submitting
+    }
+
+    // If the credentials don't match, the form will submit as usual
+    return true;
   }
 
-  // If the credentials don't match, the form will submit as usual
-  return true;
-}
+  // Event handlers for form submissions
+  $("#registrationForm").submit(function () {
+    // If everything is valid, the form will submit as usual
+    return true;
+  });
 
-function validateDoctorLogin() {
-  var username = document.getElementById("username").value;
-  var password = document.getElementById("password").value;
+  $("#userLoginForm").submit(function () {
+    return validateLogin("userDashboard.html");
+  });
 
-  // Check if the credentials match the desired values
-  if (username === "admin" && password === "admin") {
-    // Redirect to the dashboard page
-    window.location.href = "doctorDashboard.html";
-    return false; // Prevent the form from submitting
-  }
+  $("#doctorLoginForm").submit(function () {
+    return validateLogin("doctorDashboard.html");
+  });
 
-  // If the credentials don't match, the form will submit as usual
-  return true;
-}
-
-function validateAdminLogin() {
-  var username = document.getElementById("username").value;
-  var password = document.getElementById("password").value;
-
-  // Check if the credentials match the desired values
-  if (username === "admin" && password === "admin") {
-    // Redirect to the dashboard page
-    window.location.href = "adminDashboard.html";
-    return false; // Prevent the form from submitting
-  }
-
-  // If the credentials don't match, the form will submit as usual
-  return true;
-}
+  $("#adminLoginForm").submit(function () {
+    return validateLogin("adminDashboard.html");
+  });
+});

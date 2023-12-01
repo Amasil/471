@@ -16,9 +16,10 @@
     </div>
     <div class="login-container">
       <h2>User Registration</h2>
-      <form action="register.php" method="post">
+      <form id="registrationForm" action="register.php" method="post">
         <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required /><br />
+        <input type="text" id="username" name="username" required />
+        <span id="usernameAvailability"></span><br />
 
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required /><br />
@@ -32,6 +33,7 @@
         <button type="submit">Register</button>
       </form>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
