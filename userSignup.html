@@ -3,32 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Login</title>
+    <title>User Registration</title>
     <link rel="stylesheet" href="style.css" />
-    <link
-      rel="icon"
-      type="image/x-icon"
-      href="https://cdn.iconscout.com/icon/premium/png-512-thumb/user-239-95852.png?f=webp&w=256"
-    />
   </head>
   <body>
     <div class="topnav">
       <a href="login-doctor.html">Doctor Login</a>
-      <a href="userSignup.html">Sign Up as Donor</a>
+      <a href="login-admin.html">Admin Login</a>
       <a href="index.html" class="home"
         ><img src="https://img.icons8.com/ios/50/000000/home.png" alt="Home"
       /></a>
     </div>
     <div class="login-container">
-      <h2>Login</h2>
-      <form action="#" method="post" onsubmit="return validateUserLogin()">
+      <h2>User Registration</h2>
+      <form action="register.php" method="post">
         <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required />
+        <input type="text" id="username" name="username" required /><br />
 
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required />
+        <input type="password" id="password" name="password" required /><br />
 
-        <button type="submit">Login</button>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required /><br />
+
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" required /><br />
+
+        <button type="submit">Register</button>
       </form>
     </div>
     <script src="script.js"></script>

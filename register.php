@@ -23,7 +23,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "INSERT INTO User (Username, Password, Email, Phone_No) VALUES ('$username', '$password', '$email', '$phone')";
 
     if ($conn->query($sql) === TRUE) {
-        echo "User registered successfully";
+        echo "<script type=\"text/javascript\">" .
+            "alert('User registered successfully');" .
+            "window.location = 'index.html';" .
+            "</script>";
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
