@@ -2,7 +2,7 @@ body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
   margin: 0;
-  padding: 0; /* Remove default body padding */
+  padding: 0;
 }
 
 .topnav {
@@ -11,7 +11,7 @@ body {
 
 .topnav a {
   float: right;
-  color: black; /* Change text color to black */
+  color: black;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
@@ -29,13 +29,13 @@ body {
 }
 
 .topnav a.home {
-  float: left; 
-  padding: 14px 16px; 
+  float: left;
+  padding: 14px 16px;
 }
 
 .topnav a.home img {
-  width: 20px; 
-  height: 20px; 
+  width: 20px;
+  height: 20px;
 }
 
 .login-container {
@@ -44,7 +44,7 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
   width: 300px;
-  margin: 20px auto; /* Center the login container horizontally */
+  margin: 20px auto;
 }
 
 h2 {
@@ -58,7 +58,9 @@ label {
   color: #555;
 }
 
-input {
+input,
+select,
+button {
   width: 100%;
   padding: 8px;
   margin-bottom: 10px;
@@ -67,10 +69,25 @@ input {
   border-radius: 4px;
 }
 
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 8px;
+  background-color: #fff;
+  background-image: url("https://img.icons8.com/material-outlined/24/000000/chevron-down.png");
+  background-position: right 10px center;
+  background-repeat: no-repeat;
+}
+
+input[type="date"] {
+  padding: 8px;
+}
+
 button {
   width: 100%;
   padding: 10px;
-  margin-top: 25px;
+  margin-top: 15px; /* Adjusted margin */
   background-color: #4caf50;
   color: #fff;
   border: none;
@@ -80,4 +97,19 @@ button {
 
 button:hover {
   background-color: #45a049;
+}
+
+label.required::before {
+  content: "* ";
+  color: #ff0000;
+}
+.note {
+  font-size: 12px;
+  color: #555;
+  margin-top: 5px;
+}
+.note-asterisk {
+  font-size: 12px;
+  color: red;
+  margin-top: 5px;
 }
