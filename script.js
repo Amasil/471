@@ -81,9 +81,9 @@ $(document).ready(function () {
     var phone = $("#register-phone").val();
     $.post("check_phone.php", { phone: phone }, function (data) {
       if (data === "taken") {
-        $("#phoneAvailability").text("Phone not available").css("color", "red");
+        $("#telAvailability").text("Phone not available").css("color", "red");
       } else {
-        $("#phoneAvailability").text("Phone available").css("color", "green");
+        $("#telAvailability").text("Phone available").css("color", "green");
       }
     });
   }
