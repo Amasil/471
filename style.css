@@ -29,13 +29,13 @@ body {
 }
 
 .topnav a.home {
-  float: left; /* Move the Home link to the left */
-  padding: 14px 16px; /* Adjust padding for alignment */
+  float: left; 
+  padding: 14px 16px; 
 }
 
 .topnav a.home img {
-  width: 20px; /* Adjust the width as needed */
-  height: 20px; /* Adjust the height as needed */
+  width: 20px; 
+  height: 20px; 
 }
 
 .login-container {
@@ -61,7 +61,7 @@ label {
 input {
   width: 100%;
   padding: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 4px;
