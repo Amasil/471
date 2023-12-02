@@ -1,45 +1,55 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 
 const Users = () => {
-  // State to store the list of users
   const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
 
-  // useEffect to fetch users when the component mounts
   useEffect(() => {
-    // Define an async function for fetching users
     const fetchAllUsers = async () => {
       try {
-        // Make a GET request to the API endpoint
         const res = await axios.get("http://localhost:3000/user");
-
-        // Update the state with the received user data
         setUsers(res.data);
-
-        // Log the received data for debugging purposes
-        console.log(res.data);
       } catch (err) {
-        // Log any errors that occur during the fetch
         console.error("Error fetching users:", err);
       }
     };
 
-    // Call the fetchAllUsers function
     fetchAllUsers();
-  }, []); // The empty dependency array ensures that this effect runs only once on component mount
+  }, []);
 
-  // Render the component
+  const handleUserSelect = (userId) => {
+    // Find the selected user based on the User_ID
+    const selected = users.find((user) => user.User_ID === userId);
+    setSelectedUser(selected);
+  };
+
   return (
     <div>
       <h1>Test All Users</h1>
-      <div className="user-list">
-        {/* Map through the users and render each user */}
-        {users.map((user) => (
-          <div key={user.User_ID} className="user-item">
-            <h2>{user.First_Name}</h2>
+      <div>
+        {/* Dropdown to select users */}
+        <select onChange={(e) => handleUserSelect(parseInt(e.target.value))}>
+          <option value={null}>Select a user</option>
+          {/* Map through the users and create an option for each */}
+          {users.map((user) => (
+            <option key={user.User_ID} value={user.User_ID}>
+              {user.First_Name} {user.Middle_Name || ""} {user.Last_Name}
+            </option>
+          ))}
+        </select>
+
+        {/* Display selected user information */}
+        {selectedUser && (
+          <div className="user-details">
+            <h2>User Information</h2>
+            <p>User ID: {selectedUser.User_ID}</p>
+            <p>First Name: {selectedUser.First_Name}</p>
+            <p>Middle Name: {selectedUser.Middle_Name || "N/A"}</p>
+            <p>Last Name: {selectedUser.Last_Name}</p>
+            {/* Add other user information as needed */}
           </div>
-        ))}
+        )}
       </div>
     </div>
   );

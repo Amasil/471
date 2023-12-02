@@ -8,6 +8,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import "./style.css";
+import UserDashboard from "./User_Dashboard.js";
 
 const Navbar = () => {
   return (
@@ -312,6 +313,7 @@ const App = () => {
         <Route path="/login-doctor" element={<DoctorLogin />} />
         <Route path="/user-registration" element={<UserRegistration />} />
         <Route path="/sign-up-as-user" element={<SignUpAsUser />} />
+        <Route path="/user-dashboard" element={<UserDashboard />} />
         {/* Set the default route to UserLogin */}
         <Route index element={<UserLogin />} />
       </Routes>
