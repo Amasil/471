@@ -22,7 +22,6 @@ const Navbar = () => {
   );
 };
 
-
 const updateFavicon = (faviconURL) => {
   const favicon = document.querySelector('link[rel="icon"]');
   if (favicon) {
