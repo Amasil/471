@@ -159,8 +159,7 @@ const UserRegistration = () => {
   }, []);
   return (
     <div>
-      {/* Assuming Navbar is a component */}
-      {/* <Navbar /> */}
+      <Navbar />
       <div className="login-container">
         <h2>User Registration</h2>
         <form id="registrationForm" onSubmit={handleRegistration}>
