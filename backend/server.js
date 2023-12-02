@@ -1,9 +1,11 @@
 const express = require("express");
 const mysql = require("mysql2");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors());
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -50,7 +52,7 @@ app.post("/user", (req, res) => {
     Blood_Group,
     Last_Donation_Date,
   } = req.body;
-
+  console.log(req.body);
   if (
     !First_Name ||
     !Last_Name ||
