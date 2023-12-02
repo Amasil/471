@@ -1,53 +1,105 @@
-// Import required modules
 const express = require("express");
 const mysql = require("mysql2");
+const bodyParser = require("body-parser");
 
-// Create an Express application
 const app = express();
+app.use(bodyParser.json());
 
-// Set up a MySQL database connection configuration
 const connection = mysql.createConnection({
-  // Database host
   host: "localhost",
-  // Database user
   user: "root",
-  // Database password
   password: "sZ10O84<",
-  // Database port
   database: "Test",
-  // Authentication method
   authPlugins: {
     mysql_clear_password: () => () => Buffer.from("sZ10O84<"),
   },
 });
 
-// Connect to the MySQL database
 connection.connect((err) => {
   if (err) {
-    console.error("Error connecting to database: " + err.stack);
+    console.error("Error connecting to the database: " + err.stack);
     return;
   }
 
-  console.log("Connected to database.");
+  console.log("Connected to the database.");
 });
 
-// Define an API route for handling GET requests to "/users"
-app.get("/users", (req, res) => {
-  // Execute a SELECT query on the "users" table
-  connection.query("SELECT * FROM users", (err, results) => {
+// GET route to fetch all users
+app.get("/user", (req, res) => {
+  connection.query("SELECT * FROM User", (err, results) => {
     if (err) {
-      // Handle database query error
-      console.error("Error querying database: " + err.stack);
-      res.status(500).send("Error querying database.");
+      console.error("Error querying the database: " + err.stack);
+      res.status(500).send("Error querying the database.");
       return;
     }
 
-    // Send the query results as the response
     res.send(results);
   });
 });
 
-// Start the Express server on port 3000
+// POST route to insert a new user
+app.post("/user", (req, res) => {
+  const {
+    First_Name,
+    Middle_Name,
+    Last_Name,
+    Username,
+    Password,
+    Email,
+    Phone_No,
+    Blood_Group,
+    Last_Donation_Date,
+  } = req.body;
+
+  if (
+    !First_Name ||
+    !Last_Name ||
+    !Username ||
+    !Password ||
+    !Email ||
+    !Phone_No
+  ) {
+    res.status(400).send("All required fields must be provided.");
+    return;
+  }
+
+  const insertQuery = `
+    INSERT INTO User (
+      First_Name,
+      Middle_Name,
+      Last_Name,
+      Username,
+      Password,
+      Email,
+      Phone_No,
+      Blood_Group,
+      Last_Donation_Date
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  const values = [
+    First_Name,
+    Middle_Name,
+    Last_Name,
+    Username,
+    Password,
+    Email,
+    Phone_No,
+    Blood_Group,
+    Last_Donation_Date,
+  ];
+
+  connection.query(insertQuery, values, (err, results) => {
+    if (err) {
+      console.error("Error inserting into the database: " + err.stack);
+      res.status(500).send("Error inserting into the database.");
+      return;
+    }
+
+    res.send("User inserted successfully.");
+  });
+});
+
 app.listen(3000, () => {
   console.log("Server listening on port 3000.");
 });
