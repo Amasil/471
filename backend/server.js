@@ -38,7 +38,71 @@ app.get("/user", (req, res) => {
     res.send(results);
   });
 });
+// PUT route to update user information
+app.put("/user/:userId", (req, res) => {
+  const userId = req.params.userId;
+  const {
+    First_Name,
+    Middle_Name,
+    Last_Name,
+    Username,
+    Password,
+    Email,
+    Phone_No,
+    Blood_Group,
+    Last_Donation_Date,
+  } = req.body;
 
+  if (
+    !First_Name ||
+    !Last_Name ||
+    !Username ||
+    !Password ||
+    !Email ||
+    !Phone_No
+  ) {
+    res.status(400).send("All required fields must be provided.");
+    return;
+  }
+
+  const updateQuery = `
+    UPDATE User
+    SET
+      First_Name = ?,
+      Middle_Name = ?,
+      Last_Name = ?,
+      Username = ?,
+      Password = ?,
+      Email = ?,
+      Phone_No = ?,
+      Blood_Group = ?,
+      Last_Donation_Date = ?
+    WHERE User_ID = ?
+  `;
+
+  const values = [
+    First_Name,
+    Middle_Name,
+    Last_Name,
+    Username,
+    Password,
+    Email,
+    Phone_No,
+    Blood_Group,
+    Last_Donation_Date,
+    userId,
+  ];
+
+  connection.query(updateQuery, values, (err, results) => {
+    if (err) {
+      console.error("Error updating the database: " + err.stack);
+      res.status(500).send("Error updating the database.");
+      return;
+    }
+
+    res.send("User updated successfully.");
+  });
+});
 // POST route to insert a new user
 app.post("/user", (req, res) => {
   const {
