@@ -39,9 +39,9 @@ app.get("/user", (req, res) => {
   });
 });
 // PUT route to update user information
-app.put("/user/:userId", (req, res) => {
-  const userId = req.params.userId;
+app.put("/user", (req, res) => {
   const {
+    User_ID,
     First_Name,
     Middle_Name,
     Last_Name,
@@ -54,6 +54,7 @@ app.put("/user/:userId", (req, res) => {
   } = req.body;
 
   if (
+    !User_ID ||
     !First_Name ||
     !Last_Name ||
     !Username ||
@@ -90,7 +91,7 @@ app.put("/user/:userId", (req, res) => {
     Phone_No,
     Blood_Group,
     Last_Donation_Date,
-    userId,
+    User_ID,
   ];
 
   connection.query(updateQuery, values, (err, results) => {
@@ -103,6 +104,7 @@ app.put("/user/:userId", (req, res) => {
     res.send("User updated successfully.");
   });
 });
+
 // POST route to insert a new user
 app.post("/user", (req, res) => {
   const {
