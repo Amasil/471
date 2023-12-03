@@ -56,7 +56,7 @@ const Users = () => {
   const handleChangeUserInfo = async () => {
     // Filter out User_ID from the newUserInfo
     const { User_ID, ...updatedInfo } = newUserInfo;
-    console.log("Updated user info:", updatedInfo);
+
     try {
       // Only send request if there are changes
       if (JSON.stringify(updatedInfo) !== "{}") {
@@ -64,7 +64,13 @@ const Users = () => {
         console.log("User info updated successfully!");
         // Refetch users after successful update
         const res = await axios.get("http://localhost:3000/user");
-        setUsers(res.data);
+        setUsers(res.data); // Update local state with the latest data
+
+        // Update selectedUser with the latest information
+        const updatedSelectedUser = res.data.find(
+          (user) => user.User_ID === selectedUser.User_ID
+        );
+        setSelectedUser(updatedSelectedUser);
       } else {
         console.log("No changes to update.");
       }
