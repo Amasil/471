@@ -290,20 +290,6 @@ const UserRegistration = () => {
   );
 };
 
-const SignUpAsUser = () => {
-  // Similar to UserRegistration component, you can add the sign-up logic here
-
-  return (
-    <div>
-      <Navbar />
-      <div className="login-container">
-        <h2>Sign Up as User</h2>
-        {/* ... sign-up form fields ... */}
-      </div>
-    </div>
-  );
-};
-
 const App = () => {
   return (
     <Router>
@@ -312,7 +298,6 @@ const App = () => {
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/login-doctor" element={<DoctorLogin />} />
         <Route path="/user-registration" element={<UserRegistration />} />
-        <Route path="/sign-up-as-user" element={<SignUpAsUser />} />
         <Route path="/user-dashboard" element={<UserDashboard />} />
         {/* Set the default route to UserLogin */}
         <Route index element={<UserLogin />} />
