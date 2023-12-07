@@ -81,6 +81,41 @@ const Users = () => {
     setIsEditing(false); // Reset editing mode
   };
 
+  const handleDeleteUser = async () => {
+    try {
+      if (selectedUser && selectedUser.User_ID) {
+        await axios.delete("http://localhost:3000/user", {
+          data: { User_ID: selectedUser.User_ID },
+        });
+
+        console.log("User deleted successfully!");
+
+        // Refetch users after successful deletion
+        const res = await axios.get("http://localhost:3000/user");
+        setUsers(res.data); // Update local state with the latest data
+
+        setSelectedUser(null); // Reset selectedUser
+        setNewUserInfo({
+          User_ID: "",
+          First_Name: "",
+          Middle_Name: "",
+          Last_Name: "",
+          Username: "",
+          Password: "",
+          Email: "",
+          Phone_No: "",
+          Blood_Group: "",
+          Last_Donation_Date: "",
+        });
+        setIsEditing(false); // Reset editing mode
+      } else {
+        console.log("No user selected to delete.");
+      }
+    } catch (err) {
+      console.error("Error deleting user:", err);
+    }
+  };
+
   return (
     <div className="users-container">
       <h1>Test All Users</h1>
@@ -152,6 +187,7 @@ const Users = () => {
               </label>
               <br />
               <button onClick={handleChangeUserInfo}>Save Changes</button>
+              <button onClick={handleDeleteUser}>Delete User</button>
             </div>
           ) : (
             // Render a button to enable editing mode

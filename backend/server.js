@@ -168,6 +168,34 @@ app.post("/user", (req, res) => {
   });
 });
 
+app.delete("/user", (req, res) => {
+  const userId = req.body.User_ID;
+
+  if (!userId) {
+    res.status(400).send("User ID must be provided in the request body.");
+    return;
+  }
+
+  const deleteQuery = `
+    DELETE FROM User
+    WHERE User_ID = ?
+  `;
+
+  connection.query(deleteQuery, [userId], (err, results) => {
+    if (err) {
+      console.error("Error deleting from the database: " + err.stack);
+      res.status(500).send("Error deleting from the database.");
+      return;
+    }
+
+    if (results.affectedRows === 0) {
+      res.status(404).send("User not found.");
+    } else {
+      res.send("User deleted successfully.");
+    }
+  });
+});
+
 app.listen(3000, () => {
   console.log("Server listening on port 3000.");
 });
