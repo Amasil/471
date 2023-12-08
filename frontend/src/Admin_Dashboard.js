@@ -1,10 +1,12 @@
 // Admin_Dashboard.js
 
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useParams } from "react-router-dom";
 import AdminSidebar from "./AdminSidebar.js";
-//import Users from "./Users"; // Create Users component for the Users route
-//import Settings from "./Settings"; // Create Settings component for the Settings route
+import "./Admin_Dashboard.css";
+//import Users from "./Users";
+//import Settings from "./Settings";
+import UserDashboard from "./User_Dashboard.js";
 
 const Admin_Dashboard = () => {
   return (
@@ -13,6 +15,7 @@ const Admin_Dashboard = () => {
       <div className="admin-content">
         <Routes>
           <Route path="/" element={<DashboardHome />} />
+          <Route path="user-dashboard" element={<UserDashboard />} />
           {/* Add more routes as needed */}
         </Routes>
       </div>
@@ -24,6 +27,24 @@ const DashboardHome = () => {
   return <h2>Welcome to the Admin Dashboard!</h2>;
 };
 
+const UsersSection = () => {
+  let { action } = useParams();
+
+  // Render different components based on the route parameter
+  if (action === "edit") {
+    return <EditUser />;
+  } else if (action === "create") {
+    return <CreateUser />;
+  } else {
+  }
+};
+
+const EditUser = () => {
+  return <h2>Edit User</h2>;
+};
+
+const CreateUser = () => {
+  return <h2>Create User</h2>;
+};
+
 export default Admin_Dashboard;
-//<Route path="users" element={<Users />} />
-//<Route path="settings" element={<Settings />} />
