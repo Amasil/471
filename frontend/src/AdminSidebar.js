@@ -11,14 +11,10 @@ const AdminSidebar = () => {
       <Link to="/admin-dashboard" className={location.pathname === "/" ? "active" : ""}>
         Dashboard
       </Link>
-      <Link to="/admin-dashboard/users"
-        className={location.pathname.startsWith("/admin-dashboard/users") ? "active" : ""}
-      >
+      <Link to="/admin-dashboard/users" className={location.pathname === "/users" ? "active" : ""}>
         Users
       </Link>
-      <Link to="/admin-dashboard/settings"
-        className={location.pathname.startsWith("/admin-dashboard/settings") ? "active" : ""}
-      >
+      <Link to="/admin-dashboard/settings" className={location.pathname === "settings" ? "active" : ""}>
         Settings
       </Link>
       {/* Add more links as needed */}
