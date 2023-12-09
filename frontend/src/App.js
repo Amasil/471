@@ -45,6 +45,7 @@ const updateWebpageTitle = (title) => {
 
 const UserLogin = () => {
   const validateUserLogin = (event) => {};
+  const Navigate = useNavigate();
 
   useEffect(() => {
     updateFavicon(
@@ -53,6 +54,11 @@ const UserLogin = () => {
     );
     updateWebpageTitle("User Login");
   }, []);
+
+  const redirectToDonorDashboard = () => {
+    // Simulate a successful login by directly redirecting to the donor dashboard
+    Navigate("/donor-dashboard");
+  };
 
   return (
     <div>
@@ -66,7 +72,9 @@ const UserLogin = () => {
           <label htmlFor="password">Password:</label>
           <input type="password" id="password" name="password" required />
 
-          <button type="submit">Login</button>
+          <button type="button" onClick={redirectToDonorDashboard}>
+            Login
+          </button>
         </form>
       </div>
     </div>
@@ -75,25 +83,31 @@ const UserLogin = () => {
 
 const AdminLogin = () => {
   const validateAdminLogin = (event) => {};
+  const Navigate = useNavigate();
   useEffect(() => {
     updateFavicon(
       "https://cdn.iconscout.com/icon/premium/png-512-thumb/admin-1-32-687612.png?f=webp&w=512"
     );
     updateWebpageTitle("Admin Login");
   }, []);
+  const redirectToAdminDashboard = () => {
+    // Simulate a successful login by directly redirecting to the admin dashboard
+    Navigate("/admin-dashboard");
+  };
   return (
     <div>
+      {/* Navbar component (assuming it's defined somewhere) */}
       <Navbar />
       <div className="login-container">
         <h2>Admin Login</h2>
-        <form onSubmit={(e) => e.preventDefault() || validateAdminLogin(e)}>
+        <form onSubmit={(e) => e.preventDefault()}>
           <label htmlFor="username">Username:</label>
           <input type="text" id="username" name="username" required />
-
           <label htmlFor="password">Password:</label>
           <input type="password" id="password" name="password" required />
-
-          <button type="submit">Login</button>
+          <button type="button" onClick={redirectToAdminDashboard}>
+            Login
+          </button>
         </form>
       </div>
     </div>
@@ -102,25 +116,31 @@ const AdminLogin = () => {
 
 const DoctorLogin = () => {
   const validateDoctorLogin = (event) => {};
+  const Navigate = useNavigate();
   useEffect(() => {
     updateFavicon(
       "https://cdn.iconscout.com/icon/premium/png-512-thumb/doctor-567-1118047.png?f=webp&w=512"
     );
     updateWebpageTitle("Doctor Login");
   }, []);
+  const redirectToDoctorDashboard = () => {
+    // Simulate a successful login by directly redirecting to the doctor dashboard
+    Navigate("/doctor-dashboard");
+  };
   return (
     <div>
+      {/* Navbar component (assuming it's defined somewhere) */}
       <Navbar />
       <div className="login-container">
         <h2>Doctor Login</h2>
-        <form onSubmit={(e) => e.preventDefault() || validateDoctorLogin(e)}>
+        <form onSubmit={(e) => e.preventDefault()}>
           <label htmlFor="username">Username:</label>
           <input type="text" id="username" name="username" required />
-
           <label htmlFor="password">Password:</label>
           <input type="password" id="password" name="password" required />
-
-          <button type="submit">Login</button>
+          <button type="button" onClick={redirectToDoctorDashboard}>
+            Login
+          </button>
         </form>
       </div>
     </div>
