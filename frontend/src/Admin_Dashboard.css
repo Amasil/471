@@ -1,7 +1,7 @@
 /* Style for the whole admin dashboard container */
 .admin-dashboard {
   display: flex;
-  height: 100vh; /* 100% of the viewport height */
+  height: 220vh; /* 100% of the viewport height */
 }
 
 /* Style for the admin sidebar */

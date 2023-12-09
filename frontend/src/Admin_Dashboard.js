@@ -156,13 +156,52 @@ const Admin_Dashboard = () => {
         {selectedUser && (
           <div className="user-details-container">
             <h2>User Information</h2>
-            <p>User ID: {selectedUser.User_ID}</p>
-            <p>First Name: {selectedUser.First_Name}</p>
-            <p>Middle Name: {selectedUser.Middle_Name || "N/A"}</p>
-            <p>Last Name: {selectedUser.Last_Name}</p>
+            <table>
+              <tbody>
+                <tr>
+                  <td>User ID:</td>
+                  <td>{selectedUser.User_ID}</td>
+                </tr>
+                <tr>
+                  <td>First Name:</td>
+                  <td>{selectedUser.First_Name}</td>
+                </tr>
+                <tr>
+                  <td>Middle Name:</td>
+                  <td>{selectedUser.Middle_Name || "N/A"}</td>
+                </tr>
+                <tr>
+                  <td>Last Name:</td>
+                  <td>{selectedUser.Last_Name}</td>
+                </tr>
+                <tr>
+                  <td>Username: </td>
+                  <td>{selectedUser.Username}</td>
+                </tr>
+                <tr>
+                  <td>Password: </td>
+                  <td>{selectedUser.Password}</td>
+                </tr>
+                <tr>
+                  <td>Email: </td>
+                  <td>{selectedUser.Email}</td>
+                </tr>
+                <tr>
+                  <td>Phone No: </td>
+                  <td>{selectedUser.Phone_No}</td>
+                </tr>
+                <tr>
+                  <td>Blood_Group: </td>
+                  <td>{selectedUser.Blood_Group}</td>
+                </tr>
+                <tr>
+                  <td>Last Donation Date: </td>
+                  <td>{selectedUser.Last_Donation_Date}</td>
+                </tr>
+              </tbody>
+            </table>
 
             {isEditing ? (
-              // Render a form for editing the user info
               <div>
                 <h2>Edit User Information</h2>
                 <label>
@@ -207,11 +246,103 @@ const Admin_Dashboard = () => {
                   />
                 </label>
                 <br />
+                <label>
+                  Username:
+                  <input
+                    type="text"
+                    value={newUserInfo.Username}
+                    onChange={(e) =>
+                      setNewUserInfo({
+                        ...newUserInfo,
+                        Username: e.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <br />
+                <label>
+                  Password:
+                  <input
+                    type="text"
+                    value={newUserInfo.Password}
+                    onChange={(e) =>
+                      setNewUserInfo({
+                        ...newUserInfo,
+                        Password: e.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <br />
+                <label>
+                  Email:
+                  <input
+                    type="text"
+                    value={newUserInfo.Email}
+                    onChange={(e) =>
+                      setNewUserInfo({
+                        ...newUserInfo,
+                        Email: e.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <br />
+                <label>
+                  Phone No:
+                  <input
+                    type="text"
+                    value={newUserInfo.Phone_No}
+                    onChange={(e) =>
+                      setNewUserInfo({
+                        ...newUserInfo,
+                        Phone_No: e.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <br />
+                <label>
+                  Blood Group:
+                  <select
+                    value={newUserInfo.Blood_Group}
+                    onChange={(e) =>
+                      setNewUserInfo({
+                        ...newUserInfo,
+                        Blood_Group: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="Unknown">Unknown</option>
+                  </select>
+                </label>
+                <br />
+                <label>
+                  Last Donation Date
+                  <input
+                    type="date"
+                    value={newUserInfo.Last_Donation_Date}
+                    onChange={(e) =>
+                      setNewUserInfo({
+                        ...newUserInfo,
+                        Last_Donation_Date: e.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <br />
                 <button onClick={handleChangeUserInfo}>Save Changes</button>
                 <button onClick={handleDeleteUser}>Delete User</button>
               </div>
             ) : (
-              // Render a button to enable editing mode
               <button onClick={() => setIsEditing(true)}>Edit User Info</button>
             )}
           </div>
@@ -220,5 +351,4 @@ const Admin_Dashboard = () => {
     );
   }
 };
-
 export default Admin_Dashboard;
