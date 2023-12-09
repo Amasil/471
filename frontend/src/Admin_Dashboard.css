@@ -1,18 +1,18 @@
 /* Style for the whole admin dashboard container */
-.admin-dashboard, .doctor-dashboard {
+.admin-dashboard {
   display: flex;
   height: 100vh; /* 100% of the viewport height */
 }
 
 /* Style for the admin sidebar */
-.admin-sidebar, .doctor-sidebar {
+.admin-sidebar {
   width: 200px;
   background-color: #333;
   color: #fff;
   padding: 20px;
 }
 
-.admin-sidebar a, .doctor-sidebar a {
+.admin-sidebar a {
   display: block;
   color: #fff;
   text-decoration: none;
@@ -22,22 +22,22 @@
   transition: background-color 0.3s ease;
 }
 
-.admin-sidebar a:hover, .doctor-sidebar a:hover {
+.admin-sidebar a:hover {
   background-color: #555;
 }
 
 /* Style for the admin content area */
-.admin-content, .doctor-content {
+.admin-content {
   flex: 1;
   padding: 20px;
 }
 
 /* Style for the welcome message in the admin content area */
-.admin-content h2, .doctor-content h2 {
+.admin-content h2 {
   color: #333;
 }
 
 /* Add this style to highlight the active link in the sidebar */
-.admin-sidebar a.active, .doctor-sidebar a.active {
+.admin-sidebar a.active {
   background-color: #555;
 }

@@ -17,7 +17,7 @@ const DonorSidebar = () => {
       <Link
         to="/donor-dashboard/edit"
         className={
-          location.pathname.startsWith("/doctor-dashboard/edit") ? "active" : ""
+          location.pathname.startsWith("/donor-dashboard/edit") ? "active" : ""
         }
       >
         Edit User
