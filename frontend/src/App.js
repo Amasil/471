@@ -10,6 +10,9 @@ import {
 import "./style.css";
 import UserDashboard from "./User_Dashboard.js";
 import Admin_Dashboard from "./Admin_Dashboard.js";
+import Doctor_Dashboard from "./Doctor_Dashboard.js";
+import Donor_Dashboard from "./Donor_Dashboard.js";
+import Recipient_Dashboard from "./Recipient_Dashboard.js";
 
 const Navbar = () => {
   return (
@@ -301,6 +304,9 @@ const App = () => {
         <Route path="/user-registration" element={<UserRegistration />} />
         <Route path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/admin-dashboard" element={<Admin_Dashboard />} />
+        <Route path="/doctor-dashboard" element={<Doctor_Dashboard />} />
+        <Route path="/recipient-dashboard" element={<Donor_Dashboard />} />
+        <Route path="/recipient-dashboard" element={<Recipient_Dashboard />} />
         {/* Set the default route to UserLogin */}
         <Route index element={<UserLogin />} />
       </Routes>
