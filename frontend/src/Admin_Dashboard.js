@@ -14,8 +14,6 @@ const Admin_Dashboard = () => {
         <Routes>
           <Route path="/" element={<DashboardHome />} />
           <Route path="user-dashboard" element={<UserDashboard />} />
-          <Route path="user-dashboard" element={<UsersSection />} /> {/* Add the UsersSection route */}
-          {/* Add more routes as needed */}
         </Routes>
       </div>
     </div>

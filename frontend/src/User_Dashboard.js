@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import AdminSidebar from "./AdminSidebar.js";
 
 import "./Users.css"; // Import the CSS file
 
@@ -117,8 +118,10 @@ const Users = () => {
   };
 
   return (
+    <div className="admin-dashboard">
+      <AdminSidebar />
     <div className="users-container">
-      <h1>Test All Users</h1>
+      <h1>Select a user to edit</h1>
       <div className="user-dropdown-container">
         <select
           className="user-dropdown"
@@ -139,6 +142,13 @@ const Users = () => {
           <p>First Name: {selectedUser.First_Name}</p>
           <p>Middle Name: {selectedUser.Middle_Name || "N/A"}</p>
           <p>Last Name: {selectedUser.Last_Name}</p>
+          <p>Username: {selectedUser.Username}</p>
+          <p>Password: {selectedUser.Password}</p>
+          <p>Email: {selectedUser.Email}</p>
+          <p>Phone Number: {selectedUser.Phone_No}</p>
+          <p>Blood Group: {selectedUser.Blood_Group}</p>
+          <p>Last Donation Date: {selectedUser.Last_Donation_Date}</p>
+
 
           {isEditing ? (
             // Render a form for editing the user info
@@ -186,15 +196,109 @@ const Users = () => {
                 />
               </label>
               <br />
+              <label>
+                  Username:
+                  <input
+                    type="text"
+                    value={newUserInfo.Username}
+                    onChange={(e) =>
+                      setNewUserInfo({
+                        ...newUserInfo,
+                        Username: e.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <br />
+                <label>
+                  Password:
+                  <input
+                    type="text"
+                    value={newUserInfo.Password}
+                    onChange={(e) =>
+                      setNewUserInfo({
+                        ...newUserInfo,
+                        Password: e.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <br />
+                <label>
+                  Email:
+                  <input
+                    type="text"
+                    value={newUserInfo.Email}
+                    onChange={(e) =>
+                      setNewUserInfo({
+                        ...newUserInfo,
+                        Email: e.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <br />
+                <label>
+                  Phone No:
+                  <input
+                    type="text"
+                    value={newUserInfo.Phone_No}
+                    onChange={(e) =>
+                      setNewUserInfo({
+                        ...newUserInfo,
+                        Phone_No: e.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <br />
+                <label>
+                  Blood Group:
+                  <select
+                    value={newUserInfo.Blood_Group}
+                    onChange={(e) =>
+                      setNewUserInfo({
+                        ...newUserInfo,
+                        Blood_Group: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="Unknown">Unknown</option>
+                  </select>
+                </label>
+                <br />
+                <label>
+                  Last Donation Date
+                  <input
+                    type="date"
+                    value={newUserInfo.Last_Donation_Date}
+                    onChange={(e) =>
+                      setNewUserInfo({
+                        ...newUserInfo,
+                        Last_Donation_Date: e.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <br />
               <button onClick={handleChangeUserInfo}>Save Changes</button>
               <button onClick={handleDeleteUser}>Delete User</button>
             </div>
           ) : (
             // Render a button to enable editing mode
-            <button onClick={() => setIsEditing(true)}>Edit User Info</button>
+            <button onClick={() => setIsEditing(true)}>Edit/Delete User Info</button>
           )}
         </div>
       )}
+    </div>
     </div>
   );
 };
