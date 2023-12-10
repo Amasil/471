@@ -8,14 +8,17 @@ const AdminSidebar = () => {
 
   return (
     <div className="admin-sidebar">
-      <Link to="/admin-dashboard" className={location.pathname === "/" ? "active" : ""}>
+      <Link
+        to="/"
+        className={location.pathname === "/" ? "active" : ""}
+      >
         Dashboard
       </Link>
-      <Link to="/admin-dashboard/users" className={location.pathname === "/users" ? "active" : ""}>
+      <Link
+        to="/user-dashboard"
+        className={location.pathname.startsWith("/user-dashboard") ? "active" : ""}
+      >
         Users
-      </Link>
-      <Link to="/admin-dashboard/settings" className={location.pathname === "settings" ? "active" : ""}>
-        Settings
       </Link>
       {/* Add more links as needed */}
     </div>
