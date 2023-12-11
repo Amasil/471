@@ -81,6 +81,15 @@ const Users = () => {
     fetchAllUsers();
   }, []);
 
+  const handleRefreshUsers = async () => {
+    try {
+      const res = await axios.get("http://localhost:3000/user");
+      setUsers(res.data);
+    } catch (err) {
+      console.error("Error fetching users:", err);
+    }
+  };
+
   // Handler for selecting a user for editing
   const handleUserSelect = (userId) => {
     // Find the selected user from the user list
@@ -140,30 +149,31 @@ const Users = () => {
   };
 
   // Handler for deleting a user and canceling the operation
-const handleDeleteUserAndCancel = async (userId) => {
-  // Display a confirmation pop-up
-  const userConfirmed = window.confirm("Are you sure you want to delete this user?");
-  
-  if (userConfirmed) {
-    try {
-      // Delete the user and set cancelClicked state
-      await handleDeleteUser(userId);
-      setCancelClicked(true);
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  }
-};
+  const handleDeleteUserAndCancel = (userId) => {
+    // Set cancelClicked state
+    setCancelClicked(true);
 
-// Handler for deleting a user
-const handleDeleteUser = async () => {
-  try {
-    // Check if a user is selected for deletion
-    if (selectedUser && selectedUser.User_ID) {
-      // Display a confirmation pop-up
-      const userConfirmed = window.confirm("Are you sure you want to delete this user?");
-      
-      if (userConfirmed) {
+    // Call handleDeleteUser function with userId
+    handleDeleteUser(userId);
+  };
+  // Handler for deleting a user
+  const handleDeleteUser = async () => {
+    try {
+      // Check if a user is selected for deletion
+      if (selectedUser && selectedUser.User_ID) {
+        // Display a confirmation pop-up only if cancelClicked state is false
+        if (!cancelClicked) {
+          const userConfirmed = window.confirm(
+            "Are you sure you want to delete this user?"
+          );
+
+          if (!userConfirmed) {
+            // If the user doesn't confirm, reset cancelClicked state and return
+            setCancelClicked(false);
+            return;
+          }
+        }
+
         // If user confirms, proceed with deletion
         await axios.delete("http://localhost:3000/user", {
           data: { User_ID: selectedUser.User_ID },
@@ -193,92 +203,225 @@ const handleDeleteUser = async () => {
         // Disable editing mode and reset button states
         setIsEditing(false);
         setIsDeleteButtonDisabled(true);
+      } else {
+        console.log("No user selected to delete.");
       }
-    } else {
-      console.log("No user selected to delete.");
+    } catch (err) {
+      console.error("Error deleting user:", err);
     }
-  } catch (err) {
-    console.error("Error deleting user:", err);
-  }
-};
+  };
 
   // Rendering UI for user management
   return (
     <div className="admin-dashboard">
       <div className="users-container">
-        <h1>User List</h1>
-        <table className="user-table">
-          <thead>
-            <tr>
-              <th>User ID</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* Mapping through the list of users and rendering rows */}
-            {users.map((user) => (
-              <React.Fragment key={user.User_ID}>
-                <tr>
-                  <td>{user.User_ID}</td>
-                  <td>{user.First_Name}</td>
-                  <td>{user.Last_Name}</td>
-                  <td>
-                    <button onClick={() => handleUserSelect(user.User_ID)}>
-                      {/* Display "Cancel" or "Edit" based on editing state */}
-                      {isEditing &&
-                      selectedUser &&
-                      selectedUser.User_ID === user.User_ID
-                        ? "Cancel"
-                        : "Edit"}
-                    </button>
-                    {/* Display delete button during editing mode */}
-                    {isEditing &&
-                      selectedUser &&
-                      selectedUser.User_ID === user.User_ID && (
-                        <button
-                          onClick={() =>
-                            handleDeleteUserAndCancel(user.User_ID)
-                          }
-                          disabled={isDeleteButtonDisabled || cancelClicked}
-                          className="delete-button"
-                        >
-                          Delete
-                        </button>
-                      )}
-                  </td>
-                </tr>
-                {/* Display additional row for editing user information */}
-                {isEditing &&
-                  selectedUser &&
-                  selectedUser.User_ID === user.User_ID && (
-                    <tr>
-                      <td colSpan="4">
-                        <div>
-                          <h2>Edit User Information</h2>
-                          {/* Input fields for editing user information */}
-                          {/* ... (omitted for brevity) ... */}
-                          <button onClick={handleChangeUserInfo}>
-                            Save Changes
-                          </button>
-                          {/* Button to cancel editing */}
-                          <button
-                            onClick={() => {
-                              setIsEditing(false); // Stop editing mode
-                              setIsDeleteButtonDisabled(false); // Disable delete button
-                            }}
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  )}
-              </React.Fragment>
-            ))}
-          </tbody>
-        </table>
+        <h1>User List</h1>{" "}
+        {users.length === 0 ? (
+          <div>
+            <p>No users found. Click the "Refresh" button to fetch users.</p>
+            <button onClick={handleRefreshUsers}>Refresh</button>
+          </div>
+        ) : (
+          <table className="user-table">
+            <thead>
+              <tr>
+                <th>User ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* Mapping through the list of users and rendering rows */}
+              {users.map((user) => (
+                <React.Fragment key={user.User_ID}>
+                  <tr>
+                    <td>{user.User_ID}</td>
+                    <td>{user.First_Name}</td>
+                    <td>{user.Last_Name}</td>
+                    <td>
+                      <button onClick={() => handleUserSelect(user.User_ID)}>
+                        {/* Display "Cancel" or "Edit" based on editing state */}
+                        {isEditing &&
+                        selectedUser &&
+                        selectedUser.User_ID === user.User_ID
+                          ? "Cancel"
+                          : "Edit"}
+                      </button>
+                    </td>
+                  </tr>
+                  {/* Display additional row for editing user information */}
+                  {isEditing &&
+                    selectedUser &&
+                    selectedUser.User_ID === user.User_ID && (
+                      <tr>
+                        <td colSpan="4">
+                          <div>
+                            <h2>Edit User Information</h2>
+                            {/* Input fields for editing user information */}
+                            <label>
+                              First Name:
+                              <input
+                                type="text"
+                                value={newUserInfo.First_Name}
+                                onChange={(e) =>
+                                  setNewUserInfo({
+                                    ...newUserInfo,
+                                    First_Name: e.target.value,
+                                  })
+                                }
+                              />
+                            </label>
+                            <label>
+                              Middle Name:
+                              <input
+                                type="text"
+                                value={newUserInfo.Middle_Name}
+                                onChange={(e) =>
+                                  setNewUserInfo({
+                                    ...newUserInfo,
+                                    Middle_Name: e.target.value,
+                                  })
+                                }
+                              />
+                            </label>
+                            <br />
+                            <label>
+                              Last Name:
+                              <input
+                                type="text"
+                                value={newUserInfo.Last_Name}
+                                onChange={(e) =>
+                                  setNewUserInfo({
+                                    ...newUserInfo,
+                                    Last_Name: e.target.value,
+                                  })
+                                }
+                              />
+                            </label>
+                            <br />
+                            <label>
+                              Username:
+                              <input
+                                type="text"
+                                value={newUserInfo.Username}
+                                onChange={(e) =>
+                                  setNewUserInfo({
+                                    ...newUserInfo,
+                                    Username: e.target.value,
+                                  })
+                                }
+                              />
+                            </label>
+                            <br />
+                            <label>
+                              Password:
+                              <input
+                                type="text"
+                                value={newUserInfo.Password}
+                                onChange={(e) =>
+                                  setNewUserInfo({
+                                    ...newUserInfo,
+                                    Password: e.target.value,
+                                  })
+                                }
+                              />
+                            </label>
+                            <br />
+                            <label>
+                              Email:
+                              <input
+                                type="text"
+                                value={newUserInfo.Email}
+                                onChange={(e) =>
+                                  setNewUserInfo({
+                                    ...newUserInfo,
+                                    Email: e.target.value,
+                                  })
+                                }
+                              />
+                            </label>
+                            <br />
+                            <label>
+                              Phone No:
+                              <input
+                                type="text"
+                                value={newUserInfo.Phone_No}
+                                onChange={(e) =>
+                                  setNewUserInfo({
+                                    ...newUserInfo,
+                                    Phone_No: e.target.value,
+                                  })
+                                }
+                              />
+                            </label>
+                            <br />
+                            <label>
+                              Blood Group:
+                              <select
+                                value={newUserInfo.Blood_Group}
+                                onChange={(e) =>
+                                  setNewUserInfo({
+                                    ...newUserInfo,
+                                    Blood_Group: e.target.value,
+                                  })
+                                }
+                              >
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="Unknown">Unknown</option>
+                              </select>
+                            </label>
+                            <br />
+                            <label>
+                              Last Donation Date
+                              <input
+                                type="date"
+                                value={newUserInfo.Last_Donation_Date}
+                                onChange={(e) =>
+                                  setNewUserInfo({
+                                    ...newUserInfo,
+                                    Last_Donation_Date: e.target.value,
+                                  })
+                                }
+                              />
+                            </label>
+                            <button onClick={handleChangeUserInfo}>
+                              Save Changes
+                            </button>
+                            <button
+                              onClick={() =>
+                                handleDeleteUserAndCancel(user.User_ID)
+                              }
+                              disabled={isDeleteButtonDisabled || cancelClicked}
+                              className="delete-button"
+                            >
+                              Delete
+                            </button>
+                            {/* Button to cancel editing */}
+                            <button
+                              onClick={() => {
+                                setIsEditing(false); // Stop editing mode
+                                setIsDeleteButtonDisabled(false); // Disable delete button
+                              }}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                </React.Fragment>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );
