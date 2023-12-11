@@ -215,7 +215,10 @@ const Users = () => {
   return (
     <div className="admin-dashboard">
       <div className="users-container">
-        <h1>User List</h1>{" "}
+        <header>
+          {" "}
+          <h1>User List</h1>
+        </header>{" "}
         {users.length === 0 ? (
           <div>
             <p>No users found. Click the "Refresh" button to fetch users.</p>
@@ -225,10 +228,16 @@ const Users = () => {
           <table className="user-table">
             <thead>
               <tr>
-                <th>User ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Actions</th>
+                <th className="id">User ID</th>
+                <th className="first-name">First Name</th>
+                <th className="last-name">Last Name</th>
+                <th className="username">Username</th>
+                <th className="email">Email</th>
+                <th>Phone</th>
+                <th>Blood Group</th>
+                <th>Last Donation Date</th>
+                <th>User Type</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -236,9 +245,15 @@ const Users = () => {
               {users.map((user) => (
                 <React.Fragment key={user.User_ID}>
                   <tr>
-                    <td>{user.User_ID}</td>
-                    <td>{user.First_Name}</td>
-                    <td>{user.Last_Name}</td>
+                    <td className="id">{user.User_ID}</td>
+                    <td className="first-name">{user.First_Name}</td>
+                    <td className="last-name">{user.Last_Name}</td>
+                    <td className="username">{user.Username}</td>
+                    <td className="email">{user.Email}</td>
+                    <td>{user.Phone_No}</td>
+                    <td>{user.Blood_Group}</td>
+                    <td>{user.Last_Donation_Date}</td>
+                    <td>{user.User_Type}</td>
                     <td>
                       <button onClick={() => handleUserSelect(user.User_ID)}>
                         {/* Display "Cancel" or "Edit" based on editing state */}
@@ -255,7 +270,7 @@ const Users = () => {
                     selectedUser &&
                     selectedUser.User_ID === user.User_ID && (
                       <tr>
-                        <td colSpan="4">
+                        <td colSpan="10">
                           <div>
                             <h2>Edit User Information</h2>
                             {/* Input fields for editing user information */}

@@ -52,6 +52,7 @@ app.put("/user", (req, res) => {
     Phone_No,
     Blood_Group,
     Last_Donation_Date,
+    User_Type, // Added User_Type here
   } = req.body;
 
   // Validating required fields
@@ -62,7 +63,8 @@ app.put("/user", (req, res) => {
     !Username ||
     !Password ||
     !Email ||
-    !Phone_No
+    !Phone_No ||
+    !User_Type // Validate User_Type
   ) {
     res.status(400).send("All required fields must be provided.");
     return;
@@ -80,7 +82,8 @@ app.put("/user", (req, res) => {
       Email = ?,
       Phone_No = ?,
       Blood_Group = ?,
-      Last_Donation_Date = ?
+      Last_Donation_Date = ?,
+      User_Type = ?  -- Added User_Type here
     WHERE User_ID = ?
   `;
 
@@ -94,6 +97,7 @@ app.put("/user", (req, res) => {
     Phone_No,
     Blood_Group,
     Last_Donation_Date,
+    User_Type, // Added User_Type here
     User_ID,
   ];
 
@@ -121,6 +125,7 @@ app.post("/user", (req, res) => {
     Phone_No,
     Blood_Group,
     Last_Donation_Date,
+    User_Type, // Added User_Type here
   } = req.body;
 
   // Validating required fields
@@ -130,7 +135,8 @@ app.post("/user", (req, res) => {
     !Username ||
     !Password ||
     !Email ||
-    !Phone_No
+    !Phone_No ||
+    !User_Type // Validate User_Type
   ) {
     res.status(400).send("All required fields must be provided.");
     return;
@@ -147,8 +153,9 @@ app.post("/user", (req, res) => {
       Email,
       Phone_No,
       Blood_Group,
-      Last_Donation_Date
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      Last_Donation_Date,
+      User_Type  -- Added User_Type here
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   const values = [
@@ -161,6 +168,7 @@ app.post("/user", (req, res) => {
     Phone_No,
     Blood_Group,
     Last_Donation_Date,
+    User_Type, // Added User_Type here
   ];
 
   // Executing the insert query

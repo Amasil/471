@@ -4,9 +4,6 @@ import React from "react";
 import { Routes, Route, useParams } from "react-router-dom";
 import DoctorSidebar from "./DoctorSidebar.js";
 import "./DashboardStyles.css";
-//import Users from "./Users";
-//import Settings from "./Settings";
-//import UserDashboard from "./User_Dashboard.js";
 import Inventory from "./Inventory.js";
 
 const Doctor_Dashboard = () => {

@@ -7,12 +7,26 @@
 
 /* Style for the admin sidebar */
 .admin-sidebar {
-  width: 200px;
+  width: 150px;
   background-color: #333;
   color: #fff;
   padding: 20px;
 }
 
+.users-container {
+  max-width: 90%;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Style for the admin sidebar links */
 .admin-sidebar a {
   display: block;
   color: #fff;
@@ -43,13 +57,15 @@
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+  table-layout: fixed;
 }
 
 .user-table th,
 .user-table td {
-  border: 1px solid #ddd;
+  border: 1px solid #bdc3c7;
   padding: 8px;
   text-align: left;
+  height: 40px; /* Set a fixed height for the rows */
 }
 
 .user-table th {
@@ -85,6 +101,7 @@
   box-sizing: border-box;
 }
 
+/* Style for the delete button */
 .delete-button {
   color: #fff;
   background-color: #dc3545;
@@ -97,4 +114,10 @@
 .delete-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+.user-table td.email {
+  max-width: 150px; /* Adjust the max width based on your preference */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

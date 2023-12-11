@@ -9,13 +9,13 @@
 }
 
 header {
-  background-color: #555;
+  background-color: #333;
   color: #fff;
   padding: 20px;
   text-align: center;
 }
 
-section {
+.section {
   margin: 20px;
 }
 
@@ -37,7 +37,7 @@ td {
 }
 
 th {
-  background-color: #555;
+  background-color: #333;
   color: #fff;
 }
 

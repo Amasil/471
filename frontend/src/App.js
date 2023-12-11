@@ -159,6 +159,7 @@ const UserRegistration = () => {
     Phone_No: "",
     Blood_Group: "",
     Last_Donation_Date: "",
+    User_Type: "Donor", // Set the default user type to "Donor"
   });
 
   const handleChange = (e) => {
