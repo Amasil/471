@@ -40,7 +40,7 @@ const Users = () => {
 
     // Populate all the empty fields with the user's information
     setNewUserInfo({
-      ...selected, // Keep User_ID as is
+      User_ID: selected.User_ID || "",
       First_Name: selected.First_Name || "",
       Middle_Name: selected.Middle_Name || "",
       Last_Name: selected.Last_Name || "",
@@ -51,6 +51,7 @@ const Users = () => {
       Blood_Group: selected.Blood_Group || "",
       Last_Donation_Date: selected.Last_Donation_Date || "",
     });
+
     setIsEditing(false); // Reset editing mode
   };
 
