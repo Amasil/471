@@ -1,5 +1,3 @@
-// AdminSidebar.js
-
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -8,15 +6,12 @@ const AdminSidebar = () => {
 
   return (
     <div className="admin-sidebar">
-      <Link
-        to="/admin-dashboard"
-        className={location.pathname === "/admin-dashboard" ? "active" : ""}
-      >
+      <Link to="/admin-dashboard" className={location.pathname === "/admin-dashboard" ? "active" : ""}>
         Dashboard
       </Link>
       <Link
-        to="/user-dashboard"
-        className={location.pathname.startsWith("/user-dashboard") ? "active" : ""}
+        to="/admin-dashboard/users"
+        className={location.pathname.startsWith("/admin-dashboard/users") ? "active" : ""}
       >
         Users
       </Link>

@@ -6,7 +6,7 @@ import RecipientSidebar from "./RecipientSidebar.js";
 import "./DashboardStyles.css";
 //import Users from "./Users";
 //import Settings from "./Settings";
-import UserDashboard from "./User_Dashboard.js";
+//import UserDashboard from "./User_Dashboard.js";
 
 const Recipient_Dashboard = () => {
   return (
@@ -15,14 +15,14 @@ const Recipient_Dashboard = () => {
       <div className="recipient-content">
         <Routes>
           <Route path="/" element={<DashboardHome />} />
-          <Route path="user-dashboard" element={<UserDashboard />} />
+          
           {/* Add more routes as needed */}
         </Routes>
       </div>
     </div>
   );
 };
-
+//<Route path="user-dashboard" element={<UserDashboard />} />
 const DashboardHome = () => {
   return <h2>Welcome to the Recipient Dashboard!</h2>;
 };

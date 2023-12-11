@@ -6,7 +6,7 @@ import DonorSidebar from "./DonorSidebar.js";
 import "./DashboardStyles.css";
 //import Users from "./Users";
 //import Settings from "./Settings";
-import UserDashboard from "./User_Dashboard.js";
+//import UserDashboard from "./User_Dashboard.js";
 
 const Donor_Dashboard = () => {
   return (
@@ -15,13 +15,13 @@ const Donor_Dashboard = () => {
       <div className="donor-content">
         <Routes>
           <Route path="/" element={<DashboardHome />} />
-          <Route path="user-dashboard" element={<UserDashboard />} />
           {/* Add more routes as needed */}
         </Routes>
       </div>
     </div>
   );
 };
+//<Route path="user-dashboard" element={<UserDashboard />} />
 
 const DashboardHome = () => {
   return <h2>Welcome to the Donor Dashboard!</h2>;

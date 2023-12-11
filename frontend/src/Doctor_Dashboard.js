@@ -6,7 +6,7 @@ import DoctorSidebar from "./DoctorSidebar.js";
 import "./DashboardStyles.css";
 //import Users from "./Users";
 //import Settings from "./Settings";
-import UserDashboard from "./User_Dashboard.js";
+//import UserDashboard from "./User_Dashboard.js";
 
 const Doctor_Dashboard = () => {
   return (
@@ -15,13 +15,13 @@ const Doctor_Dashboard = () => {
       <div className="doctor-content">
         <Routes>
           <Route path="/" element={<DashboardHome />} />
-          <Route path="user-dashboard" element={<UserDashboard />} />
           {/* Add more routes as needed */}
         </Routes>
       </div>
     </div>
   );
 };
+//          <Route path="user-dashboard" element={<UserDashboard />} />
 
 const DashboardHome = () => {
   return <h2>Welcome to the Doctor Dashboard!</h2>;

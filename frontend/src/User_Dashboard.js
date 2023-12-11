@@ -120,83 +120,82 @@ const Users = () => {
   return (
     <div className="admin-dashboard">
       <AdminSidebar />
-    <div className="users-container">
-      <h1>Select a user to edit</h1>
-      <div className="user-dropdown-container">
-        <select
-          className="user-dropdown"
-          onChange={(e) => handleUserSelect(parseInt(e.target.value))}
-        >
-          <option value={null}>Select a user</option>
-          {users.map((user) => (
-            <option key={user.User_ID} value={user.User_ID}>
-              {user.First_Name} {user.Middle_Name || ""} {user.Last_Name}
-            </option>
-          ))}
-        </select>
-      </div>
-      {selectedUser && (
-        <div className="user-details-container">
-          <h2>User Information</h2>
-          <p>User ID: {selectedUser.User_ID}</p>
-          <p>First Name: {selectedUser.First_Name}</p>
-          <p>Middle Name: {selectedUser.Middle_Name || "N/A"}</p>
-          <p>Last Name: {selectedUser.Last_Name}</p>
-          <p>Username: {selectedUser.Username}</p>
-          <p>Password: {selectedUser.Password}</p>
-          <p>Email: {selectedUser.Email}</p>
-          <p>Phone Number: {selectedUser.Phone_No}</p>
-          <p>Blood Group: {selectedUser.Blood_Group}</p>
-          <p>Last Donation Date: {selectedUser.Last_Donation_Date}</p>
+      <div className="users-container">
+        <h1>Select a user to edit</h1>
+        <div className="user-dropdown-container">
+          <select
+            className="user-dropdown"
+            onChange={(e) => handleUserSelect(parseInt(e.target.value))}
+          >
+            <option value={null}>Select a user</option>
+            {users.map((user) => (
+              <option key={user.User_ID} value={user.User_ID}>
+                {user.First_Name} {user.Middle_Name || ""} {user.Last_Name}
+              </option>
+            ))}
+          </select>
+        </div>
+        {selectedUser && (
+          <div className="user-details-container">
+            <h2>User Information</h2>
+            <p>User ID: {selectedUser.User_ID}</p>
+            <p>First Name: {selectedUser.First_Name}</p>
+            <p>Middle Name: {selectedUser.Middle_Name || "N/A"}</p>
+            <p>Last Name: {selectedUser.Last_Name}</p>
+            <p>Username: {selectedUser.Username}</p>
+            <p>Password: {selectedUser.Password}</p>
+            <p>Email: {selectedUser.Email}</p>
+            <p>Phone Number: {selectedUser.Phone_No}</p>
+            <p>Blood Group: {selectedUser.Blood_Group}</p>
+            <p>Last Donation Date: {selectedUser.Last_Donation_Date}</p>
 
-
-          {isEditing ? (
-            // Render a form for editing the user info
-            <div>
-              <h2>Edit User Information</h2>
-              <label>
-                First Name:
-                <input
-                  type="text"
-                  value={newUserInfo.First_Name}
-                  onChange={(e) =>
-                    setNewUserInfo({
-                      ...newUserInfo,
-                      First_Name: e.target.value,
-                    })
-                  }
-                />
-              </label>
-              <br />
-              <label>
-                Middle Name:
-                <input
-                  type="text"
-                  value={newUserInfo.Middle_Name}
-                  onChange={(e) =>
-                    setNewUserInfo({
-                      ...newUserInfo,
-                      Middle_Name: e.target.value,
-                    })
-                  }
-                />
-              </label>
-              <br />
-              <label>
-                Last Name:
-                <input
-                  type="text"
-                  value={newUserInfo.Last_Name}
-                  onChange={(e) =>
-                    setNewUserInfo({
-                      ...newUserInfo,
-                      Last_Name: e.target.value,
-                    })
-                  }
-                />
-              </label>
-              <br />
-              <label>
+            {isEditing ? (
+              // Render a form for editing the user info
+              <div>
+                <h2>Edit User Information</h2>
+                <label>
+                  First Name:
+                  <input
+                    type="text"
+                    value={newUserInfo.First_Name}
+                    onChange={(e) =>
+                      setNewUserInfo({
+                        ...newUserInfo,
+                        First_Name: e.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <br />
+                <label>
+                  Middle Name:
+                  <input
+                    type="text"
+                    value={newUserInfo.Middle_Name}
+                    onChange={(e) =>
+                      setNewUserInfo({
+                        ...newUserInfo,
+                        Middle_Name: e.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <br />
+                <label>
+                  Last Name:
+                  <input
+                    type="text"
+                    value={newUserInfo.Last_Name}
+                    onChange={(e) =>
+                      setNewUserInfo({
+                        ...newUserInfo,
+                        Last_Name: e.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <br />
+                <label>
                   Username:
                   <input
                     type="text"
@@ -289,16 +288,18 @@ const Users = () => {
                   />
                 </label>
                 <br />
-              <button onClick={handleChangeUserInfo}>Save Changes</button>
-              <button onClick={handleDeleteUser}>Delete User</button>
-            </div>
-          ) : (
-            // Render a button to enable editing mode
-            <button onClick={() => setIsEditing(true)}>Edit/Delete User Info</button>
-          )}
-        </div>
-      )}
-    </div>
+                <button onClick={handleChangeUserInfo}>Save Changes</button>
+                <button onClick={handleDeleteUser}>Delete User</button>
+              </div>
+            ) : (
+              // Render a button to enable editing mode
+              <button onClick={() => setIsEditing(true)}>
+                Edit/Delete User Info
+              </button>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
