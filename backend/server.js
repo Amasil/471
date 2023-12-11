@@ -248,23 +248,22 @@ app.post("/inventory", (req, res) => {
   });
 });
 
-// ...
 // PUT route to update blood quantities in the Inventory table
-app.put("/updateQuantity", (req, res) => {
-  const { Blood_type, No_of_units } = req.body;
+app.put("/inventory", (req, res) => {
+  const { Hospital_ID, No_of_units, Blood_type } = req.body;
 
-  if (!Blood_type || !No_of_units) {
-    res.status(400).send("Blood type and quantity must be provided.");
+  if (!Hospital_ID || !No_of_units || !Blood_type) {
+    res.status(400).send("All required fields must be provided.");
     return;
   }
 
   const updateQuery = `
     UPDATE Inventory
-    SET No_of_units = ?
-    WHERE Blood_type = ?
+    SET No_of_units = No_of_units + ?
+    WHERE Hospital_ID = ? AND Blood_type = ?
   `;
 
-  const values = [No_of_units, Blood_type];
+  const values = [No_of_units, Hospital_ID, Blood_type];
 
   connection.query(updateQuery, values, (err, results) => {
     if (err) {
@@ -276,6 +275,7 @@ app.put("/updateQuantity", (req, res) => {
     res.send("Blood quantity updated successfully.");
   });
 });
+
 app.listen(3000, () => {
   console.log("Server listening on port 3000.");
 });
