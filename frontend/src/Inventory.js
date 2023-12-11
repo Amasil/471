@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./dashboard.css";
+//import "./dashboard.css";
 import AdminSidebar from "./AdminSidebar.js";
 
 const Inventory = () => {
@@ -131,14 +131,20 @@ const Inventory = () => {
                   <td>{status[bloodType]}</td>
                   <td>
                     {editableQuantities[bloodType] ? (
-                      <button onClick={() => handleSaveQuantity(bloodType)}>Save</button>
+                      <button onClick={() => handleSaveQuantity(bloodType)}>
+                        Save
+                      </button>
                     ) : (
-                      <button onClick={() => handleUpdateQuantity(bloodType)}>Update</button>
+                      <button onClick={() => handleUpdateQuantity(bloodType)}>
+                        Update
+                      </button>
                     )}
                   </td>
                   <td>
                     <button
-                      disabled={status[bloodType] !== "Low" || sendAlert[bloodType]}
+                      disabled={
+                        status[bloodType] !== "Low" || sendAlert[bloodType]
+                      }
                       onClick={() => handleSendAlert(bloodType)}
                     >
                       Send Alert

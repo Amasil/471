@@ -1,0 +1,59 @@
+.admin-dashboard {
+    display: flex;
+  }
+
+  .inventory-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  header {
+    background-color: #555;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  section {
+    margin: 20px;
+  }
+  
+  h2 {
+    color: #2c3e50;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  th, td {
+    border: 1px solid #bdc3c7;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #555;
+    color: #fff;
+  }
+  
+  tbody tr:hover {
+    background-color: #ecf0f1;
+  }
+  
+  input {
+    width: 50px;
+  }
+  
+  button {
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  button[disabled] {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+  }  

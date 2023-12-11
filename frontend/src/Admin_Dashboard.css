@@ -85,17 +85,16 @@
   box-sizing: border-box;
 }
 
-/* Style for the delete button */
-.user-edit-form button.delete-button {
-  background-color: #ff0000; /* Red color */
+.delete-button {
   color: #fff;
+  background-color: #dc3545;
   border: none;
-  border-radius: 5px;
-  padding: 10px;
+  padding: 8px 12px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  border-radius: 4px;
 }
 
-.user-edit-form button.delete-button:hover {
-  background-color: #cc0000; /* Darker red on hover */
+.delete-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
