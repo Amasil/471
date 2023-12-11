@@ -14,7 +14,6 @@ import UsersSection from "./Admin_Dashboard.js";
 import Doctor_Dashboard from "./Doctor_Dashboard.js";
 import Donor_Dashboard from "./Donor_Dashboard.js";
 import Recipient_Dashboard from "./Recipient_Dashboard.js";
-import Inventory from "./Inventory.js";
 
 const Navbar = () => {
   return (
@@ -328,6 +327,7 @@ const App = () => {
         <Route path="/admin-dashboard/*" element={<Admin_Dashboard />} />
         <Route path="/users" element={<UsersSection />} />
         <Route path="/doctor-dashboard" element={<Doctor_Dashboard />} />
+        <Route path="/doctor-dashboard/*" element={<Doctor_Dashboard />} />
         <Route path="/donor-dashboard" element={<Donor_Dashboard />} />
         <Route path="/recipient-dashboard" element={<Recipient_Dashboard />} />
         {/* Set the default route to UserLogin */}

@@ -17,7 +17,7 @@ const DoctorSidebar = () => {
       <Link
         to="/doctor-dashboard/inventory"
         className={
-          location.pathname.startsWith("/doctor-dashboard/inventory") ? "active" : ""
+          location.pathname.startsWith("/doctor-dashboard/") ? "active" : ""
         }
       >
         Inventory

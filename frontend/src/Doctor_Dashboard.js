@@ -7,6 +7,7 @@ import "./DashboardStyles.css";
 //import Users from "./Users";
 //import Settings from "./Settings";
 //import UserDashboard from "./User_Dashboard.js";
+import Inventory from "./Inventory.js";
 
 const Doctor_Dashboard = () => {
   return (
@@ -15,6 +16,7 @@ const Doctor_Dashboard = () => {
       <div className="doctor-content">
         <Routes>
           <Route path="/" element={<DashboardHome />} />
+          <Route path="/inventory" element={<Inventory />} />
           {/* Add more routes as needed */}
         </Routes>
       </div>

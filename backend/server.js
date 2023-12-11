@@ -11,10 +11,10 @@ app.use(cors());
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "sZ10O84<",
+  password: "Taha12345",
   database: "Test",
   authPlugins: {
-    mysql_clear_password: () => () => Buffer.from("sZ10O84<"),
+    mysql_clear_password: () => () => Buffer.from("Taha12345"),
   },
 });
 
