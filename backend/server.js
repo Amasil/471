@@ -196,6 +196,86 @@ app.delete("/user", (req, res) => {
   });
 });
 
+// GET route to fetch initial blood quantities
+app.get("/bloodQuantities", (req, res) => {
+  connection.query(
+    "SELECT Blood_Type, No_of_units FROM Inventory",
+    (err, results) => {
+      if (err) {
+        console.error(
+          "Error querying the database for blood quantities: " + err.stack
+        );
+        res
+          .status(500)
+          .send("Error querying the database for blood quantities.");
+        return;
+      }
+
+      const quantities = {};
+      results.forEach((row) => {
+        quantities[row.Blood_Type] = row.No_of_units;
+      });
+
+      res.send(quantities);
+    }
+  );
+});
+
+// POST route to insert data into the Inventory table
+app.post("/inventory", (req, res) => {
+  const { Hospital_ID, No_of_units, Blood_type } = req.body;
+
+  if (!Hospital_ID || !No_of_units || !Blood_type) {
+    res.status(400).send("All required fields must be provided.");
+    return;
+  }
+
+  const insertQuery = `
+    INSERT INTO Inventory (Hospital_ID, No_of_units, Blood_type)
+    VALUES (?, ?, ?)
+  `;
+
+  const values = [Hospital_ID, No_of_units, Blood_type];
+
+  connection.query(insertQuery, values, (err, results) => {
+    if (err) {
+      console.error("Error inserting into the Inventory table: " + err.stack);
+      res.status(500).send("Error inserting into the Inventory table.");
+      return;
+    }
+
+    res.send("Data inserted into the Inventory table successfully.");
+  });
+});
+
+// ...
+// PUT route to update blood quantities in the Inventory table
+app.put("/updateQuantity", (req, res) => {
+  const { Blood_type, No_of_units } = req.body;
+
+  if (!Blood_type || !No_of_units) {
+    res.status(400).send("Blood type and quantity must be provided.");
+    return;
+  }
+
+  const updateQuery = `
+    UPDATE Inventory
+    SET No_of_units = ?
+    WHERE Blood_type = ?
+  `;
+
+  const values = [No_of_units, Blood_type];
+
+  connection.query(updateQuery, values, (err, results) => {
+    if (err) {
+      console.error("Error updating blood quantity: " + err.stack);
+      res.status(500).send("Error updating blood quantity.");
+      return;
+    }
+
+    res.send("Blood quantity updated successfully.");
+  });
+});
 app.listen(3000, () => {
   console.log("Server listening on port 3000.");
 });

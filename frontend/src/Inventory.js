@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./inventory.css";
 
 const Inventory = () => {
@@ -14,14 +14,14 @@ const Inventory = () => {
   });
 
   const [quantities, setQuantities] = useState({
-    "A+": 50,
-    "A-": 25,
-    "B+": 40,
-    "B-": 15,
-    "AB+": 30,
-    "AB-": 10,
-    "O+": 35,
-    "O-": 20,
+    "A+": 0,
+    "A-": 0,
+    "B+": 0,
+    "B-": 0,
+    "AB+": 0,
+    "AB-": 0,
+    "O+": 0,
+    "O-": 0,
   });
 
   const [status, setStatus] = useState({
@@ -46,6 +46,24 @@ const Inventory = () => {
     "O-": false,
   });
 
+  useEffect(() => {
+    // Make an asynchronous call to fetch initial quantities from the database
+    const fetchInitialQuantities = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/bloodQuantities");
+        const data = await response.json();
+
+        // Update the quantities state with the fetched data
+        setQuantities(data);
+      } catch (error) {
+        console.error("Error fetching initial quantities:", error);
+      }
+    };
+
+    // Call the function to fetch initial quantities when the component mounts
+    fetchInitialQuantities();
+  }, []);
+
   const handleSendAlert = (bloodType) => {
     setSendAlert((prevSendAlert) => ({
       ...prevSendAlert,
@@ -61,7 +79,7 @@ const Inventory = () => {
     }));
   };
 
-  const handleSaveQuantity = (bloodType) => {
+  const handleSaveQuantity = async (bloodType) => {
     const updatedQuantities = {
       ...quantities,
       [bloodType]: parseInt(quantities[bloodType], 10),
@@ -80,6 +98,29 @@ const Inventory = () => {
         [bloodType]: "Low",
       }));
       alert(`Status for ${bloodType} set to Low due to low quantity.`);
+    }
+
+    try {
+      // Send the updated data to the server
+      const response = await fetch("http://localhost:3000/updateQuantity", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          Blood_type: bloodType,
+          No_of_units: updatedQuantities[bloodType],
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to update blood quantity for ${bloodType}`);
+      }
+
+      console.log(`Blood quantity for ${bloodType} updated successfully.`);
+    } catch (error) {
+      console.error("Error updating blood quantity:", error);
+      // Handle the error as needed (e.g., show an error message to the user)
     }
   };
 
