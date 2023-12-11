@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import axios from "axios";
 import AdminSidebar from "./AdminSidebar.js";
 import "./Admin_Dashboard.css";
+import Inventory from "./Inventory.js";
 
 const updateFavicon = (faviconURL) => {
   const favicon = document.querySelector('link[rel="icon"]');
@@ -381,6 +382,7 @@ const Admin_Dashboard = () => {
           <Routes>
             <Route path="/" element={<DashboardHome />} />
             <Route path="/users" element={<Users />} />
+            <Route path="/inventory" element={<Inventory />} />
             {/* Add other routes for inventory or additional features */}
           </Routes>
         </div>

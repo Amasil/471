@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-//import "./dashboard.css";
-import AdminSidebar from "./AdminSidebar.js";
+import "./inventory.css";
 
 const Inventory = () => {
   const [editableQuantities, setEditableQuantities] = useState({
@@ -94,7 +93,6 @@ const Inventory = () => {
 
   return (
     <div className="admin-dashboard">
-      <AdminSidebar />
       <div className="inventory-container">
         <header>
           <h1>Inventory Dashboard</h1>

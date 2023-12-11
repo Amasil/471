@@ -330,8 +330,6 @@ const App = () => {
         <Route path="/doctor-dashboard" element={<Doctor_Dashboard />} />
         <Route path="/donor-dashboard" element={<Donor_Dashboard />} />
         <Route path="/recipient-dashboard" element={<Recipient_Dashboard />} />
-        <Route path="/inventory" element={<Inventory />} />
-
         {/* Set the default route to UserLogin */}
         <Route index element={<UserLogin />} />
       </Routes>
