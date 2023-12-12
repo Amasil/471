@@ -6,7 +6,6 @@ import {
   Route,
   Link,
   useNavigate,
-  Navigate,
 } from "react-router-dom";
 import "./AppStyle.css";
 import UserDashboard from "./User_Dashboard.js";
@@ -16,6 +15,7 @@ import UsersSection from "./admin/AdminDashboard.js";
 import DoctorDashboard from "./doctor/DoctorDashboard.js";
 import DonorDashboard from "./donor/DonorDashboard.js";
 import RecipientDashboard from "./recipient/RecipientDashboard.js";
+import { Navigate } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -51,6 +51,7 @@ const UserLogin = () => {
     username: "",
     password: "",
   });
+  const Navigate = useNavigate(); // Make sure this is within the functional component
 
   const handleChange = (e) => {
     setUserCredentials((prev) => ({
@@ -58,8 +59,6 @@ const UserLogin = () => {
       [e.target.name]: e.target.value,
     }));
   };
-
-  const Navigate = useNavigate(); // Move the hook call here
 
   const handleLogin = async () => {
     try {

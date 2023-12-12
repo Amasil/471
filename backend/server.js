@@ -1,11 +1,12 @@
 const express = require("express");
-const mysql = require("mysql");
+const mysql = require("mysql2");
+const bodyParser = require("body-parser");
+const cors = require("cors");
 const jwt = require("jsonwebtoken");
-const cors = require("cors"); // Import the cors middleware
-
+const bcrypt = require("bcrypt");
 const app = express();
-app.use(express.json());
-app.use(cors()); // Use cors middleware
+app.use(bodyParser.json());
+app.use(cors());
 
 // Establishing a connection to the MySQL database
 const connection = mysql.createConnection({
@@ -16,7 +17,6 @@ const connection = mysql.createConnection({
   authPlugins: {
     mysql_clear_password: () => () => Buffer.from("sZ10O84<"),
   },
-  insecureAuth: true, // Add this line
 });
 
 connection.connect((err) => {
@@ -25,36 +25,6 @@ connection.connect((err) => {
     return;
   }
   console.log("Connected to the database.");
-});
-
-// Endpoint for user login
-app.post("/login", (req, res) => {
-  const { username, password } = req.body;
-
-  // Validate user credentials against the database
-  connection.query(
-    "SELECT * FROM User WHERE Username = ? AND Password = ?",
-    [username, password],
-    (err, results) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ message: "Internal Server Error" });
-      }
-
-      if (results.length === 1) {
-        // User authenticated, generate and send a JWT token
-        const user = results[0];
-        const token = jwt.sign({ userId: user.User_ID }, "your-secret-key", {
-          expiresIn: "1h", // Set token expiration time as needed
-        });
-
-        res.json({ token });
-      } else {
-        // Invalid credentials
-        res.status(401).json({ message: "Invalid credentials" });
-      }
-    }
-  );
 });
 
 // GET route to fetch all users
@@ -82,8 +52,7 @@ app.get("/user", (req, res) => {
 });
 
 // PUT route to update user information
-app.put("/user", (req, res) => {
-  // Extracting data from the request body
+app.put("/user", async (req, res) => {
   const {
     User_ID,
     First_Name,
@@ -95,69 +64,84 @@ app.put("/user", (req, res) => {
     Phone_No,
     Blood_Group,
     Last_Donation_Date,
-    User_Type, // Added User_Type here
+    User_Type,
   } = req.body;
 
-  // Validating required fields
-  if (
-    !User_ID ||
-    !First_Name ||
-    !Last_Name ||
-    !Username ||
-    !Password ||
-    !Email ||
-    !Phone_No ||
-    !User_Type // Validate User_Type
-  ) {
-    res.status(400).send("All required fields must be provided.");
-    return;
-  }
-
-  // SQL query for updating user information
-  const updateQuery = `
-    UPDATE User
-    SET
-      First_Name = ?,
-      Middle_Name = ?,
-      Last_Name = ?,
-      Username = ?,
-      Password = ?,
-      Email = ?,
-      Phone_No = ?,
-      Blood_Group = ?,
-      Last_Donation_Date = ?,
-      User_Type = ?  -- Added User_Type here
+  // Retrieve the user's stored salt
+  const selectQuery = `
+    SELECT Salt
+    FROM User
     WHERE User_ID = ?
   `;
 
-  const values = [
-    First_Name,
-    Middle_Name,
-    Last_Name,
-    Username,
-    Password,
-    Email,
-    Phone_No,
-    Blood_Group,
-    Last_Donation_Date,
-    User_Type, // Added User_Type here
-    User_ID,
-  ];
-
-  // Executing the update query
-  connection.query(updateQuery, values, (err, results) => {
+  connection.query(selectQuery, [User_ID], async (err, results) => {
     if (err) {
-      console.error("Error updating the database: " + err.stack);
-      res.status(500).send("Error updating the database.");
+      console.error("Error querying the database: " + err.stack);
+      res.status(500).send("Error querying the database.");
       return;
     }
-    res.send("User updated successfully.");
+
+    if (results.length === 0) {
+      // User not found
+      res.status(404).send("User not found.");
+      return;
+    }
+
+    const salt = results[0].Salt;
+
+    try {
+      // Hash the password with the stored salt
+      const hashedPassword = await bcrypt.hash(Password, salt);
+
+      // SQL query for updating user information
+      const updateQuery = `
+        UPDATE User
+        SET
+          First_Name = ?,
+          Middle_Name = ?,
+          Last_Name = ?,
+          Username = ?,
+          Password = ?,
+          Email = ?,
+          Phone_No = ?,
+          Blood_Group = ?,
+          Last_Donation_Date = ?,
+          User_Type = ?
+        WHERE User_ID = ?
+      `;
+
+      const values = [
+        First_Name,
+        Middle_Name,
+        Last_Name,
+        Username,
+        hashedPassword, // Store the hashed password
+        Email,
+        Phone_No,
+        Blood_Group,
+        Last_Donation_Date,
+        User_Type,
+        User_ID,
+      ];
+
+      // Executing the update query
+      connection.query(updateQuery, values, (err, results) => {
+        if (err) {
+          console.error("Error updating the database: " + err.stack);
+          res.status(500).send("Error updating the database.");
+          return;
+        }
+        res.send("User updated successfully.");
+      });
+    } catch (error) {
+      console.error("Error hashing password: " + error.stack);
+      res.status(500).send("Error hashing password.");
+    }
   });
 });
 
 // POST route to insert a new user
-app.post("/user", (req, res) => {
-  // Extracting data from the request body
+app.post("/user", async (req, res) => {
   const {
     First_Name,
     Middle_Name,
@@ -168,60 +152,110 @@ app.post("/user", (req, res) => {
     Phone_No,
     Blood_Group,
     Last_Donation_Date,
-    User_Type, // Added User_Type here
+    User_Type,
   } = req.body;
 
-  // Validating required fields
-  if (
-    !First_Name ||
-    !Last_Name ||
-    !Username ||
-    !Password ||
-    !Email ||
-    !Phone_No ||
-    !User_Type // Validate User_Type
-  ) {
-    res.status(400).send("All required fields must be provided.");
-    return;
-  }
+  // Generate a random salt
+  const saltRounds = 10;
+  const salt = await bcrypt.genSalt(saltRounds);
 
-  // SQL query for inserting a new user
-  const insertQuery = `
-    INSERT INTO User (
+  try {
+    // Hash the password with the salt
+    const hashedPassword = await bcrypt.hash(Password, salt);
+
+    // SQL query for inserting a new user
+    const insertQuery = `
+      INSERT INTO User (
+        First_Name,
+        Middle_Name,
+        Last_Name,
+        Username,
+        Password,
+        Email,
+        Phone_No,
+        Blood_Group,
+        Last_Donation_Date,
+        User_Type,
+        Salt
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    const values = [
       First_Name,
       Middle_Name,
       Last_Name,
       Username,
-      Password,
+      hashedPassword, // Store the hashed password
       Email,
       Phone_No,
       Blood_Group,
       Last_Donation_Date,
-      User_Type  -- Added User_Type here
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      User_Type,
+      salt, // Store the salt
+    ];
+
+    // Executing the insert query
+    connection.query(insertQuery, values, (err, results) => {
+      if (err) {
+        console.error("Error inserting into the database: " + err.stack);
+        res.status(500).send("Error inserting into the database.");
+        return;
+      }
+      res.send("User inserted successfully.");
+    });
+  } catch (error) {
+    console.error("Error hashing password: " + error.stack);
+    res.status(500).send("Error hashing password.");
+  }
+});
+// POST route for user login
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  // Query the database to get the user's stored salt and hashed password
+  const selectQuery = `
+    SELECT User_ID, Salt, Password
+    FROM User
+    WHERE Username = ?
   `;
 
-  const values = [
-    First_Name,
-    Middle_Name,
-    Last_Name,
-    Username,
-    Password,
-    Email,
-    Phone_No,
-    Blood_Group,
-    Last_Donation_Date,
-    User_Type, // Added User_Type here
-  ];
-
-  // Executing the insert query
-  connection.query(insertQuery, values, (err, results) => {
+  connection.query(selectQuery, [username], async (err, results) => {
     if (err) {
-      console.error("Error inserting into the database: " + err.stack);
-      res.status(500).send("Error inserting into the database.");
+      console.error("Error querying the database: " + err.stack);
+      res.status(500).send("Error querying the database.");
       return;
     }
-    res.send("User inserted successfully.");
+
+    if (results.length === 0) {
+      // User not found
+      res.status(401).send("Invalid credentials.");
+      return;
+    }
+
+    const { User_ID, Salt, Password: storedPassword } = results[0];
+
+    try {
+      // Use bcrypt.compare to compare entered password with stored hashed password
+      const passwordMatch = await bcrypt.compare(password, storedPassword);
+
+      if (passwordMatch) {
+        // Generate a JWT token
+        const token = jwt.sign(
+          { user_id: User_ID, username },
+          "your-secret-key",
+          {
+            expiresIn: "1h", // Token expires in 1 hour
+          }
+        );
+
+        res.json({ token });
+      } else {
+        res.status(401).send("Invalid credentials.");
+      }
+    } catch (error) {
+      console.error("Error comparing passwords: " + error.stack);
+      res.status(500).send("Error comparing passwords.");
+    }
   });
 });
 
