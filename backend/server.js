@@ -254,7 +254,7 @@ app.post("/login", async (req, res) => {
           { user_id: User_ID, username },
           "your-secret-key",
           {
-            expiresIn: "1h", // Token expires in 1 hour
+            expiresIn: "1s", // Token expires in 1 hour
           }
         );
 

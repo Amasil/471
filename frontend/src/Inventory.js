@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./inventory.css";
+import "./Inventory.css";
 
 const Inventory = () => {
   const [editableQuantities, setEditableQuantities] = useState({
@@ -177,12 +177,25 @@ const Inventory = () => {
     <div className="admin-dashboard">
       <div className="inventory-container">
         <header>
-          <h1>Inventory Dashboard</h1>
+          <h1 className="inventory-h1">Inventory Dashboard</h1>
         </header>
 
         <section>
-          <h2>Inventory</h2>
-
+          <table className="header-table">
+            <tr className="header-row">
+              <td className="header-inventory">
+                <h1>Inventory</h1>
+              </td>
+              <td class="refresh-button-container">
+                <button
+                  onClick={handleRefreshInventory}
+                  className="refresh-button"
+                >
+                  Refresh
+                </button>
+              </td>
+            </tr>
+          </table>
           <table>
             <thead>
               <tr>
@@ -234,11 +247,6 @@ const Inventory = () => {
               ))}
             </tbody>
           </table>
-          <div className="refresh-button-container">
-            <button onClick={handleRefreshInventory} className="refresh-button">
-              Refresh
-            </button>
-          </div>
         </section>
       </div>
     </div>
