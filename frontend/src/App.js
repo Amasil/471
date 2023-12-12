@@ -15,7 +15,6 @@ import UsersSection from "./admin/AdminDashboard.js";
 import DoctorDashboard from "./doctor/DoctorDashboard.js";
 import DonorDashboard from "./donor/DonorDashboard.js";
 import RecipientDashboard from "./recipient/RecipientDashboard.js";
-import { Navigate } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -29,6 +28,7 @@ const Navbar = () => {
     </div>
   );
 };
+
 
 const updateFavicon = (faviconURL) => {
   const favicon = document.querySelector('link[rel="icon"]');

@@ -1,24 +1,32 @@
+// Importing required modules
 const express = require("express");
 const mysql = require("mysql2");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+
+// Creating an Express application
 const app = express();
-app.use(bodyParser.json());
-app.use(cors());
+
+// Middleware setup
+app.use(bodyParser.json()); // Parse JSON requests
+app.use(cors()); // Enable Cross-Origin Resource Sharing (CORS)
+
+// =================================================================================================================
 
 // Establishing a connection to the MySQL database
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "sZ10O84<",
+  password: "sZ10O84<", // Consider using environment variables for sensitive information
   database: "Test",
   authPlugins: {
     mysql_clear_password: () => () => Buffer.from("sZ10O84<"),
   },
 });
 
+// Connecting to the database
 connection.connect((err) => {
   if (err) {
     console.error("Error connecting to the database: " + err.stack);
@@ -27,21 +35,12 @@ connection.connect((err) => {
   console.log("Connected to the database.");
 });
 
+// =================================================================================================================
+
 // GET route to fetch all users
 app.get("/user", (req, res) => {
+  // Query to fetch all users from the User table
   connection.query("SELECT * FROM User", (err, results) => {
-    if (err) {
-      console.error("Error querying the database: " + err.stack);
-      res.status(500).send("Error querying the database.");
-      return;
-    }
-    res.send(results);
-  });
-});
-
-// GET route to fetch all feedback
-app.get("/user", (req, res) => {
-  connection.query("SELECT * FROM Feedback", (err, results) => {
     if (err) {
       console.error("Error querying the database: " + err.stack);
       res.status(500).send("Error querying the database.");
@@ -53,6 +52,7 @@ app.get("/user", (req, res) => {
 
 // PUT route to update user information
 app.put("/user", async (req, res) => {
+  // Extracting user data from the request body
   const {
     User_ID,
     First_Name,
@@ -208,6 +208,41 @@ app.post("/user", async (req, res) => {
     res.status(500).send("Error hashing password.");
   }
 });
+
+// DELETE route to delete a user
+app.delete("/user", (req, res) => {
+  const userId = req.body.User_ID;
+
+  // Validating required fields
+  if (!userId) {
+    res.status(400).send("User ID must be provided in the request body.");
+    return;
+  }
+
+  // SQL query for deleting a user
+  const deleteQuery = `
+    DELETE FROM User
+    WHERE User_ID = ?
+  `;
+
+  connection.query(deleteQuery, [userId], (err, results) => {
+    if (err) {
+      console.error("Error deleting from the database: " + err.stack);
+      res.status(500).send("Error deleting from the database.");
+      return;
+    }
+
+    // Checking if the user was found and deleted
+    if (results.affectedRows === 0) {
+      res.status(404).send("User not found.");
+    } else {
+      res.send("User deleted successfully.");
+    }
+  });
+});
+
+// =================================================================================================================
+
 // POST route for user login
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
@@ -259,37 +294,7 @@ app.post("/login", async (req, res) => {
   });
 });
 
-// DELETE route to delete a user
-app.delete("/user", (req, res) => {
-  const userId = req.body.User_ID;
-
-  // Validating required fields
-  if (!userId) {
-    res.status(400).send("User ID must be provided in the request body.");
-    return;
-  }
-
-  // SQL query for deleting a user
-  const deleteQuery = `
-    DELETE FROM User
-    WHERE User_ID = ?
-  `;
-
-  connection.query(deleteQuery, [userId], (err, results) => {
-    if (err) {
-      console.error("Error deleting from the database: " + err.stack);
-      res.status(500).send("Error deleting from the database.");
-      return;
-    }
-
-    // Checking if the user was found and deleted
-    if (results.affectedRows === 0) {
-      res.status(404).send("User not found.");
-    } else {
-      res.send("User deleted successfully.");
-    }
-  });
-});
+// =================================================================================================================
 
 // GET route to fetch initial blood quantities
 app.get("/bloodQuantities", (req, res) => {
@@ -317,6 +322,41 @@ app.get("/bloodQuantities", (req, res) => {
     }
   );
 });
+
+// PUT route to update blood quantities in the Inventory table
+app.put("/updateQuantity", (req, res) => {
+  const { Blood_type, No_of_units } = req.body;
+
+  // Validating required fields
+  if (!Blood_type || !No_of_units) {
+    res
+      .status(400)
+      .send("Blood type and quantity must be provided in the request body.");
+    return;
+  }
+
+  // SQL query for updating blood quantities in the Inventory table
+  const updateQuery = `
+    UPDATE Inventory
+    SET No_of_units = ?
+    WHERE Blood_type = ?
+  `;
+
+  const values = [No_of_units, Blood_type];
+
+  // Executing the update query
+  connection.query(updateQuery, values, (err, results) => {
+    if (err) {
+      console.error("Error updating blood quantity: " + err.stack);
+      res.status(500).send("Error updating blood quantity.");
+      return;
+    }
+
+    res.send("Blood quantity updated successfully.");
+  });
+});
+
+// =================================================================================================================
 
 // POST route to insert data into the Inventory table
 app.post("/inventory", (req, res) => {
@@ -380,38 +420,8 @@ app.put("/inventory", (req, res) => {
     res.send("Blood quantity updated successfully.");
   });
 });
-// PUT route to update blood quantities in the Inventory table
-app.put("/updateQuantity", (req, res) => {
-  const { Blood_type, No_of_units } = req.body;
 
-  // Validating required fields
-  if (!Blood_type || !No_of_units) {
-    res
-      .status(400)
-      .send("Blood type and quantity must be provided in the request body.");
-    return;
-  }
-
-  // SQL query for updating blood quantities in the Inventory table
-  const updateQuery = `
-    UPDATE Inventory
-    SET No_of_units = ?
-    WHERE Blood_type = ?
-  `;
-
-  const values = [No_of_units, Blood_type];
-
-  // Executing the update query
-  connection.query(updateQuery, values, (err, results) => {
-    if (err) {
-      console.error("Error updating blood quantity: " + err.stack);
-      res.status(500).send("Error updating blood quantity.");
-      return;
-    }
-
-    res.send("Blood quantity updated successfully.");
-  });
-});
+// =================================================================================================================
 
 // PUT route to update feedback
 app.put("/Feedback", (req, res) => {
@@ -442,6 +452,21 @@ app.put("/Feedback", (req, res) => {
     res.send("Feedback updated successfully.");
   });
 });
+
+// GET route to fetch all feedback
+app.get("/feedback", (req, res) => {
+  // Query to fetch all feedback from the Feedback table
+  connection.query("SELECT * FROM Feedback", (err, results) => {
+    if (err) {
+      console.error("Error querying the database: " + err.stack);
+      res.status(500).send("Error querying the database.");
+      return;
+    }
+    res.send(results);
+  });
+});
+
+// =================================================================================================================
 
 // Starting the server on port 3000
 app.listen(3000, () => {
