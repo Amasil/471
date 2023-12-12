@@ -110,7 +110,16 @@ const Inventory = () => {
         [bloodType]: "Low",
       }));
     }
+    // Ask for confirmation before saving
+    const userConfirmed = window.confirm(
+      "Are you sure you want to update the quantity?"
+    );
 
+    if (!userConfirmed) {
+      // If the user cancels, revert the changes
+      handleRefreshInventory();
+      return;
+    }
     try {
       // Send the updated data to the server
       const response = await fetch("http://localhost:3000/updateQuantity", {
