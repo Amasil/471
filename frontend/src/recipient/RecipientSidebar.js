@@ -15,7 +15,7 @@ const RecipientSidebar = () => {
         Dashboard
       </Link>
       <Link
-        to="/recipient-dashboard/edit"
+        to="/recipient-dashboard/appointments"
         className={
           location.pathname.startsWith("/recipient-dashboard/appointments")
             ? "active"
@@ -32,7 +32,12 @@ const RecipientSidebar = () => {
       >
         Feedback
       </Link>
-      {/* Add more links as needed */}
+      <Link
+        to="/user-login"
+        className={location.pathname === "/user-login" ? "active" : ""}
+      >
+        Logout
+      </Link>
     </div>
   );
 };
