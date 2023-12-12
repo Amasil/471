@@ -10,6 +10,7 @@ import {
 import "./AppStyle.css";
 import UserDashboard from "./User_Dashboard.js";
 import AdminDashboard from "./admin/adminDashboard.js";
+// If adminDashboard breaks it, rename it
 import UsersSection from "./admin/adminDashboard.js";
 import DoctorDashboard from "./doctor/DoctorDashboard.js";
 import DonorDashboard from "./donor/DonorDashboard.js";
