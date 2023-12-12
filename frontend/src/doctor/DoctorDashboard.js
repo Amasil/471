@@ -6,6 +6,7 @@ import DoctorSidebar from "./DoctorSidebar.js";
 import "./DoctorDashboard.css";
 import Inventory from "../Inventory.js";
 import FeedbackDoctor from "../FeedbackDoctor.js";
+import DoctorCreate from "./DoctorCreate.js";
 
 const DoctorDashboard = () => {
   return (
@@ -14,6 +15,7 @@ const DoctorDashboard = () => {
       <div className="doctor-content">
         <Routes>
           <Route path="/" element={<DashboardHome />} />
+          <Route path="/create" element={<DoctorCreate />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/feedback-doctor" element={<FeedbackDoctor />} />
           {/* Add more routes as needed */}

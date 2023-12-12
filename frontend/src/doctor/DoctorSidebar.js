@@ -15,6 +15,14 @@ const DoctorSidebar = () => {
         Dashboard
       </Link>
       <Link
+        to="/doctor-dashboard/create"
+        className={
+          location.pathname.startsWith("/doctor-dashboard/") ? "active" : ""
+        }
+      >
+        Create User
+      </Link>
+      <Link
         to="/doctor-dashboard/inventory"
         className={
           location.pathname.startsWith("/doctor-dashboard/") ? "active" : ""

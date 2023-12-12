@@ -5,6 +5,7 @@ import axios from "axios";
 import AdminSidebar from "./AdminSidebar.js";
 import "./AdminDashboard.css";
 import Inventory from "../Inventory.js";
+import CreateUser from "../CreateUser.js";
 // Function to update the favicon of the webpage
 const updateFavicon = (faviconURL) => {
   const favicon = document.querySelector('link[rel="icon"]');
@@ -484,6 +485,7 @@ const AdminDashboard = () => {
             <Route path="/" element={<DashboardHome />} />
             <Route path="/users" element={<Users />} />
             <Route path="/inventory" element={<Inventory />} />
+            <Route path="/create-user" element={<CreateUser />} />
             {/* Add other routes for inventory or additional features */}
           </Routes>
         </div>

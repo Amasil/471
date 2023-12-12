@@ -21,6 +21,14 @@ const AdminSidebar = () => {
         Users
       </Link>
       <Link
+        to="/admin-dashboard/create-user"
+        className={
+          location.pathname.startsWith("/admin-dashboard/create-user") ? "active" : ""
+        }
+      >
+        Create User
+      </Link>
+      <Link
         to="/admin-dashboard/inventory"
         className={
           location.pathname.startsWith("/admin-dashboard/") ? "active" : ""
