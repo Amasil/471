@@ -7,6 +7,7 @@ import "./Recipient_Dashboard.css";
 //import Users from "./Users";
 //import Settings from "./Settings";
 //import UserDashboard from "./User_Dashboard.js";
+import Feedback from "../Feedback.js";
 
 const Recipient_Dashboard = () => {
   return (
@@ -15,8 +16,7 @@ const Recipient_Dashboard = () => {
       <div className="recipient-content">
         <Routes>
           <Route path="/" element={<DashboardHome />} />
-          
-          {/* Add more routes as needed */}
+          <Route path="/feedback" element={<Feedback />} />
         </Routes>
       </div>
     </div>

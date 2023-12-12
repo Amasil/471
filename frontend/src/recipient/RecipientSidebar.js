@@ -17,18 +17,20 @@ const RecipientSidebar = () => {
       <Link
         to="/recipient-dashboard/edit"
         className={
-          location.pathname.startsWith("/recipient-dashboard/appointments") ? "active" : ""
+          location.pathname.startsWith("/recipient-dashboard/appointments")
+            ? "active"
+            : ""
         }
       >
         Upcoming appointments
       </Link>
       <Link
-        to="/recipient-dashboard/settings"
+        to="/recipient-dashboard/feedback"
         className={
-          location.pathname === "/recipient-dashboard/settings" ? "active" : ""
+          location.pathname === "/recipient-dashboard/feedback" ? "active" : ""
         }
       >
-        Settings
+        Feedback
       </Link>
       {/* Add more links as needed */}
     </div>

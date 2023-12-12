@@ -327,10 +327,12 @@ const App = () => {
         <Route path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/admin-dashboard/*" element={<Admin_Dashboard />} />
         <Route path="/users" element={<UsersSection />} />
-        <Route path="/doctor-dashboard" element={<Doctor_Dashboard />} />
         <Route path="/doctor-dashboard/*" element={<Doctor_Dashboard />} />
-        <Route path="/donor-dashboard" element={<Donor_Dashboard />} />
-        <Route path="/recipient-dashboard" element={<Recipient_Dashboard />} />
+        <Route path="/donor-dashboard/*" element={<Donor_Dashboard />} />
+        <Route
+          path="/recipient-dashboard/*"
+          element={<Recipient_Dashboard />}
+        />
         {/* Set the default route to UserLogin */}
         <Route index element={<UserLogin />} />
       </Routes>

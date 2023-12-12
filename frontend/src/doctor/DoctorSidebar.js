@@ -23,14 +23,15 @@ const DoctorSidebar = () => {
         Inventory
       </Link>
       <Link
-        to="/doctor-dashboard/settings"
+        to="/doctor-dashboard/feedback-doctor"
         className={
-          location.pathname === "/doctor-dashboard/settings" ? "active" : ""
+          location.pathname === "/doctor-dashboard/feedback-doctor"
+            ? "active"
+            : ""
         }
       >
-        Settings
+        Feedback
       </Link>
-      {/* Add more links as needed */}
     </div>
   );
 };

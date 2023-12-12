@@ -7,6 +7,7 @@ import "./Donor_Dashboard.css";
 //import Users from "./Users";
 //import Settings from "./Settings";
 //import UserDashboard from "./User_Dashboard.js";
+import Feedback from "../Feedback.js";
 
 const Donor_Dashboard = () => {
   return (
@@ -15,13 +16,12 @@ const Donor_Dashboard = () => {
       <div className="donor-content">
         <Routes>
           <Route path="/" element={<DashboardHome />} />
-          {/* Add more routes as needed */}
+          <Route path="/feedback" element={<Feedback />} />
         </Routes>
       </div>
     </div>
   );
 };
-//<Route path="user-dashboard" element={<UserDashboard />} />
 
 const DashboardHome = () => {
   return <h2>Welcome to the Donor Dashboard!</h2>;

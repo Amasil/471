@@ -23,12 +23,18 @@ const DonorSidebar = () => {
         Edit User
       </Link>
       <Link
+        to="/donor-dashboard/feedback"
+        className={location.pathname === "/doctor-dashboard/feedback"}
+      >
+        Feedback
+      </Link>
+      <Link
         to="/donor-dashboard/settings"
         className={
           location.pathname === "/donor-dashboard/settings" ? "active" : ""
         }
       >
-        Settings
+        Logout
       </Link>
       {/* Add more links as needed */}
     </div>
