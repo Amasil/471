@@ -9,9 +9,9 @@ import {
 } from "react-router-dom";
 import "./AppStyle.css";
 import UserDashboard from "./User_Dashboard.js";
-import AdminDashboard from "./admin/adminDashboard.js";
+import AdminDashboard from "./admin/AdminDashboard.js";
 // If adminDashboard breaks it, rename it
-import UsersSection from "./admin/adminDashboard.js";
+import UsersSection from "./admin/AdminDashboard.js";
 import DoctorDashboard from "./doctor/DoctorDashboard.js";
 import DonorDashboard from "./donor/DonorDashboard.js";
 import RecipientDashboard from "./recipient/RecipientDashboard.js";
