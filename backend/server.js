@@ -38,6 +38,18 @@ app.get("/user", (req, res) => {
   });
 });
 
+// GET route to fetch all feedback
+app.get("/user", (req, res) => {
+  connection.query("SELECT * FROM Feedback", (err, results) => {
+    if (err) {
+      console.error("Error querying the database: " + err.stack);
+      res.status(500).send("Error querying the database.");
+      return;
+    }
+    res.send(results);
+  });
+});
+
 // PUT route to update user information
 app.put("/user", (req, res) => {
   // Extracting data from the request body
@@ -333,6 +345,42 @@ app.put("/updateQuantity", (req, res) => {
     }
 
     res.send("Blood quantity updated successfully.");
+  });
+});
+
+// PUT route to update feedback
+app.put("/Feedback", (req, res) => {
+  const {
+    Rating,
+    Feedback,
+  } = req.body;
+
+  // Validating required fields
+  if (
+    !Rating ||
+    !Feedback
+  ) {
+    res.status(400).send("All required fields must be provided.");
+    return;
+  }
+  // SQL query for updating feedback
+  const updateQuery = `
+  UPDATE Feedback
+  SET Rating = ?
+  WHERE Feedback = ?
+  `;
+
+  const values = [No_of_units, Blood_type];
+
+  // Executing the update query
+  connection.query(updateQuery, values, (err, results) => {
+  if (err) {
+    console.error("Error updating feedback: " + err.stack);
+    res.status(500).send("Error updating feedback.");
+    return;
+  }
+
+  res.send("Feedback updated successfully.");
   });
 });
 
