@@ -7,36 +7,10 @@
 
 /* Style for the admin sidebar */
 .admin-sidebar {
-  position: fixed;
   width: 150px;
-  height: 100%;
   background-color: #333;
   color: #fff;
   padding: 20px;
-  overflow-y: auto; /* Enable vertical scrolling if the content is taller than the sidebar */
-}
-
-.mainContainer {
-  margin-left: 50px;
-}
-
-/* Adjust the styles for the content area to accommodate the fixed sidebar */
-.admin-content {
-  flex: 1;
-  padding: 20px;
-  margin-left: 150px; /* Set the width of the fixed sidebar */
-}
-
-/* Adjust the max width for smaller screens */
-@media (max-width: 768px) {
-  .admin-sidebar {
-    position: relative;
-    height: auto;
-  }
-
-  .admin-content {
-    margin-left: 0;
-  }
 }
 
 .users-container {
@@ -141,7 +115,6 @@ header {
   background-color: #ccc;
   cursor: not-allowed;
 }
-<<<<<<< HEAD
 .user-table td.first-name,
 .user-table td.middle-name,
 .user-table td.last-name,
@@ -153,11 +126,6 @@ header {
 .user-table td.user-type,
 .user-table td.action {
   max-width: 150px;
-=======
-
-.user-table td.email {
-  max-width: 150px; /* Adjust the max width based on your preference */
->>>>>>> 21589e40 (change)
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

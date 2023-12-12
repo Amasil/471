@@ -55,6 +55,18 @@ const Inventory = () => {
 
         // Update the quantities state with the fetched data
         setQuantities(data);
+
+        // Check and update status based on initial quantities
+        const updatedStatus = {};
+        Object.keys(data).forEach((bloodType) => {
+          if (parseInt(data[bloodType], 10) < 20) {
+            updatedStatus[bloodType] = "Low";
+          } else {
+            updatedStatus[bloodType] = "Healthy";
+          }
+        });
+
+        setStatus(updatedStatus);
       } catch (error) {
         console.error("Error fetching initial quantities:", error);
       }
@@ -92,12 +104,11 @@ const Inventory = () => {
 
     setQuantities(updatedQuantities);
 
-    if (parseInt(updatedQuantities[bloodType], 10) < 30) {
+    if (parseInt(updatedQuantities[bloodType], 10) < 20) {
       setStatus((prevStatus) => ({
         ...prevStatus,
         [bloodType]: "Low",
       }));
-      alert(`Status for ${bloodType} set to Low due to low quantity.`);
     }
 
     try {
