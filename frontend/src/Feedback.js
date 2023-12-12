@@ -18,7 +18,7 @@ const Feedback = () => {
       <header>
         <h1>Feedback</h1>
       </header>
-      <div id="rating-container">
+      <div className="rating-container">
         <p>Rate us out of 5:</p>
         <select
           value={rating}

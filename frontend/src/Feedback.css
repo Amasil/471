@@ -1,28 +1,47 @@
-.textarea-size {
-    width: 100%; /* Adjust the width as needed */
-    height: 150px; /* Adjust the height as needed */
-    resize: vertical; /* Allow vertical resizing */
-}
-
-.rating-dropdown {
-     width: 55px;
+.feedback-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 header {
-    background-color: #333;
-    color: #fff;
-    padding: 20px;
-    text-align: center;
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+.rating-container {
+  margin-top: 20px;
+}
+
+p {
+  color: #2c3e50;
+}
+
+.rating-dropdown {
+  width: 55px;
+  padding: 8px 12px;
+  margin-left: 10px;
+}
+
+#feedback-text {
+  width: 100%;
+  height: 150px;
+  resize: vertical;
+  margin-top: 20px;
+  padding: 10px;
 }
 
 button {
-    padding: 8px 12px;
-    cursor: pointer;
-    border: none;
-    border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  margin-top: 20px;
 }
 
 button[disabled] {
-    background-color: #bdc3c7;
-    cursor: not-allowed;
-  }
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
