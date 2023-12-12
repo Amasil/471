@@ -67,77 +67,54 @@ app.put("/user", async (req, res) => {
     User_Type,
   } = req.body;
 
-  // Retrieve the user's stored salt
-  const selectQuery = `
-    SELECT Salt
-    FROM User
-    WHERE User_ID = ?
-  `;
+  try {
+    // Hash the password with automatically generated salt
+    const hashedPassword = await bcrypt.hash(Password, 10); // 10 is the cost factor, you can adjust it
 
-  connection.query(selectQuery, [User_ID], async (err, results) => {
-    if (err) {
-      console.error("Error querying the database: " + err.stack);
-      res.status(500).send("Error querying the database.");
-      return;
-    }
+    // SQL query for updating user information
+    const updateQuery = `
+      UPDATE User
+      SET
+        First_Name = ?,
+        Middle_Name = ?,
+        Last_Name = ?,
+        Username = ?,
+        Password = ?,
+        Email = ?,
+        Phone_No = ?,
+        Blood_Group = ?,
+        Last_Donation_Date = ?,
+        User_Type = ?
+      WHERE User_ID = ?
+    `;
 
-    if (results.length === 0) {
-      // User not found
-      res.status(404).send("User not found.");
-      return;
-    }
+    const values = [
+      First_Name,
+      Middle_Name,
+      Last_Name,
+      Username,
+      hashedPassword, // Store the hashed password
+      Email,
+      Phone_No,
+      Blood_Group,
+      Last_Donation_Date,
+      User_Type,
+      User_ID,
+    ];
 
-    const salt = results[0].Salt;
-
-    try {
-      // Hash the password with the stored salt
-      const hashedPassword = await bcrypt.hash(Password, salt);
-
-      // SQL query for updating user information
-      const updateQuery = `
-        UPDATE User
-        SET
-          First_Name = ?,
-          Middle_Name = ?,
-          Last_Name = ?,
-          Username = ?,
-          Password = ?,
-          Email = ?,
-          Phone_No = ?,
-          Blood_Group = ?,
-          Last_Donation_Date = ?,
-          User_Type = ?
-        WHERE User_ID = ?
-      `;
-
-      const values = [
-        First_Name,
-        Middle_Name,
-        Last_Name,
-        Username,
-        hashedPassword, // Store the hashed password
-        Email,
-        Phone_No,
-        Blood_Group,
-        Last_Donation_Date,
-        User_Type,
-        User_ID,
-      ];
-
-      // Executing the update query
-      connection.query(updateQuery, values, (err, results) => {
-        if (err) {
-          console.error("Error updating the database: " + err.stack);
-          res.status(500).send("Error updating the database.");
-          return;
-        }
-        res.send("User updated successfully.");
-      });
-    } catch (error) {
-      console.error("Error hashing password: " + error.stack);
-      res.status(500).send("Error hashing password.");
-    }
-  });
+    // Executing the update query
+    connection.query(updateQuery, values, (err, results) => {
+      if (err) {
+        console.error("Error updating the database: " + err.stack);
+        res.status(500).send("Error updating the database.");
+        return;
+      }
+      res.send("User updated successfully.");
+    });
+  } catch (error) {
+    console.error("Error hashing password: " + error.stack);
+    res.status(500).send("Error hashing password.");
+  }
 });
 
 // POST route to insert a new user
@@ -175,9 +152,8 @@ app.post("/user", async (req, res) => {
         Phone_No,
         Blood_Group,
         Last_Donation_Date,
-        User_Type,
-        Salt
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        User_Type
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     const values = [
@@ -191,7 +167,6 @@ app.post("/user", async (req, res) => {
       Blood_Group,
       Last_Donation_Date,
       User_Type,
-      salt, // Store the salt
     ];
 
     // Executing the insert query
@@ -247,9 +222,9 @@ app.delete("/user", (req, res) => {
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
-  // Query the database to get the user's stored salt and hashed password
+  // Query the database to get the user's stored hashed password
   const selectQuery = `
-    SELECT User_ID, Salt, Password
+    SELECT User_ID, Password
     FROM User
     WHERE Username = ?
   `;
@@ -267,14 +242,14 @@ app.post("/login", async (req, res) => {
       return;
     }
 
-    const { User_ID, Salt, Password: storedPassword } = results[0];
+    const { User_ID, Password: storedPassword } = results[0];
 
     try {
       // Use bcrypt.compare to compare entered password with stored hashed password
       const passwordMatch = await bcrypt.compare(password, storedPassword);
 
       if (passwordMatch) {
-        // Generate a JWT token
+        // You may want to include the user's ID or other information in the token
         const token = jwt.sign(
           { user_id: User_ID, username },
           "your-secret-key",
@@ -293,7 +268,6 @@ app.post("/login", async (req, res) => {
     }
   });
 });
-
 // =================================================================================================================
 
 // GET route to fetch initial blood quantities
