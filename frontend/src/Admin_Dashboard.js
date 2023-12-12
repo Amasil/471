@@ -35,7 +35,7 @@ const DashboardHome = () => {
   }, []);
 
   return (
-    <div>
+    <div className="mainContainer">
       <h2>Welcome to the Admin Dashboard!</h2>
       <p>
         This is the homepage. You can navigate to other sections using the
