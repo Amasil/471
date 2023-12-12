@@ -350,16 +350,10 @@ app.put("/updateQuantity", (req, res) => {
 
 // PUT route to update feedback
 app.put("/Feedback", (req, res) => {
-  const {
-    Rating,
-    Feedback,
-  } = req.body;
+  const { Rating, Feedback } = req.body;
 
   // Validating required fields
-  if (
-    !Rating ||
-    !Feedback
-  ) {
+  if (!Rating || !Feedback) {
     res.status(400).send("All required fields must be provided.");
     return;
   }
@@ -374,13 +368,13 @@ app.put("/Feedback", (req, res) => {
 
   // Executing the update query
   connection.query(updateQuery, values, (err, results) => {
-  if (err) {
-    console.error("Error updating feedback: " + err.stack);
-    res.status(500).send("Error updating feedback.");
-    return;
-  }
+    if (err) {
+      console.error("Error updating feedback: " + err.stack);
+      res.status(500).send("Error updating feedback.");
+      return;
+    }
 
-  res.send("Feedback updated successfully.");
+    res.send("Feedback updated successfully.");
   });
 });
 

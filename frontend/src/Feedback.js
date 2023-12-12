@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from 'react';
-import './Feedback.css'; 
+import React, { useState, useEffect } from "react";
+import "./Feedback.css";
 
 const Feedback = () => {
   const [rating, setRating] = useState(0);
-  const [feedbackText, setFeedbackText] = useState('');
+  const [feedbackText, setFeedbackText] = useState("");
 
   const handleRatingChange = (event) => {
     setRating(Number(event.target.value));
@@ -38,13 +38,13 @@ const Feedback = () => {
         value={feedbackText}
         onChange={(e) => setFeedbackText(e.target.value)}
         className="textarea-size"
-      >
-      </textarea>
+      ></textarea>
       <button //ensures button can only be pressed if feedback is present
-        disabled={
-        rating == 0 || feedbackText.trim() == ''
-        }
-        onClick={submitFeedback}>Submit</button>
+        disabled={rating == 0 || feedbackText.trim() == ""}
+        onClick={submitFeedback}
+      >
+        Submit
+      </button>
     </div>
   );
 };
