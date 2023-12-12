@@ -276,7 +276,7 @@ const Users = () => {
                     selectedUser &&
                     selectedUser.User_ID === user.User_ID && (
                       <tr>
-                        <td colSpan="10">
+                        <td colSpan="11">
                           <div>
                             <h2>Edit User Information</h2>
                             {/* Input fields for editing user information */}
@@ -461,6 +461,12 @@ const Users = () => {
             </tbody>
           </table>
         )}
+        {/* Add the refresh button */}
+        <div className="refresh-button-container">
+          <button onClick={handleRefreshUsers} className="refresh-button">
+            Refresh
+          </button>
+        </div>
       </div>
     </div>
   );
