@@ -3,9 +3,8 @@ import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import axios from "axios";
 import AdminSidebar from "./AdminSidebar.js";
-import "./Admin_Dashboard.css";
+import "./AdminDashboard.css";
 import Inventory from "../Inventory.js";
-
 // Function to update the favicon of the webpage
 const updateFavicon = (faviconURL) => {
   const favicon = document.querySelector('link[rel="icon"]');

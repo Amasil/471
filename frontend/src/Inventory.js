@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./inventory.css";
+import "./Inventory.css";
 
 const Inventory = () => {
   const [editableQuantities, setEditableQuantities] = useState({
@@ -142,6 +142,27 @@ const Inventory = () => {
     };
     setQuantities(updatedQuantities);
   };
+  const handleRefreshInventory = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/bloodQuantities");
+      const data = await response.json();
+
+      setQuantities(data);
+
+      const updatedStatus = {};
+      Object.keys(data).forEach((bloodType) => {
+        if (parseInt(data[bloodType], 10) < 20) {
+          updatedStatus[bloodType] = "Low";
+        } else {
+          updatedStatus[bloodType] = "Healthy";
+        }
+      });
+
+      setStatus(updatedStatus);
+    } catch (error) {
+      console.error("Error refreshing inventory:", error);
+    }
+  };
 
   return (
     <div className="admin-dashboard">
@@ -204,6 +225,11 @@ const Inventory = () => {
               ))}
             </tbody>
           </table>
+          <div className="refresh-button-container">
+            <button onClick={handleRefreshInventory} className="refresh-button">
+              Refresh
+            </button>
+          </div>
         </section>
       </div>
     </div>

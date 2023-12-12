@@ -9,11 +9,11 @@ import {
 } from "react-router-dom";
 import "./App_Style.css";
 import UserDashboard from "./User_Dashboard.js";
-import Admin_Dashboard from "./admin/Admin_Dashboard.js";
-import UsersSection from "./admin/Admin_Dashboard.js";
-import Doctor_Dashboard from "./doctor/Doctor_Dashboard.js";
-import Donor_Dashboard from "./donor/Donor_Dashboard.js";
-import Recipient_Dashboard from "./recipient/Recipient_Dashboard.js";
+import AdminDashboard from "./admin/AdminDashboard.js";
+import UsersSection from "./admin/AdminDashboard.js";
+import DoctorDashboard from "./doctor/DoctorDashboard.js";
+import DonorDashboard from "./donor/DonorDashboard.js";
+import RecipientDashboard from "./recipient/RecipientDashboard.js";
 
 const Navbar = () => {
   return (
@@ -325,14 +325,11 @@ const App = () => {
         <Route path="/login-doctor" element={<DoctorLogin />} />
         <Route path="/user-registration" element={<UserRegistration />} />
         <Route path="/user-dashboard" element={<UserDashboard />} />
-        <Route path="/admin-dashboard/*" element={<Admin_Dashboard />} />
+        <Route path="/admin-dashboard/*" element={<AdminDashboard />} />
         <Route path="/users" element={<UsersSection />} />
-        <Route path="/doctor-dashboard/*" element={<Doctor_Dashboard />} />
-        <Route path="/donor-dashboard/*" element={<Donor_Dashboard />} />
-        <Route
-          path="/recipient-dashboard/*"
-          element={<Recipient_Dashboard />}
-        />
+        <Route path="/doctor-dashboard/*" element={<DoctorDashboard />} />
+        <Route path="/donor-dashboard/*" element={<DonorDashboard />} />
+        <Route path="/recipient-dashboard/*" element={<RecipientDashboard />} />
         {/* Set the default route to UserLogin */}
         <Route index element={<UserLogin />} />
       </Routes>

@@ -32,6 +32,12 @@ const DoctorSidebar = () => {
       >
         Feedback
       </Link>
+      <Link
+        to="/login-doctor"
+        className={location.pathname === "/login-doctor" ? "active" : ""}
+      >
+        Logout
+      </Link>
     </div>
   );
 };

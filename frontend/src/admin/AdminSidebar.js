@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
-const AdminSidebar = () => {
+const adminSidebar = () => {
   const location = useLocation();
 
   return (
@@ -38,4 +38,4 @@ const AdminSidebar = () => {
   );
 };
 
-export default AdminSidebar;
+export default adminSidebar;

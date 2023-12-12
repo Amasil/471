@@ -132,9 +132,8 @@ header {
   white-space: nowrap;
 }
 
-/* Add this to your CSS file or style block */
 .refresh-button-container {
-  margin-top: 20px; /* Adjust the margin as needed */
+  margin-top: 20px;
   text-align: center;
 }
 

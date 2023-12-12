@@ -3,7 +3,7 @@
 import React from "react";
 import { Routes, Route, useParams } from "react-router-dom";
 import DoctorSidebar from "./DoctorSidebar.js";
-import "./Doctor_Dashboard.css";
+import "./DoctorDashboard.css";
 import Inventory from "../Inventory.js";
 import Feedback_Doctor from "../Feedback_Doctor.js";
 

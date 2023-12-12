@@ -1,19 +1,19 @@
-// Recipient_Dashboard.js
+// Donor_Dashboard.js
 
 import React from "react";
 import { Routes, Route, useParams } from "react-router-dom";
-import RecipientSidebar from "./RecipientSidebar.js";
-import "./Recipient_Dashboard.css";
+import DonorSidebar from "./DonorSidebar.js";
+import "./DonorDashboard.css";
 //import Users from "./Users";
 //import Settings from "./Settings";
 //import UserDashboard from "./User_Dashboard.js";
 import Feedback from "../Feedback.js";
 
-const Recipient_Dashboard = () => {
+const Donor_Dashboard = () => {
   return (
-    <div className="recipient-dashboard">
-      <RecipientSidebar />
-      <div className="recipient-content">
+    <div className="donor-dashboard">
+      <DonorSidebar />
+      <div className="donor-content">
         <Routes>
           <Route path="/" element={<DashboardHome />} />
           <Route path="/feedback" element={<Feedback />} />
@@ -22,9 +22,9 @@ const Recipient_Dashboard = () => {
     </div>
   );
 };
-//<Route path="user-dashboard" element={<UserDashboard />} />
+
 const DashboardHome = () => {
-  return <h2>Welcome to the Recipient Dashboard!</h2>;
+  return <h2>Welcome to the Donor Dashboard!</h2>;
 };
 
 const UsersSection = () => {
@@ -47,4 +47,4 @@ const CreateUser = () => {
   return <h2>Create User</h2>;
 };
 
-export default Recipient_Dashboard;
+export default Donor_Dashboard;
