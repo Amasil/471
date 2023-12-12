@@ -108,6 +108,7 @@ const Users = () => {
       Phone_No: selected.Phone_No || "",
       Blood_Group: selected.Blood_Group || "",
       Last_Donation_Date: selected.Last_Donation_Date || "",
+      User_Type: selected.User_Type || "",
     });
 
     // Enable editing mode and update button states
@@ -230,14 +231,15 @@ const Users = () => {
               <tr>
                 <th className="id">User ID</th>
                 <th className="first-name">First Name</th>
+                <th className="middle-name">Middle Name</th>
                 <th className="last-name">Last Name</th>
                 <th className="username">Username</th>
                 <th className="email">Email</th>
-                <th>Phone</th>
-                <th>Blood Group</th>
-                <th>Last Donation Date</th>
-                <th>User Type</th>
-                <th>Action</th>
+                <th className="phone">Phone</th>
+                <th className="blood-group">Blood Group</th>
+                <th className="last-donation-date">Last Donation Date</th>
+                <th className="user-type">User Type</th>
+                <th className="action">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -247,14 +249,18 @@ const Users = () => {
                   <tr>
                     <td className="id">{user.User_ID}</td>
                     <td className="first-name">{user.First_Name}</td>
+                    <td className="middle-name">{user.Middle_Name}</td>
                     <td className="last-name">{user.Last_Name}</td>
                     <td className="username">{user.Username}</td>
                     <td className="email">{user.Email}</td>
-                    <td>{user.Phone_No}</td>
-                    <td>{user.Blood_Group}</td>
-                    <td>{user.Last_Donation_Date}</td>
-                    <td>{user.User_Type}</td>
-                    <td>
+                    <td className="phone">{user.Phone_No}</td>
+                    <td className="blood-group">{user.Blood_Group}</td>
+                    <td className="last-donation-date">
+                      {user.Last_Donation_Date}
+                    </td>
+                    <td className="user-type">{user.User_Type}</td>
+                    <td className="action">
+                      {/* Button to select a user for editing */}
                       <button onClick={() => handleUserSelect(user.User_ID)}>
                         {/* Display "Cancel" or "Edit" based on editing state */}
                         {isEditing &&
@@ -407,6 +413,24 @@ const Users = () => {
                                 }
                               />
                             </label>
+                            <br />
+                            <label>
+                              User Type:
+                              <select
+                                value={newUserInfo.User_Type}
+                                onChange={(e) =>
+                                  setNewUserInfo({
+                                    ...newUserInfo,
+                                    User_Type: e.target.value,
+                                  })
+                                }
+                              >
+                                <option value="Donor">Donor</option>
+                                <option value="Receipient">Receipient</option>
+                                <option value="Doctor">Doctor</option>
+                              </select>
+                            </label>
+                            <br />
                             <button onClick={handleChangeUserInfo}>
                               Save Changes
                             </button>

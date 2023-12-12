@@ -115,8 +115,17 @@ header {
   background-color: #ccc;
   cursor: not-allowed;
 }
-.user-table td.email {
-  max-width: 150px; /* Adjust the max width based on your preference */
+.user-table td.first-name,
+.user-table td.middle-name,
+.user-table td.last-name,
+.user-table td.username,
+.user-table td.email,
+.user-table td.phone,
+.user-table td.blood-group,
+.user-table td.last-donation-date,
+.user-table td.user-type,
+.user-table td.action {
+  max-width: 150px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
