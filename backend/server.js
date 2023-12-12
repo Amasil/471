@@ -1,11 +1,11 @@
 const express = require("express");
-const mysql = require("mysql2");
-const bodyParser = require("body-parser");
-const cors = require("cors");
+const mysql = require("mysql");
+const jwt = require("jsonwebtoken");
+const cors = require("cors"); // Import the cors middleware
 
 const app = express();
-app.use(bodyParser.json());
-app.use(cors());
+app.use(express.json());
+app.use(cors()); // Use cors middleware
 
 // Establishing a connection to the MySQL database
 const connection = mysql.createConnection({
@@ -16,6 +16,7 @@ const connection = mysql.createConnection({
   authPlugins: {
     mysql_clear_password: () => () => Buffer.from("sZ10O84<"),
   },
+  insecureAuth: true, // Add this line
 });
 
 connection.connect((err) => {
@@ -24,6 +25,36 @@ connection.connect((err) => {
     return;
   }
   console.log("Connected to the database.");
+});
+
+// Endpoint for user login
+app.post("/login", (req, res) => {
+  const { username, password } = req.body;
+
+  // Validate user credentials against the database
+  connection.query(
+    "SELECT * FROM User WHERE Username = ? AND Password = ?",
+    [username, password],
+    (err, results) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Internal Server Error" });
+      }
+
+      if (results.length === 1) {
+        // User authenticated, generate and send a JWT token
+        const user = results[0];
+        const token = jwt.sign({ userId: user.User_ID }, "your-secret-key", {
+          expiresIn: "1h", // Set token expiration time as needed
+        });
+
+        res.json({ token });
+      } else {
+        // Invalid credentials
+        res.status(401).json({ message: "Invalid credentials" });
+      }
+    }
+  );
 });
 
 // GET route to fetch all users

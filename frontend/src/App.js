@@ -6,6 +6,7 @@ import {
   Route,
   Link,
   useNavigate,
+  Navigate,
 } from "react-router-dom";
 import "./AppStyle.css";
 import UserDashboard from "./User_Dashboard.js";
@@ -46,35 +47,74 @@ const updateWebpageTitle = (title) => {
 };
 
 const UserLogin = () => {
-  const validateUserLogin = (event) => {};
-  const Navigate = useNavigate();
+  const [userCredentials, setUserCredentials] = useState({
+    username: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setUserCredentials((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const Navigate = useNavigate(); // Move the hook call here
+
+  const handleLogin = async () => {
+    try {
+      // Send a request to your authentication API
+      const response = await axios.post("http://localhost:3000/login", {
+        username: userCredentials.username,
+        password: userCredentials.password,
+      });
+
+      // Assuming the API responds with a token upon successful login
+      const authToken = response.data.token;
+
+      // Save the token to localStorage or a state management solution (e.g., Redux)
+      localStorage.setItem("authToken", authToken);
+
+      // Redirect to the user dashboard upon successful login
+      Navigate("/user-dashboard");
+    } catch (error) {
+      console.error("Login failed:", error);
+      // Handle login failure (e.g., show an error message to the user)
+    }
+  };
 
   useEffect(() => {
     updateFavicon(
-      //"https://cdn.iconscout.com/icon/free/png-512/free-user-1851010-1568997.png?f=webp&w=512"
       "https://cdn.iconscout.com/icon/free/png-512/free-user-employee-avatar-man-person-businessman-15-17179.png?f=webp&w=512"
     );
     updateWebpageTitle("User Login");
   }, []);
-
-  const redirectToDonorDashboard = () => {
-    // Simulate a successful login by directly redirecting to the donor dashboard
-    Navigate("/donor-dashboard");
-  };
 
   return (
     <div>
       <Navbar />
       <div className="login-container">
         <h2>User Login</h2>
-        <form onSubmit={(e) => e.preventDefault() || validateUserLogin(e)}>
+        <form>
           <label htmlFor="username">Username:</label>
-          <input type="text" id="username" name="username" required />
+          <input
+            type="text"
+            id="username"
+            name="username"
+            onChange={handleChange}
+            required
+          />
 
           <label htmlFor="password">Password:</label>
-          <input type="password" id="password" name="password" required />
+          <input
+            type="password"
+            id="password"
+            name="password"
+            onChange={handleChange}
+            required
+          />
 
-          <button type="button" onClick={redirectToDonorDashboard}>
+          <button type="button" onClick={handleLogin}>
             Login
           </button>
         </form>
