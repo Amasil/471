@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import AdminSidebar from "./admin/AdminSidebar.js";
 
-import "./Users.css"; // Import the CSS file
+import "./User_Dashboard.css"; // Import the CSS file
 
 const Users = () => {
   const [users, setUsers] = useState([]);

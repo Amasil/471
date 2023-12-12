@@ -1,0 +1,19 @@
+.users-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.user-dropdown-container {
+  margin-bottom: 20px;
+}
+
+.user-dropdown {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.user-details-container {
+  margin-top: 20px;
+}
