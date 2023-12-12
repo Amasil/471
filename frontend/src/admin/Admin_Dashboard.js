@@ -4,7 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import axios from "axios";
 import AdminSidebar from "./AdminSidebar.js";
 import "./Admin_Dashboard.css";
-import Inventory from "./Inventory.js";
+import Inventory from "../Inventory.js";
 
 // Function to update the favicon of the webpage
 const updateFavicon = (faviconURL) => {

@@ -1,29 +1,30 @@
-// Doctor_Dashboard.js
+// Donor_Dashboard.js
 
 import React from "react";
 import { Routes, Route, useParams } from "react-router-dom";
-import DoctorSidebar from "./DoctorSidebar.js";
-import "./DashboardStyles.css";
-import Inventory from "./Inventory.js";
+import DonorSidebar from "./DonorSidebar.js";
+import "../DashboardStyles.css";
+//import Users from "./Users";
+//import Settings from "./Settings";
+//import UserDashboard from "./User_Dashboard.js";
 
-const Doctor_Dashboard = () => {
+const Donor_Dashboard = () => {
   return (
-    <div className="doctor-dashboard">
-      <DoctorSidebar />
-      <div className="doctor-content">
+    <div className="donor-dashboard">
+      <DonorSidebar />
+      <div className="donor-content">
         <Routes>
           <Route path="/" element={<DashboardHome />} />
-          <Route path="/inventory" element={<Inventory />} />
           {/* Add more routes as needed */}
         </Routes>
       </div>
     </div>
   );
 };
-//          <Route path="user-dashboard" element={<UserDashboard />} />
+//<Route path="user-dashboard" element={<UserDashboard />} />
 
 const DashboardHome = () => {
-  return <h2>Welcome to the Doctor Dashboard!</h2>;
+  return <h2>Welcome to the Donor Dashboard!</h2>;
 };
 
 const UsersSection = () => {
@@ -46,4 +47,4 @@ const CreateUser = () => {
   return <h2>Create User</h2>;
 };
 
-export default Doctor_Dashboard;
+export default Donor_Dashboard;

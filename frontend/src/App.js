@@ -9,11 +9,11 @@ import {
 } from "react-router-dom";
 import "./style.css";
 import UserDashboard from "./User_Dashboard.js";
-import Admin_Dashboard from "./Admin_Dashboard.js";
-import UsersSection from "./Admin_Dashboard.js";
-import Doctor_Dashboard from "./Doctor_Dashboard.js";
-import Donor_Dashboard from "./Donor_Dashboard.js";
-import Recipient_Dashboard from "./Recipient_Dashboard.js";
+import Admin_Dashboard from "./admin/Admin_Dashboard.js";
+import UsersSection from "./admin/Admin_Dashboard.js";
+import Doctor_Dashboard from "./doctor/Doctor_Dashboard.js";
+import Donor_Dashboard from "./donor/Donor_Dashboard.js";
+import Recipient_Dashboard from "./recipient/Recipient_Dashboard.js";
 
 const Navbar = () => {
   return (

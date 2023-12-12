@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import AdminSidebar from "./AdminSidebar.js";
+import AdminSidebar from "./admin/AdminSidebar.js";
 
 import "./Users.css"; // Import the CSS file
 
