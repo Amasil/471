@@ -472,7 +472,7 @@ const Users = () => {
 };
 
 // Main component for the admin dashboard
-const Admin_Dashboard = () => {
+const AdminDashboard = () => {
   return (
     <div className="admin-navbar">
       <div className="admin-dashboard">
@@ -492,5 +492,5 @@ const Admin_Dashboard = () => {
   );
 };
 
-// Export the Admin_Dashboard component as the default export
-export default Admin_Dashboard;
+// Export the AdminDashboard component as the default export
+export default AdminDashboard;
