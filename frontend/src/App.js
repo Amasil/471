@@ -77,6 +77,10 @@ const LoginForm = ({ userType, onLogin, setUsername }) => {
 
       // Save the token to localStorage or a state management solution (e.g., Redux)
       localStorage.setItem("authToken", authToken);
+
+      localStorage.setItem("username", userCredentials.username);
+
+      console.log("Username saved:", userCredentials.username); // Log the saved username
       // Redirect to the user dashboard upon successful login
       onLogin();
     } catch (error) {
@@ -128,11 +132,9 @@ const LoginForm = ({ userType, onLogin, setUsername }) => {
 
 const UserLogin = ({ setAuthenticated }) => {
   const Navigate = useNavigate();
-  const [username, setUsername] = useState(""); // Add state for username
 
   const handleUserLogin = () => {
     setAuthenticated(true);
-    localStorage.setItem("username", username); // Store the username in localStorage
     Navigate("/donor-dashboard");
   };
 
@@ -148,11 +150,7 @@ const UserLogin = ({ setAuthenticated }) => {
       <Navbar />
       <div className="login-container">
         <h2>User Login</h2>
-        <LoginForm
-          userType="Donor"
-          onLogin={handleUserLogin}
-          setUsername={setUsername}
-        />
+        <LoginForm userType="Donor" onLogin={handleUserLogin} />
       </div>
     </div>
   );
@@ -442,6 +440,7 @@ const App = () => {
             )
           }
         />
+
         <Route index element={<UserLogin />} />
       </Routes>
     </Router>
