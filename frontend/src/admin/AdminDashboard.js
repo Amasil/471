@@ -480,13 +480,11 @@ const AdminDashboard = () => {
         {/* Render the admin sidebar */}
         <AdminSidebar />
         <div className="admin-content">
-          {/* Define routes for different sections of the admin dashboard */}
           <Routes>
             <Route path="/" element={<DashboardHome />} />
             <Route path="/users" element={<Users />} />
             <Route path="/inventory" element={<Inventory />} />
             <Route path="/create-user" element={<CreateUser />} />
-            {/* Add other routes for inventory or additional features */}
           </Routes>
         </div>
       </div>

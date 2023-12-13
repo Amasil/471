@@ -28,8 +28,7 @@ const DashboardHome = () => {
 
   return (
     <div>
-      <h1>Welcome, {storedUsername}!</h1>
-      {/* Other content of the user dashboard */}
+      <h1>Welcome to the donor dashboard!</h1>
     </div>
   );
 };
