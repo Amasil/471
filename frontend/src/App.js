@@ -47,7 +47,7 @@ const updateWebpageTitle = (title) => {
   document.title = title;
 };
 
-const LoginForm = ({ userType, onLogin }) => {
+const LoginForm = ({ userType, onLogin, setUsername }) => {
   const [userCredentials, setUserCredentials] = useState({
     username: "",
     password: "",
@@ -77,7 +77,6 @@ const LoginForm = ({ userType, onLogin }) => {
 
       // Save the token to localStorage or a state management solution (e.g., Redux)
       localStorage.setItem("authToken", authToken);
-
       // Redirect to the user dashboard upon successful login
       onLogin();
     } catch (error) {
@@ -129,12 +128,14 @@ const LoginForm = ({ userType, onLogin }) => {
 
 const UserLogin = ({ setAuthenticated }) => {
   const Navigate = useNavigate();
+  const [username, setUsername] = useState(""); // Add state for username
 
   const handleUserLogin = () => {
     setAuthenticated(true);
-
+    localStorage.setItem("username", username); // Store the username in localStorage
     Navigate("/donor-dashboard");
   };
+
   useEffect(() => {
     updateFavicon(
       "https://cdn.iconscout.com/icon/free/png-512/free-user-employee-avatar-man-person-businessman-15-17179.png?f=webp&w=512"
@@ -147,7 +148,11 @@ const UserLogin = ({ setAuthenticated }) => {
       <Navbar />
       <div className="login-container">
         <h2>User Login</h2>
-        <LoginForm userType="Donor" onLogin={handleUserLogin} />
+        <LoginForm
+          userType="Donor"
+          onLogin={handleUserLogin}
+          setUsername={setUsername}
+        />
       </div>
     </div>
   );

@@ -24,7 +24,15 @@ const Donor_Dashboard = () => {
 };
 
 const DashboardHome = () => {
-  return <h2>Welcome to the Donor Dashboard!</h2>;
+  // Retrieve the username from localStorage
+  const storedUsername = localStorage.getItem("username");
+
+  return (
+    <div>
+      <h1>Welcome, {storedUsername}!</h1>
+      {/* Other content of the user dashboard */}
+    </div>
+  );
 };
 
 const UsersSection = () => {
