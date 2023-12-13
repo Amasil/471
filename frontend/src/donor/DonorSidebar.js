@@ -29,10 +29,8 @@ const DonorSidebar = () => {
         Feedback
       </Link>
       <Link
-        to="/donor-dashboard/settings"
-        className={
-          location.pathname === "/donor-dashboard/settings" ? "active" : ""
-        }
+        to="/login-user"
+        className={location.pathname === "/login-user" ? "active" : ""}
       >
         Logout
       </Link>
