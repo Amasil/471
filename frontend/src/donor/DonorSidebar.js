@@ -15,12 +15,14 @@ const DonorSidebar = () => {
         Dashboard
       </Link>
       <Link
-        to="/donor-dashboard/edit"
+        to="/donor-dashboard/appointment"
         className={
-          location.pathname.startsWith("/donor-dashboard/edit") ? "active" : ""
+          location.pathname.startsWith("/donor-dashboard/appointment")
+            ? "active"
+            : ""
         }
       >
-        Edit User
+        Donation Appointment{" "}
       </Link>
       <Link
         to="/donor-dashboard/feedback"

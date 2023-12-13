@@ -1,5 +1,4 @@
 /* Style for the whole admin dashboard container */
-/* .admin-dashboard { */
 .admin-dashboard {
   display: flex;
   min-height: 100vh; /* 100% of the viewport height */
@@ -14,12 +13,14 @@
   padding: 20px;
 }
 
+/* Container for users list */
 .users-container {
   max-width: 90%;
   margin: 0 auto;
   padding: 20px;
 }
 
+/* Header styling */
 header {
   background-color: #333;
   color: #fff;
@@ -38,6 +39,7 @@ header {
   transition: background-color 0.3s ease;
 }
 
+/* Hover effect for admin sidebar links */
 .admin-sidebar a:hover {
   background-color: #555;
 }
@@ -61,6 +63,7 @@ header {
   table-layout: fixed;
 }
 
+/* Styling for table headers and cells */
 .user-table th,
 .user-table td {
   border: 1px solid #bdc3c7;
@@ -69,11 +72,13 @@ header {
   height: 40px; /* Set a fixed height for the rows */
 }
 
+/* Styling for table headers */
 .user-table th {
   background-color: #333;
   color: #fff;
 }
 
+/* Alternate row background color */
 .user-table tr:nth-child(even) {
   background-color: #f2f2f2;
 }
@@ -87,12 +92,14 @@ header {
   border-radius: 5px;
 }
 
+/* Styling for form labels */
 .user-edit-form label {
   display: block;
   margin-bottom: 10px;
   font-weight: bold;
 }
 
+/* Styling for form inputs, selects, and buttons */
 .user-edit-form input,
 .user-edit-form select,
 .user-edit-form button {
@@ -112,10 +119,13 @@ header {
   border-radius: 4px;
 }
 
+/* Disabled state for the delete button */
 .delete-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
+
+/* Truncate long text in table cells */
 .user-table td.first-name,
 .user-table td.middle-name,
 .user-table td.last-name,
@@ -132,11 +142,13 @@ header {
   white-space: nowrap;
 }
 
+/* Style for the refresh button container */
 .refresh-button-container {
   margin-top: 20px;
   text-align: center;
 }
 
+/* Style for the refresh button */
 .refresh-button {
   padding: 10px;
   font-size: 16px;

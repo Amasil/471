@@ -10,13 +10,11 @@ import {
 } from "react-router-dom";
 
 import "./AppStyle.css";
-import UserDashboard from "./User_Dashboard.js";
 import AdminDashboard from "./admin/AdminDashboard.js";
 // If adminDashboard breaks it, rename it
 import UsersSection from "./admin/AdminDashboard.js";
 import DoctorDashboard from "./doctor/DoctorDashboard.js";
 import DonorDashboard from "./donor/DonorDashboard.js";
-import RecipientDashboard from "./recipient/RecipientDashboard.js";
 
 const Navbar = () => {
   return (
@@ -398,12 +396,6 @@ const App = () => {
         />
         <Route path="/user-registration" element={<UserRegistration />} />
         <Route
-          path="/user-dashboard"
-          element={
-            isAuthenticated ? <UserDashboard /> : <Navigate to="/user-login" />
-          }
-        />
-        <Route
           path="/admin-dashboard/*"
           element={
             isAuthenticated ? (
@@ -428,16 +420,6 @@ const App = () => {
           path="/donor-dashboard/*"
           element={
             isAuthenticated ? <DonorDashboard /> : <Navigate to="/user-login" />
-          }
-        />
-        <Route
-          path="/recipient-dashboard/*"
-          element={
-            isAuthenticated ? (
-              <RecipientDashboard />
-            ) : (
-              <Navigate to="/user-login" />
-            )
           }
         />
 

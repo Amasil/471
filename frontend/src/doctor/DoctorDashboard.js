@@ -26,7 +26,15 @@ const DoctorDashboard = () => {
 };
 
 const DashboardHome = () => {
-  return <h2>Welcome to the Doctor Dashboard!</h2>;
+  return (
+    <div className="mainContainer">
+      <h2>Welcome to the Doctor Dashboard!</h2>
+      <p>
+        This is the homepage. You can navigate to other sections using the
+        sidebar.
+      </p>
+    </div>
+  );
 };
 
 export default DoctorDashboard;

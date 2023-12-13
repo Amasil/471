@@ -446,18 +446,61 @@ app.put("/Feedback", (req, res) => {
 });
 
 // API endpoint to fetch all feedback
-app.get('/get-feedback', (req, res) => {
-  const selectQuery = 'SELECT * FROM Feedback';
+app.get("/get-feedback", (req, res) => {
+  const selectQuery = "SELECT * FROM Feedback";
   connection.query(selectQuery, (err, results) => {
     if (err) {
-      console.error('Error fetching feedback: ' + err.message);
-      res.status(500).json({ error: 'Internal Server Error' });
+      console.error("Error fetching feedback: " + err.message);
+      res.status(500).json({ error: "Internal Server Error" });
     } else {
       res.status(200).json(results);
     }
   });
 });
 
+// =================================================================================================================
+// API endpoint to handle donation appointment submissions
+app.post("/schedule-appointment", (req, res) => {
+  const { USER_ID, Status, Appointment_Date, Appointment_Time } = req.body;
+
+  const insertQuery =
+    "INSERT INTO DONATION_APPOINTMENT (USER_ID, Status, Appointment_Date, Appointment_Time) VALUES (?, ?, ?, ?)";
+
+  connection.query(
+    insertQuery,
+    [USER_ID, Status, Appointment_Date, Appointment_Time],
+    (err, results) => {
+      if (err) {
+        console.error("Error scheduling appointment:", err.message);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      const insertedAppointmentId = results.insertId;
+      console.log("Appointment scheduled with ID:", insertedAppointmentId);
+      res.status(200).json({
+        message: "Appointment scheduled successfully",
+        Appointment_ID: insertedAppointmentId,
+      });
+    }
+  );
+});
+
+// Define the route to get all appointments for a specific user
+app.get("/get-appointments/:userId", (req, res) => {
+  const userId = req.params.userId;
+
+  // Query to retrieve appointments for the specified user
+  const sql = `SELECT * FROM DONATION_APPOINTMENT WHERE USER_ID = ?`;
+
+  connection.query(sql, [userId], (err, results) => {
+    if (err) {
+      console.error("MySQL query error:", err);
+      res.status(500).send("Internal Server Error");
+    } else {
+      res.json(results);
+    }
+  });
+});
 // =================================================================================================================
 
 // Starting the server on port 3000

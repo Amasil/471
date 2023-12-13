@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./Feedback.css";
 
 const Feedback = () => {
@@ -69,7 +69,7 @@ const Feedback = () => {
         className="textarea-size"
       ></textarea>
       <button //ensures button can only be pressed if feedback is present
-        disabled={rating == 0 || feedbackText.trim() == ""}
+        disabled={rating === 0 || feedbackText.trim() === ""}
         onClick={submitFeedback}
       >
         Submit
