@@ -65,6 +65,7 @@ const UserLogin = () => {
       const response = await axios.post("http://localhost:3000/login", {
         username: userCredentials.username,
         password: userCredentials.password,
+        userType: "Donor"
       });
 
       // Assuming the API responds with a token upon successful login

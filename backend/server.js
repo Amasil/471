@@ -220,8 +220,7 @@ app.delete("/user", (req, res) => {
 
 // POST route for user login
 app.post("/login", async (req, res) => {
-  const { username, password } = req.body;
-
+  const { username, password, userType } = req.body;
   // Query the database to get the user's stored hashed password
   const selectQuery = `
     SELECT User_ID, Password
