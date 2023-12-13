@@ -221,14 +221,14 @@ app.delete("/user", (req, res) => {
 // POST route for user login
 app.post("/login", async (req, res) => {
   const { username, password, userType } = req.body;
-  // Query the database to get the user's stored hashed password
+  // Query the database to get the user's stored hashed password and user type
   const selectQuery = `
-    SELECT User_ID, Password
+    SELECT User_ID, Password, User_Type
     FROM User
-    WHERE Username = ?
+    WHERE Username = ? AND User_Type = ?
   `;
 
-  connection.query(selectQuery, [username], async (err, results) => {
+  connection.query(selectQuery, [username, userType], async (err, results) => {
     if (err) {
       console.error("Error querying the database: " + err.stack);
       res.status(500).send("Error querying the database.");
@@ -236,21 +236,25 @@ app.post("/login", async (req, res) => {
     }
 
     if (results.length === 0) {
-      // User not found
+      // User not found or user type mismatch
       res.status(401).send("Invalid credentials.");
       return;
     }
 
-    const { User_ID, Password: storedPassword } = results[0];
+    const {
+      User_ID,
+      Password: storedPassword,
+      User_Type: storedUserType,
+    } = results[0];
 
     try {
       // Use bcrypt.compare to compare entered password with stored hashed password
       const passwordMatch = await bcrypt.compare(password, storedPassword);
 
       if (passwordMatch) {
-        // You may want to include the user's ID or other information in the token
+        // You may want to include other user information in the token
         const token = jwt.sign(
-          { user_id: User_ID, username },
+          { user_id: User_ID, username, userType: storedUserType },
           "your-secret-key",
           {
             expiresIn: "1s", // Token expires in 1 hour
@@ -267,6 +271,7 @@ app.post("/login", async (req, res) => {
     }
   });
 });
+
 // =================================================================================================================
 
 // GET route to fetch initial blood quantities
