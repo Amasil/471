@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./inventory.css";
+import "./Inventory.css";
 
 const Inventory = () => {
   const [editableQuantities, setEditableQuantities] = useState({
