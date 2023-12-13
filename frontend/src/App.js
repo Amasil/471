@@ -4,9 +4,11 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
+  Navigate,
   Link,
   useNavigate,
 } from "react-router-dom";
+
 import "./AppStyle.css";
 import UserDashboard from "./User_Dashboard.js";
 import AdminDashboard from "./admin/AdminDashboard.js";
@@ -125,10 +127,12 @@ const LoginForm = ({ userType, onLogin }) => {
   );
 };
 
-const UserLogin = () => {
+const UserLogin = ({ setAuthenticated }) => {
   const Navigate = useNavigate();
 
   const handleUserLogin = () => {
+    setAuthenticated(true);
+
     Navigate("/donor-dashboard");
   };
   useEffect(() => {
@@ -149,10 +153,11 @@ const UserLogin = () => {
   );
 };
 
-const AdminLogin = () => {
+const AdminLogin = ({ setAuthenticated }) => {
   const Navigate = useNavigate();
 
   const handleAdminLogin = () => {
+    setAuthenticated(true);
     Navigate("/admin-dashboard");
   };
   useEffect(() => {
@@ -172,10 +177,11 @@ const AdminLogin = () => {
   );
 };
 
-const DoctorLogin = () => {
+const DoctorLogin = ({ setAuthenticated }) => {
   const Navigate = useNavigate();
 
   const handleDoctorLogin = () => {
+    setAuthenticated(true);
     Navigate("/doctor-dashboard");
   };
   useEffect(() => {
@@ -193,6 +199,13 @@ const DoctorLogin = () => {
       </div>
     </div>
   );
+};
+
+const handleLogout = () => {
+  // Clear authentication state
+  // setAuthenticated(false);
+  // Redirect to the login page
+  Navigate("/user-login");
 };
 
 const UserRegistration = () => {
@@ -364,20 +377,66 @@ const UserRegistration = () => {
 };
 
 const App = () => {
+  const [isAuthenticated, setAuthenticated] = useState(false);
   return (
     <Router>
       <Routes>
-        <Route path="/user-login" element={<UserLogin />} />
-        <Route path="/admin-login" element={<AdminLogin />} />
-        <Route path="/login-doctor" element={<DoctorLogin />} />
+        <Route
+          path="/user-login"
+          element={<UserLogin setAuthenticated={setAuthenticated} />}
+        />
+        <Route
+          path="/admin-login"
+          element={<AdminLogin setAuthenticated={setAuthenticated} />}
+        />
+        <Route
+          path="/login-doctor"
+          element={<DoctorLogin setAuthenticated={setAuthenticated} />}
+        />
         <Route path="/user-registration" element={<UserRegistration />} />
-        <Route path="/user-dashboard" element={<UserDashboard />} />
-        <Route path="/admin-dashboard/*" element={<AdminDashboard />} />
+        <Route
+          path="/user-dashboard"
+          element={
+            isAuthenticated ? <UserDashboard /> : <Navigate to="/user-login" />
+          }
+        />
+        <Route
+          path="/admin-dashboard/*"
+          element={
+            isAuthenticated ? (
+              <AdminDashboard />
+            ) : (
+              <Navigate to="/admin-login" />
+            )
+          }
+        />
         <Route path="/users" element={<UsersSection />} />
-        <Route path="/doctor-dashboard/*" element={<DoctorDashboard />} />
-        <Route path="/donor-dashboard/*" element={<DonorDashboard />} />
-        <Route path="/recipient-dashboard/*" element={<RecipientDashboard />} />
-        {/* Set the default route to UserLogin */}
+        <Route
+          path="/doctor-dashboard/*"
+          element={
+            isAuthenticated ? (
+              <DoctorDashboard />
+            ) : (
+              <Navigate to="/login-doctor" />
+            )
+          }
+        />
+        <Route
+          path="/donor-dashboard/*"
+          element={
+            isAuthenticated ? <DonorDashboard /> : <Navigate to="/user-login" />
+          }
+        />
+        <Route
+          path="/recipient-dashboard/*"
+          element={
+            isAuthenticated ? (
+              <RecipientDashboard />
+            ) : (
+              <Navigate to="/user-login" />
+            )
+          }
+        />
         <Route index element={<UserLogin />} />
       </Routes>
     </Router>
