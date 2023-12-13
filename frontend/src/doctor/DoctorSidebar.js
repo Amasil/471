@@ -31,9 +31,9 @@ const DoctorSidebar = () => {
         Inventory
       </Link>
       <Link
-        to="/doctor-dashboard/feedback-doctor"
+        to="/doctor-dashboard/doctor-feedback"
         className={
-          location.pathname === "/doctor-dashboard/feedback-doctor"
+          location.pathname === "/doctor-dashboard/doctor-feedback"
             ? "active"
             : ""
         }

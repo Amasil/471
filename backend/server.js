@@ -445,16 +445,16 @@ app.put("/Feedback", (req, res) => {
   });
 });
 
-// GET route to fetch all feedback
-app.get("/feedback", (req, res) => {
-  // Query to fetch all feedback from the Feedback table
-  connection.query("SELECT * FROM Feedback", (err, results) => {
+// API endpoint to fetch all feedback
+app.get('/get-feedback', (req, res) => {
+  const selectQuery = 'SELECT * FROM Feedback';
+  connection.query(selectQuery, (err, results) => {
     if (err) {
-      console.error("Error querying the database: " + err.stack);
-      res.status(500).send("Error querying the database.");
-      return;
+      console.error('Error fetching feedback: ' + err.message);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.status(200).json(results);
     }
-    res.send(results);
   });
 });
 

@@ -5,8 +5,8 @@ import { Routes, Route, useParams } from "react-router-dom";
 import DoctorSidebar from "./DoctorSidebar.js";
 import "./DoctorDashboard.css";
 import Inventory from "../Inventory.js";
-import FeedbackDoctor from "../FeedbackDoctor.js";
 import DoctorCreate from "./DoctorCreate.js";
+import DoctorFeedback from "../DoctorFeedback.js";
 
 const DoctorDashboard = () => {
   return (
@@ -17,7 +17,7 @@ const DoctorDashboard = () => {
           <Route path="/" element={<DashboardHome />} />
           <Route path="/create" element={<DoctorCreate />} />
           <Route path="/inventory" element={<Inventory />} />
-          <Route path="/feedback-doctor" element={<FeedbackDoctor />} />
+          <Route path="/doctor-feedback" element={<DoctorFeedback />} />
           {/* Add more routes as needed */}
         </Routes>
       </div>
