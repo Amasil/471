@@ -120,11 +120,7 @@ const LoginForm = ({ userType, onLogin }) => {
         Note: Fields marked with <span style={{ fontSize: "1.2em" }}>(*)</span>{" "}
         are mandatory
       </p>
-      {loginError && (
-        <p className="login-error">
-          {loginError}
-        </p>
-      )}
+      {loginError && <p className="login-error">{loginError}</p>}
     </form>
   );
 };
@@ -133,7 +129,7 @@ const UserLogin = () => {
   const Navigate = useNavigate();
 
   const handleUserLogin = () => {
-    Navigate("/user-dashboard");
+    Navigate("/donor-dashboard");
   };
   useEffect(() => {
     updateFavicon(

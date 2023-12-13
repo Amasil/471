@@ -227,7 +227,7 @@ app.post("/login", async (req, res) => {
     FROM User
     WHERE Username = ? AND User_Type = ?
   `;
-console.log(username, userType)
+  console.log(username, userType);
   connection.query(selectQuery, [username, userType], async (err, results) => {
     if (err) {
       console.error("Error querying the database: " + err.stack);
@@ -400,7 +400,21 @@ app.put("/inventory", (req, res) => {
 });
 
 // =================================================================================================================
+// API endpoint to handle feedback submissions
+app.post("/submit-feedback", (req, res) => {
+  const { Rating, Feedback } = req.body;
 
+  const insertQuery = "INSERT INTO Feedback (Rating, Feedback) VALUES (?, ?)";
+  connection.query(insertQuery, [Rating, Feedback], (err, results) => {
+    if (err) {
+      console.error("Error inserting feedback: " + err.message);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      console.log("Feedback inserted with ID " + results.insertId);
+      res.status(200).json({ message: "Feedback submitted successfully" });
+    }
+  });
+});
 // PUT route to update feedback
 app.put("/Feedback", (req, res) => {
   const { Rating, Feedback } = req.body;

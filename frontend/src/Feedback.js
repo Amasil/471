@@ -10,7 +10,36 @@ const Feedback = () => {
   };
 
   const submitFeedback = () => {
-    alert(`Your feedback has been recorded.`);
+    // Prepare the data to be sent to the server
+    const feedbackData = {
+      Rating: rating,
+      Feedback: feedbackText,
+    };
+
+    // Make a POST request to the server
+    fetch("http://localhost:3000/submit-feedback", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(feedbackData),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        alert("Your feedback has been recorded.");
+        // You can also perform any additional actions after successful submission
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+        alert(
+          "There was an error submitting your feedback. Please try again later."
+        );
+      });
   };
 
   return (
