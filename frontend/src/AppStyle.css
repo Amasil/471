@@ -108,7 +108,8 @@ label.required::before {
   color: #555;
   margin-top: 5px;
 }
-.note-asterisk {
+.note-asterisk,
+.login-error {
   font-size: 12px;
   color: red;
   margin-top: 5px;

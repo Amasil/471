@@ -50,11 +50,15 @@ const LoginForm = ({ userType, onLogin }) => {
     username: "",
     password: "",
   });
+
+  const [loginError, setLoginError] = useState(null);
+
   const handleChange = (e) => {
     setUserCredentials((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
+    setLoginError(null);
   };
 
   const handleLogin = async () => {
@@ -76,13 +80,20 @@ const LoginForm = ({ userType, onLogin }) => {
       onLogin();
     } catch (error) {
       console.error("Login failed:", error);
-      // Handle login failure (e.g., show an error message to the user)
+      // Set the login error and clear the password field
+      setLoginError("Login failed, check your credentials.");
+      setUserCredentials((prev) => ({
+        ...prev,
+        password: "",
+      }));
     }
   };
 
   return (
     <form>
-      <label htmlFor="username">Username:</label>
+      <label htmlFor="username" className="required">
+        Username:
+      </label>
       <input
         type="text"
         id="username"
@@ -91,7 +102,9 @@ const LoginForm = ({ userType, onLogin }) => {
         required
       />
 
-      <label htmlFor="password">Password:</label>
+      <label htmlFor="password" className="required">
+        Password:
+      </label>
       <input
         type="password"
         id="password"
@@ -103,6 +116,15 @@ const LoginForm = ({ userType, onLogin }) => {
       <button type="button" onClick={handleLogin}>
         Login
       </button>
+      <p className="note-asterisk">
+        Note: Fields marked with <span style={{ fontSize: "1.2em" }}>(*)</span>{" "}
+        are mandatory
+      </p>
+      {loginError && (
+        <p className="login-error">
+          {loginError}
+        </p>
+      )}
     </form>
   );
 };
