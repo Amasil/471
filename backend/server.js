@@ -227,7 +227,7 @@ app.post("/login", async (req, res) => {
     FROM User
     WHERE Username = ? AND User_Type = ?
   `;
-
+console.log(username, userType)
   connection.query(selectQuery, [username, userType], async (err, results) => {
     if (err) {
       console.error("Error querying the database: " + err.stack);
