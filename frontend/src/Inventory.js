@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./Inventory.css";
+import "./inventory.css";
 
 const Inventory = () => {
   const [initialized, setInitialized] = useState(false);
