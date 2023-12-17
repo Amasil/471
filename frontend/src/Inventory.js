@@ -2,6 +2,12 @@ import React, { useState, useEffect } from "react";
 import "./Inventory.css";
 
 const Inventory = () => {
+  const [initialized, setInitialized] = useState(false);
+  const [refreshed, setRefreshed] = useState(false);
+
+  // Add a new state variable to store the result of checking if the database is empty
+  const [isEmpty, setIsEmpty] = useState(false);
+
   const [editableQuantities, setEditableQuantities] = useState({
     "A+": false,
     "A-": false,
@@ -46,32 +52,37 @@ const Inventory = () => {
     "O-": false,
   });
 
+  // Define the fetchInitialQuantities function
+  const fetchInitialQuantities = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/bloodQuantities");
+      const data = await response.json();
+
+      // Update the quantities state with the fetched data
+      setQuantities(data);
+
+      // Check and update status based on initial quantities
+      const updatedStatus = {};
+      Object.keys(data).forEach((bloodType) => {
+        if (parseInt(data[bloodType], 10) < 20) {
+          updatedStatus[bloodType] = "Low";
+        } else {
+          updatedStatus[bloodType] = "Healthy";
+        }
+      });
+
+      setStatus(updatedStatus);
+
+      // Check if the database is empty or not by using Object.keys()
+      // If the array of keys is empty, then the database is empty
+      // Set the isEmpty state accordingly
+      setIsEmpty(Object.keys(data).length === 0);
+    } catch (error) {
+      console.error("Error fetching initial quantities:", error);
+    }
+  };
+
   useEffect(() => {
-    // Make an asynchronous call to fetch initial quantities from the database
-    const fetchInitialQuantities = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/bloodQuantities");
-        const data = await response.json();
-
-        // Update the quantities state with the fetched data
-        setQuantities(data);
-
-        // Check and update status based on initial quantities
-        const updatedStatus = {};
-        Object.keys(data).forEach((bloodType) => {
-          if (parseInt(data[bloodType], 10) < 20) {
-            updatedStatus[bloodType] = "Low";
-          } else {
-            updatedStatus[bloodType] = "Healthy";
-          }
-        });
-
-        setStatus(updatedStatus);
-      } catch (error) {
-        console.error("Error fetching initial quantities:", error);
-      }
-    };
-
     // Call the function to fetch initial quantities when the component mounts
     fetchInitialQuantities();
   }, []);
@@ -109,17 +120,13 @@ const Inventory = () => {
         ...prevStatus,
         [bloodType]: "Low",
       }));
+    } else {
+      setStatus((prevStatus) => ({
+        ...prevStatus,
+        [bloodType]: "Healthy",
+      }));
     }
-    // Ask for confirmation before saving
-    const userConfirmed = window.confirm(
-      "Are you sure you want to update the quantity?"
-    );
 
-    if (!userConfirmed) {
-      // If the user cancels, revert the changes
-      handleRefreshInventory();
-      return;
-    }
     try {
       // Send the updated data to the server
       const response = await fetch("http://localhost:3000/updateQuantity", {
@@ -151,13 +158,43 @@ const Inventory = () => {
     };
     setQuantities(updatedQuantities);
   };
-  const handleRefreshInventory = async () => {
+
+  const handleInitializeDatabase = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/initializeDatabase", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to initialize the database");
+      }
+
+      console.log("Database initialized successfully.");
+      // Refresh the page or fetch the updated data after initialization
+      setInitialized(true);
+      setRefreshed(true); // Trigger a refresh
+
+      // Set the isEmpty state to false after initializing the database
+      setIsEmpty(false);
+    } catch (error) {
+      console.error("Error initializing the database:", error);
+      // Handle the error as needed (e.g., show an error message to the user)
+    }
+  };
+
+  // Function to manually refresh the data
+  const handleRefreshData = async () => {
     try {
       const response = await fetch("http://localhost:3000/bloodQuantities");
       const data = await response.json();
 
+      // Update the quantities state with the fetched data
       setQuantities(data);
 
+      // Check and update status based on refreshed quantities
       const updatedStatus = {};
       Object.keys(data).forEach((bloodType) => {
         if (parseInt(data[bloodType], 10) < 20) {
@@ -169,33 +206,35 @@ const Inventory = () => {
 
       setStatus(updatedStatus);
     } catch (error) {
-      console.error("Error refreshing inventory:", error);
+      console.error("Error refreshing data:", error);
+      // Handle the error as needed (e.g., show an error message to the user)
+    } finally {
+      setRefreshed(false); // Reset the state after refreshing
     }
   };
+
+  useEffect(() => {
+    // Call the function to fetch initial quantities when the component mounts
+    fetchInitialQuantities();
+  }, [refreshed]); // Trigger a refresh when the refreshed state changes
 
   return (
     <div className="admin-dashboard">
       <div className="inventory-container">
         <header>
-          <h1 className="inventory-h1">Inventory Dashboard</h1>
+          <h1>Inventory Dashboard</h1>
         </header>
 
         <section>
-          <table className="header-table">
-            <tr className="header-row">
-              <td className="header-inventory">
-                <h1>Inventory</h1>
-              </td>
-              <td class="refresh-button-container">
-                <button
-                  onClick={handleRefreshInventory}
-                  className="refresh-button"
-                >
-                  Refresh
-                </button>
-              </td>
-            </tr>
-          </table>
+          <h2>Inventory</h2>
+          {/* Conditionally render the button based on the value of isEmpty */}
+          {isEmpty ? (
+            <button onClick={handleInitializeDatabase}>
+              Initialize Database
+            </button>
+          ) : null}
+          <button onClick={handleRefreshData}>Refresh</button>
+
           <table>
             <thead>
               <tr>
@@ -224,7 +263,11 @@ const Inventory = () => {
                   <td>{status[bloodType]}</td>
                   <td>
                     {editableQuantities[bloodType] ? (
-                      <button onClick={() => handleSaveQuantity(bloodType)}>
+                      <button
+                        onClick={() => {
+                          handleSaveQuantity(bloodType);
+                        }}
+                      >
                         Save
                       </button>
                     ) : (
