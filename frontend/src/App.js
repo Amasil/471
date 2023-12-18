@@ -22,7 +22,8 @@ const Navbar = () => {
     <div className="topnav">
       <Link to="/admin-login">Admin Login</Link>
       <Link to="/login-doctor">Doctor Login</Link>
-      <Link to="/user-registration">Sign Up as User</Link>
+      <Link to="/login-recipient">Recipient Login</Link>
+      <Link to="/user-registration">Sign Up as Donor</Link>
       <Link to="/user-login" className="home">
         <img src="https://img.icons8.com/ios/50/000000/home.png" alt="Home" />
       </Link>
@@ -141,7 +142,7 @@ const UserLogin = ({ setAuthenticated }) => {
     updateFavicon(
       "https://cdn.iconscout.com/icon/free/png-512/free-user-employee-avatar-man-person-businessman-15-17179.png?f=webp&w=512"
     );
-    updateWebpageTitle("User Login");
+    updateWebpageTitle("Donor Login");
   }, []);
 
   return (
@@ -421,7 +422,7 @@ const App = () => {
         />
         <Route
           path="/recipient-login"
-          element={<UserLogin setAuthenticated={setAuthenticated} />}
+          element={<RecipientLogin setAuthenticated={setAuthenticated} />}
         />
         <Route path="/user-registration" element={<UserRegistration />} />
         <Route
@@ -451,7 +452,16 @@ const App = () => {
             isAuthenticated ? <DonorDashboard /> : <Navigate to="/user-login" />
           }
         />
-
+        <Route
+          path="/recipient-dashboard/*"
+          element={
+            isAuthenticated ? (
+              <RecipientDashboard />
+            ) : (
+              <Navigate to="/login-recipient" />
+            )
+          }
+        />
         <Route index element={<UserLogin />} />
       </Routes>
     </Router>
