@@ -221,13 +221,14 @@ app.delete("/user", (req, res) => {
 // POST route for user login
 app.post("/login", async (req, res) => {
   const { username, password, userType } = req.body;
+
   // Query the database to get the user's stored hashed password and user type
   const selectQuery = `
     SELECT User_ID, Password, User_Type
     FROM User
     WHERE Username = ? AND User_Type = ?
   `;
-  console.log(username, userType);
+
   connection.query(selectQuery, [username, userType], async (err, results) => {
     if (err) {
       console.error("Error querying the database: " + err.stack);
@@ -241,11 +242,7 @@ app.post("/login", async (req, res) => {
       return;
     }
 
-    const {
-      User_ID,
-      Password: storedPassword,
-      User_Type: storedUserType,
-    } = results[0];
+    const { User_ID, Password: storedPassword, User_Type: storedUserType } = results[0];
 
     try {
       // Use bcrypt.compare to compare entered password with stored hashed password
@@ -261,7 +258,7 @@ app.post("/login", async (req, res) => {
           }
         );
 
-        res.json({ token });
+        res.json({ token, userId: User_ID }); // Include user ID in the response
       } else {
         res.status(401).send("Invalid credentials.");
       }
@@ -271,6 +268,7 @@ app.post("/login", async (req, res) => {
     }
   });
 });
+
 
 // =================================================================================================================
 

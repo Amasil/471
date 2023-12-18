@@ -69,18 +69,19 @@ const LoginForm = ({ userType, onLogin, setUsername }) => {
       const response = await axios.post("http://localhost:3000/login", {
         username: userCredentials.username,
         password: userCredentials.password,
-        userType: userType,
+        userType,
       });
 
-      // Assuming the API responds with a token upon successful login
-      const authToken = response.data.token;
+      // Assuming the API responds with a token and user ID upon successful login
+      const { token, userId } = response.data;
 
-      // Save the token to localStorage or a state management solution (e.g., Redux)
-      localStorage.setItem("authToken", authToken);
-
+      // Save the token, username, and user ID to localStorage or state management
+      localStorage.setItem("authToken", token);
+      localStorage.setItem("userId", userId);
       localStorage.setItem("username", userCredentials.username);
 
-      console.log("Username saved:", userCredentials.username); // Log the saved username
+      console.log("User ID:", userId); // Log the user ID
+
       // Redirect to the user dashboard upon successful login
       onLogin();
     } catch (error) {
@@ -93,6 +94,7 @@ const LoginForm = ({ userType, onLogin, setUsername }) => {
       }));
     }
   };
+
 
   return (
     <form>

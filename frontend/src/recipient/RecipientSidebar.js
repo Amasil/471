@@ -31,8 +31,8 @@ const RecipientSidebar = () => {
         Feedback
       </Link>
       <Link
-        to="/recipient-login"
-        className={location.pathname === "/recipient-login" ? "active" : ""}
+        to="/login-recipient"
+        className={location.pathname === "/login-recipient" ? "active" : ""}
       >
         Logout
       </Link>
