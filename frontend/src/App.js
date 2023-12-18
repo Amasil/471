@@ -15,6 +15,7 @@ import AdminDashboard from "./admin/AdminDashboard.js";
 import UsersSection from "./admin/AdminDashboard.js";
 import DoctorDashboard from "./doctor/DoctorDashboard.js";
 import DonorDashboard from "./donor/DonorDashboard.js";
+import RecipientDashboard from "./recipient/RecipientDashboard.js";
 
 const Navbar = () => {
   return (
@@ -197,6 +198,30 @@ const DoctorLogin = ({ setAuthenticated }) => {
       <div className="login-container">
         <h2>Doctor Login</h2>
         <LoginForm userType="Doctor" onLogin={handleDoctorLogin} />
+      </div>
+    </div>
+  );
+};
+
+const RecipientLogin = ({ setAuthenticated }) => {
+  const Navigate = useNavigate();
+
+  const handleRecipientLogin = () => {
+    setAuthenticated(true);
+    Navigate("/recipient-dashboard");
+  };
+  useEffect(() => {
+    updateFavicon(
+      "https://cdn.iconscout.com/icon/premium/png-512-thumb/recipient-567-1118047.png?f=webp&w=512"
+    );
+    updateWebpageTitle("Recipient Login");
+  }, []);
+  return (
+    <div>
+      <Navbar />
+      <div className="login-container">
+        <h2>Recipient Login</h2>
+        <LoginForm userType="Recipient" onLogin={handleRecipientLogin} />
       </div>
     </div>
   );
@@ -393,6 +418,10 @@ const App = () => {
         <Route
           path="/login-doctor"
           element={<DoctorLogin setAuthenticated={setAuthenticated} />}
+        />
+        <Route
+          path="/recipient-login"
+          element={<UserLogin setAuthenticated={setAuthenticated} />}
         />
         <Route path="/user-registration" element={<UserRegistration />} />
         <Route
