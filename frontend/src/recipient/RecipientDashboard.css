@@ -14,7 +14,7 @@
         padding: 20px;
       }
       
-      .users-container {
+      .recipient-container {
         max-width: 90%;
         margin: 0 auto;
         padding: 20px;
@@ -54,32 +54,32 @@
       }
       
       /* Style for the user table */
-      .user-table {
+      .recipient-table {
         width: 100%;
         border-collapse: collapse;
         margin-top: 20px;
         table-layout: fixed;
       }
       
-      .user-table th,
-      .user-table td {
+      .recipient-table th,
+      .recipient-table td {
         border: 1px solid #bdc3c7;
         padding: 8px;
         text-align: left;
         height: 40px; /* Set a fixed height for the rows */
       }
       
-      .user-table th {
+      .recipient-table th {
         background-color: #333;
         color: #fff;
       }
       
-      .user-table tr:nth-child(even) {
+      .recipient-table tr:nth-child(even) {
         background-color: #f2f2f2;
       }
       
       /* Style for the user edit form */
-      .user-edit-form {
+      .recipient-edit-form {
         background-color: #fff;
         border: 1px solid #ddd;
         padding: 20px;
@@ -93,9 +93,9 @@
         font-weight: bold;
       }
       
-      .user-edit-form input,
-      .user-edit-form select,
-      .user-edit-form button {
+      .recipient-edit-form input,
+      .recipient-edit-form select,
+      .recipient-edit-form button {
         margin-bottom: 10px;
         padding: 8px;
         width: 100%;
@@ -116,16 +116,15 @@
         background-color: #ccc;
         cursor: not-allowed;
       }
-      .user-table td.first-name,
-      .user-table td.middle-name,
-      .user-table td.last-name,
-      .user-table td.username,
-      .user-table td.email,
-      .user-table td.phone,
-      .user-table td.blood-group,
-      .user-table td.last-donation-date,
-      .user-table td.user-type,
-      .user-table td.action {
+      .recipient-table td.first-name,
+      .recipient-table td.middle-name,
+      .recipient-table td.last-name,
+      .recipient-table td.username,
+      .recipient-table td.email,
+      .recipient-table td.phone,
+      .recipient-table td.blood-group,
+      .recipient-table td.user-type,
+      .recipient-table td.action {
         max-width: 150px;
         overflow: hidden;
         text-overflow: ellipsis;

@@ -1,4 +1,4 @@
-// Donor_Dashboard.js
+// DonorDashboard.js
 
 import React from "react";
 import { Routes, Route, useParams } from "react-router-dom";
@@ -7,7 +7,7 @@ import "./DonorDashboard.css";
 import Feedback from "../Feedback.js";
 import DonationAppt from "../DonationAppt.js";
 
-const Donor_Dashboard = () => {
+const DonorDashboard = () => {
   return (
     <div className="donor-dashboard">
       <DonorSidebar />
@@ -33,4 +33,4 @@ const DashboardHome = () => {
   );
 };
 
-export default Donor_Dashboard;
+export default DonorDashboard;
