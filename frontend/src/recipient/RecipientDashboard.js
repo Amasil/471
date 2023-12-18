@@ -1,20 +1,19 @@
-// DonorDashboard.js
+//Recipient_Dashboard.js
 
 import React from "react";
 import { Routes, Route, useParams } from "react-router-dom";
-import DonorSidebar from "./DonorSidebar.js";
-import "./DonorDashboard.css";
+import RecipientSidebar from "./RecipientSidebar.js";
+import "./RecipientDashboard.css";
 import Feedback from "../Feedback.js";
-import DonationAppt from "../DonationAppt.js";
 
-const DonorDashboard = () => {
+//change to functions for recipients - donation appointment switches to view transfusion appointment 
+const RecipientDashboard = () => {
   return (
-    <div className="donor-dashboard">
-      <DonorSidebar />
-      <div className="donor-content">
+    <div className="recipient-dashboard">
+      <RecipientSidebar />
+      <div className="recipient-content">
         <Routes>
           <Route path="/" element={<DashboardHome />} />
-          <Route path="/appointment" element={<DonationAppt />} />
           <Route path="/feedback" element={<Feedback />} />
         </Routes>
       </div>
@@ -28,9 +27,9 @@ const DashboardHome = () => {
 
   return (
     <div>
-      <h1>Welcome to the donor dashboard!</h1>
+      <h1>Welcome to the recipient dashboard!</h1>
     </div>
   );
 };
 
-export default DonorDashboard;
+export default RecipientDashboard;

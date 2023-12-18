@@ -18,6 +18,8 @@ const updateFavicon = (faviconURL) => {
     document.title = title;
   };
 
+
+  //needs to be changed to reflect new database
 const CreateUser = () => {
   const [user, setUser] = useState({
     First_Name: "",
@@ -40,8 +42,8 @@ const CreateUser = () => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:3000/user", user);
-      Navigate("/user-login");
+      await axios.post("http://localhost:3000/donor", user);
+      Navigate("/donor-login");
     } catch (error) {
       console.error(error);
     }
@@ -51,12 +53,12 @@ const CreateUser = () => {
     updateFavicon(
       "https://cdn.iconscout.com/icon/free/png-512/free-user-add-plus-contact-account-new-create-7-3318.png?f=webp&w=512"
     );
-    updateWebpageTitle("User Registration");
+    updateWebpageTitle("Donor Registration");
   }, []);
   return (
     <div>
       <div className="login-container">
-        <h2>User Registration</h2>
+        <h2>Donor Registration</h2>
         <form id="registrationForm" onSubmit={handleRegistration}>
           <label htmlFor="registerFirstName" className="required">
             First Name:

@@ -15,13 +15,15 @@ import AdminDashboard from "./admin/AdminDashboard.js";
 import UsersSection from "./admin/AdminDashboard.js";
 import DoctorDashboard from "./doctor/DoctorDashboard.js";
 import DonorDashboard from "./donor/DonorDashboard.js";
+import RecipientDashboard from "./recipient/RecipientDashboard.js";
 
 const Navbar = () => {
   return (
     <div className="topnav">
       <Link to="/admin-login">Admin Login</Link>
       <Link to="/login-doctor">Doctor Login</Link>
-      <Link to="/user-registration">Sign Up as User</Link>
+      <Link to="/login-recipient">Recipient Login</Link>
+      <Link to="/user-registration">Sign Up as Donor</Link>
       <Link to="/user-login" className="home">
         <img src="https://img.icons8.com/ios/50/000000/home.png" alt="Home" />
       </Link>
@@ -140,7 +142,7 @@ const UserLogin = ({ setAuthenticated }) => {
     updateFavicon(
       "https://cdn.iconscout.com/icon/free/png-512/free-user-employee-avatar-man-person-businessman-15-17179.png?f=webp&w=512"
     );
-    updateWebpageTitle("User Login");
+    updateWebpageTitle("Donor Login");
   }, []);
 
   return (
@@ -197,6 +199,30 @@ const DoctorLogin = ({ setAuthenticated }) => {
       <div className="login-container">
         <h2>Doctor Login</h2>
         <LoginForm userType="Doctor" onLogin={handleDoctorLogin} />
+      </div>
+    </div>
+  );
+};
+
+const RecipientLogin = ({ setAuthenticated }) => {
+  const Navigate = useNavigate();
+
+  const handleRecipientLogin = () => {
+    setAuthenticated(true);
+    Navigate("/recipient-dashboard");
+  };
+  useEffect(() => {
+    updateFavicon(
+      "https://cdn.iconscout.com/icon/premium/png-512-thumb/recipient-567-1118047.png?f=webp&w=512"
+    );
+    updateWebpageTitle("Recipient Login");
+  }, []);
+  return (
+    <div>
+      <Navbar />
+      <div className="login-container">
+        <h2>Recipient Login</h2>
+        <LoginForm userType="Recipient" onLogin={handleRecipientLogin} />
       </div>
     </div>
   );
@@ -394,6 +420,10 @@ const App = () => {
           path="/login-doctor"
           element={<DoctorLogin setAuthenticated={setAuthenticated} />}
         />
+        <Route
+          path="/recipient-login"
+          element={<RecipientLogin setAuthenticated={setAuthenticated} />}
+        />
         <Route path="/user-registration" element={<UserRegistration />} />
         <Route
           path="/admin-dashboard/*"
@@ -423,6 +453,12 @@ const App = () => {
           }
         />
 
+        <Route
+          path="/recipient-dashboard/*"
+          element={
+            isAuthenticated ? <RecipientDashboard /> : <Navigate to="/recipient-login" />
+          }
+        />
         <Route index element={<UserLogin />} />
       </Routes>
     </Router>
