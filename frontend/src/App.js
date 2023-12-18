@@ -421,7 +421,7 @@ const App = () => {
           element={<DoctorLogin setAuthenticated={setAuthenticated} />}
         />
         <Route
-          path="/recipient-login"
+          path="/login-recipient"
           element={<RecipientLogin setAuthenticated={setAuthenticated} />}
         />
         <Route path="/user-registration" element={<UserRegistration />} />
