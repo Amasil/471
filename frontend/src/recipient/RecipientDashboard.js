@@ -7,7 +7,7 @@ import "./RecipientDashboard.css";
 import Feedback from "../Feedback.js";
 
 //change to functions for recipients - donation appointment switches to view transfusion appointment 
-const Recipient_Dashboard = () => {
+const RecipientDashboard = () => {
   return (
     <div className="recipient-dashboard">
       <RecipientSidebar />
@@ -32,4 +32,4 @@ const DashboardHome = () => {
   );
 };
 
-export default Recipient_Dashboard;
+export default RecipientDashboard;

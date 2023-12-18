@@ -26,7 +26,7 @@ const RecipientSidebar = () => {
       </Link>
       <Link
         to="/recipient-dashboard/feedback"
-        className={location.pathname === "/doctor-dashboard/feedback"}
+        className={location.pathname === "/recipient-dashboard/feedback"}
       >
         Feedback
       </Link>

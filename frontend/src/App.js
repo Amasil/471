@@ -452,14 +452,11 @@ const App = () => {
             isAuthenticated ? <DonorDashboard /> : <Navigate to="/user-login" />
           }
         />
+
         <Route
           path="/recipient-dashboard/*"
           element={
-            isAuthenticated ? (
-              <RecipientDashboard />
-            ) : (
-              <Navigate to="/login-recipient" />
-            )
+            isAuthenticated ? <RecipientDashboard /> : <Navigate to="/recipient-login" />
           }
         />
         <Route index element={<UserLogin />} />
