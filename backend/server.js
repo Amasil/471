@@ -310,7 +310,7 @@ app.delete("/user", (req, res) => {
 
   // SQL query for deleting a user
   const deleteQuery = `
-    DELETE FROM User
+    DELETE FROM User, DONOR, RECIPIENT, MEDICAL_STAFF
     WHERE User_ID = ?
   `;
 
