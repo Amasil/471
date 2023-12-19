@@ -41,7 +41,7 @@ const CreateUser = () => {
 
     try {
       await axios.post("http://localhost:3000/user", user);
-      Navigate("/user-login");
+      Navigate("/doctor-login");
     } catch (error) {
       console.error(error);
     }

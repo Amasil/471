@@ -251,22 +251,7 @@ app.post("/user", async (req, res) => {
           });
         });
       } else if (User_Type == "Doctor") {
-        const insertPublic = `
-        INSERT INTO GENERAL_PUBLIC (
-          Public_ID,
-          Blood_Type
-        ) VALUES (?, ?)
-      `;
-        const publicValues = [User_ID, Blood_Group];
-
-        connection.query(insertPublic, publicValues, (err, results) => {
-          if (err) {
-            console.error("Error inserting into the database: " + err.stack);
-            res.status(500).send("Error inserting into the database.");
-            return;
-          }
-
-          const insertStaff = `
+        const insertStaff = `
           INSERT INTO MEDICAL_STAFF (
             Medical_ID,
             Degree,
@@ -274,18 +259,38 @@ app.post("/user", async (req, res) => {
             Alert_ID
           ) VALUES (?, ?, ?, ?)
         `;
-          const donorValues = [User_ID, "BioScience", 1, 2];
+        const staffValues = [User_ID, "BioScience", 1, 2];
 
-          connection.query(insertDonor, donorValues, (err, results) => {
-            if (err) {
-              console.error("Error inserting into the database: " + err.stack);
-              res.status(500).send("Error inserting into the database.");
-              return;
-            }
+        connection.query(insertStaff, staffValues, (err, results) => {
+          if (err) {
+            console.error("Error inserting into the database: " + err.stack);
+            res.status(500).send("Error inserting into the database.");
+            return;
+          }
 
-            // Send a single response at the end
-            res.send("Donor inserted successfully.");
-          });
+          // Send a single response at the end
+          res.send("Staff inserted successfully.");
+        });
+      } else if (User_Type == "Admin") {
+        const insertStaff = `
+          INSERT INTO MEDICAL_STAFF (
+            Medical_ID,
+            Degree,
+            Department_ID,
+            Alert_ID
+          ) VALUES (?, ?, ?, ?)
+        `;
+        const staffValues = [User_ID, "Admin", 5, 3];
+
+        connection.query(insertStaff, staffValues, (err, results) => {
+          if (err) {
+            console.error("Error inserting into the database: " + err.stack);
+            res.status(500).send("Error inserting into the database.");
+            return;
+          }
+
+          // Send a single response at the end
+          res.send("Staff inserted successfully.");
         });
       } else {
         // Send a single response at the end
@@ -310,11 +315,11 @@ app.delete("/user", (req, res) => {
 
   // SQL query for deleting a user
   const deleteQuery = `
-    DELETE FROM User, DONOR, RECIPIENT, MEDICAL_STAFF
+    DELETE FROM User
     WHERE User_ID = ?
   `;
 
-  connection.query(deleteQuery, [userId], (err, results) => {
+  connection.query(deleteQuery, [userId], async (err, results) => {
     if (err) {
       console.error("Error deleting from the database: " + err.stack);
       res.status(500).send("Error deleting from the database.");
@@ -325,11 +330,41 @@ app.delete("/user", (req, res) => {
     if (results.affectedRows === 0) {
       res.status(404).send("User not found.");
     } else {
-      res.send("User deleted successfully.");
+      // Also delete associated records in other tables
+      try {
+        const deletePublicQuery = `
+          DELETE FROM GENERAL_PUBLIC
+          WHERE Public_ID = ?
+        `;
+        const deleteDonorQuery = `
+          DELETE FROM DONOR
+          WHERE Donor_ID = ?
+        `;
+        const deleteRecipientQuery = `
+          DELETE FROM RECIPIENT
+          WHERE Recipient_ID = ?
+        `;
+        const deleteStaffQuery = `
+          DELETE FROM MEDICAL_STAFF
+          WHERE Medical_ID = ?
+        `;
+
+        // Execute the deletion queries for associated records
+        await Promise.all([
+          connection.query(deletePublicQuery, [userId]),
+          connection.query(deleteDonorQuery, [userId]),
+          connection.query(deleteRecipientQuery, [userId]),
+          connection.query(deleteStaffQuery, [userId]),
+        ]);
+
+        res.send("User and associated records deleted successfully.");
+      } catch (error) {
+        console.error("Error deleting associated records: " + error.stack);
+        res.status(500).send("Error deleting associated records.");
+      }
     }
   });
 });
-
 // =================================================================================================================
 
 // POST route for user login

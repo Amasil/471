@@ -3,23 +3,22 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const updateFavicon = (faviconURL) => {
-    const favicon = document.querySelector('link[rel="icon"]');
-    if (favicon) {
-      favicon.href = faviconURL;
-    } else {
-      const newFavicon = document.createElement("link");
-      newFavicon.rel = "icon";
-      newFavicon.href = faviconURL;
-      document.head.appendChild(newFavicon);
-    }
-  };
-  
-  const updateWebpageTitle = (title) => {
-    document.title = title;
-  };
+  const favicon = document.querySelector('link[rel="icon"]');
+  if (favicon) {
+    favicon.href = faviconURL;
+  } else {
+    const newFavicon = document.createElement("link");
+    newFavicon.rel = "icon";
+    newFavicon.href = faviconURL;
+    document.head.appendChild(newFavicon);
+  }
+};
 
+const updateWebpageTitle = (title) => {
+  document.title = title;
+};
 
-  //needs to be changed to reflect new database
+//needs to be changed to reflect new database
 const CreateUser = () => {
   const [user, setUser] = useState({
     First_Name: "",
@@ -42,7 +41,7 @@ const CreateUser = () => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:3000/donor", user);
+      await axios.post("http://localhost:3000/user", user);
       Navigate("/donor-login");
     } catch (error) {
       console.error(error);
@@ -173,7 +172,7 @@ const CreateUser = () => {
             onChange={handleChange}
             name="Last_Donation_Date"
           />
-           <label htmlFor="registerUserType" className="required">
+          <label htmlFor="registerUserType" className="required">
             User Type:
           </label>
           <select
@@ -192,8 +191,7 @@ const CreateUser = () => {
           <button type="submit" id="registerButton">
             Register
           </button>
-         
-          
+
           <p className="note-asterisk">
             Note: Fields marked with{" "}
             <span style={{ fontSize: "1.2em" }}>(*)</span> are mandatory
