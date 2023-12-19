@@ -24,7 +24,7 @@ const Navbar = () => {
       <Link to="/login-doctor">Doctor Login</Link>
       <Link to="/login-recipient">Recipient Login</Link>
       <Link to="/user-registration">Sign Up as Donor</Link>
-      <Link to="/user-login" className="home">
+      <Link to="/donor-login" className="home">
         <img src="https://img.icons8.com/ios/50/000000/home.png" alt="Home" />
       </Link>
     </div>
@@ -95,7 +95,6 @@ const LoginForm = ({ userType, onLogin, setUsername }) => {
     }
   };
 
-
   return (
     <form>
       <label htmlFor="username" className="required">
@@ -132,10 +131,10 @@ const LoginForm = ({ userType, onLogin, setUsername }) => {
   );
 };
 
-const UserLogin = ({ setAuthenticated }) => {
+const DonorLogin = ({ setAuthenticated }) => {
   const Navigate = useNavigate();
 
-  const handleUserLogin = () => {
+  const handleDonorLogin = () => {
     setAuthenticated(true);
     Navigate("/donor-dashboard");
   };
@@ -151,8 +150,8 @@ const UserLogin = ({ setAuthenticated }) => {
     <div>
       <Navbar />
       <div className="login-container">
-        <h2>User Login</h2>
-        <LoginForm userType="Donor" onLogin={handleUserLogin} />
+        <h2>Donor Login</h2>
+        <LoginForm userType="Donor" onLogin={handleDonorLogin} />
       </div>
     </div>
   );
@@ -234,7 +233,7 @@ const handleLogout = () => {
   // Clear authentication state
   // setAuthenticated(false);
   // Redirect to the login page
-  Navigate("/user-login");
+  Navigate("/donor-login");
 };
 
 const UserRegistration = () => {
@@ -260,7 +259,7 @@ const UserRegistration = () => {
 
     try {
       await axios.post("http://localhost:3000/user", user);
-      Navigate("/user-login");
+      Navigate("/donor-login");
     } catch (error) {
       console.error(error);
     }
@@ -276,7 +275,7 @@ const UserRegistration = () => {
     <div>
       <Navbar />
       <div className="login-container">
-        <h2>User Registration</h2>
+        <h2>Donor Registration</h2>
         <form id="registrationForm" onSubmit={handleRegistration}>
           <label htmlFor="registerFirstName" className="required">
             First Name:
@@ -411,8 +410,8 @@ const App = () => {
     <Router>
       <Routes>
         <Route
-          path="/user-login"
-          element={<UserLogin setAuthenticated={setAuthenticated} />}
+          path="/donor-login"
+          element={<DonorLogin setAuthenticated={setAuthenticated} />}
         />
         <Route
           path="/admin-login"
@@ -451,17 +450,25 @@ const App = () => {
         <Route
           path="/donor-dashboard/*"
           element={
-            isAuthenticated ? <DonorDashboard /> : <Navigate to="/user-login" />
+            isAuthenticated ? (
+              <DonorDashboard />
+            ) : (
+              <Navigate to="/donor-login" />
+            )
           }
         />
 
         <Route
           path="/recipient-dashboard/*"
           element={
-            isAuthenticated ? <RecipientDashboard /> : <Navigate to="/recipient-login" />
+            isAuthenticated ? (
+              <RecipientDashboard />
+            ) : (
+              <Navigate to="/recipient-login" />
+            )
           }
         />
-        <Route index element={<UserLogin />} />
+        <Route index element={<DonorLogin />} />
       </Routes>
     </Router>
   );

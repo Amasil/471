@@ -31,8 +31,8 @@ const DonorSidebar = () => {
         Feedback
       </Link>
       <Link
-        to="/user-login"
-        className={location.pathname === "/user-login" ? "active" : ""}
+        to="/donor-login"
+        className={location.pathname === "/donor-login" ? "active" : ""}
       >
         Logout
       </Link>
