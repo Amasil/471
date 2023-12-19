@@ -581,6 +581,60 @@ app.put("/inventory", (req, res) => {
 });
 
 // =================================================================================================================
+// API endpoint to handle feedback submissions
+app.post("/submit-feedback", (req, res) => {
+  const { User_ID, Feedback_Date, Details, Comment, Rating } = req.body;
+
+  const insertQuery = `
+    INSERT INTO FEEDBACK (User_ID, Feedback_Date, Details, Comment, Rating)
+    VALUES (?, ?, ?, ?, ?)
+  `;
+
+  const values = [User_ID, Feedback_Date, Details, Comment, Rating];
+
+  connection.query(insertQuery, values, (err, results) => {
+    if (err) {
+      console.error("Error inserting feedback: " + err.message);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      console.log("Feedback inserted with ID " + results.insertId);
+      res.status(200).json({ message: "Feedback submitted successfully" });
+    }
+  });
+});
+
+// PUT route to update feedback
+app.put("/update-feedback/:feedbackId", (req, res) => {
+  const feedbackId = req.params.feedbackId;
+  const { Rating, Comment } = req.body;
+
+  // Validating required fields
+  if (!Rating || !Comment) {
+    res.status(400).send("All required fields must be provided.");
+    return;
+  }
+
+  // SQL query for updating feedback
+  const updateQuery = `
+    UPDATE FEEDBACK
+    SET Rating = ?, Comment = ?
+    WHERE Feedback_ID = ?
+  `;
+
+  const values = [Rating, Comment, feedbackId];
+
+  // Executing the update query
+  connection.query(updateQuery, values, (err, results) => {
+    if (err) {
+      console.error("Error updating feedback: " + err.stack);
+      res.status(500).send("Error updating feedback.");
+      return;
+    }
+
+    res.send("Feedback updated successfully.");
+  });
+});
+
 // API endpoint to fetch all feedback with username instead of user ID
 app.get("/get-feedback", (req, res) => {
   const selectQuery = `
@@ -588,7 +642,7 @@ app.get("/get-feedback", (req, res) => {
       F.Feedback_ID,
       F.User_ID,
       F.Feedback_Date,
-      U.Username,
+      U.User_Name,
       F.Comment,
       F.Rating
     FROM
