@@ -20,7 +20,7 @@ const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "sZ10O84<", // Consider using environment variables for sensitive information
-  database: "Test",
+  database: "Website",
   authPlugins: {
     mysql_clear_password: () => () => Buffer.from("sZ10O84<"),
   },
@@ -197,7 +197,7 @@ app.post("/user", async (req, res) => {
           }
 
           const insertDonor = `
-            INSERT INTO Donor (
+            INSERT INTO DONOR (
               Donor_ID,
               No_of_Donations
             ) VALUES (?, ?)
@@ -212,7 +212,79 @@ app.post("/user", async (req, res) => {
             }
 
             // Send a single response at the end
-            res.send("User and related records inserted successfully.");
+            res.send("Donor inserted successfully.");
+          });
+        });
+      } else if (User_Type == "Recipient") {
+        const insertPublic = `
+          INSERT INTO GENERAL_PUBLIC (
+            Public_ID,
+            Blood_Type
+          ) VALUES (?, ?)
+        `;
+        const publicValues = [User_ID, Blood_Group];
+
+        connection.query(insertPublic, publicValues, (err, results) => {
+          if (err) {
+            console.error("Error inserting into the database: " + err.stack);
+            res.status(500).send("Error inserting into the database.");
+            return;
+          }
+
+          const insertRecipient = `
+            INSERT INTO RECIPIENT (
+              Recipient_ID,
+              Diagnosis
+            ) VALUES (?, ?)
+          `;
+          const recipientValues = [User_ID, "Need blood help"];
+
+          connection.query(insertRecipient, recipientValues, (err, results) => {
+            if (err) {
+              console.error("Error inserting into the database: " + err.stack);
+              res.status(500).send("Error inserting into the database.");
+              return;
+            }
+
+            // Send a single response at the end
+            res.send("Recipient inserted successfully.");
+          });
+        });
+      } else if (User_Type == "Doctor") {
+        const insertPublic = `
+        INSERT INTO GENERAL_PUBLIC (
+          Public_ID,
+          Blood_Type
+        ) VALUES (?, ?)
+      `;
+        const publicValues = [User_ID, Blood_Group];
+
+        connection.query(insertPublic, publicValues, (err, results) => {
+          if (err) {
+            console.error("Error inserting into the database: " + err.stack);
+            res.status(500).send("Error inserting into the database.");
+            return;
+          }
+
+          const insertStaff = `
+          INSERT INTO MEDICAL_STAFF (
+            Medical_ID,
+            Degree,
+            Department_ID,
+            Alert_ID
+          ) VALUES (?, ?, ?, ?)
+        `;
+          const donorValues = [User_ID, "BioScience", 1, 2];
+
+          connection.query(insertDonor, donorValues, (err, results) => {
+            if (err) {
+              console.error("Error inserting into the database: " + err.stack);
+              res.status(500).send("Error inserting into the database.");
+              return;
+            }
+
+            // Send a single response at the end
+            res.send("Donor inserted successfully.");
           });
         });
       } else {
