@@ -87,12 +87,41 @@ const Inventory = () => {
     fetchInitialQuantities();
   }, []);
 
-  const handleSendAlert = (bloodType) => {
-    setSendAlert((prevSendAlert) => ({
-      ...prevSendAlert,
-      [bloodType]: true,
-    }));
-    alert("Alert sent! Blood Type: " + bloodType);
+  const handleSendAlert = async (bloodType) => {
+    try {
+      // Check if the alert has already been sent for this blood type
+      if (sendAlert[bloodType]) {
+        alert("Alert already sent for this blood type.");
+        return;
+      }
+
+      // Send the alert data to the server with the current timestamp
+      const response = await fetch("http://localhost:3000/sendAlert", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          Blood_type: bloodType,
+          Alert_timestamp: new Date().toISOString(), // Use the current timestamp
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to send alert for ${bloodType}`);
+      }
+
+      // Update the sendAlert state to indicate that an alert has been sent for this blood type
+      setSendAlert((prevSendAlert) => ({
+        ...prevSendAlert,
+        [bloodType]: true,
+      }));
+
+      alert(`Alert sent for Blood Type: ${bloodType}`);
+    } catch (error) {
+      console.error("Error sending alert:", error);
+      // Handle the error as needed (e.g., show an error message to the user)
+    }
   };
 
   const handleUpdateQuantity = (bloodType) => {

@@ -580,6 +580,36 @@ app.put("/inventory", (req, res) => {
   });
 });
 
+/// Endpoint to handle alert submissions
+app.post("/sendAlert", (req, res) => {
+  const { Blood_type, Alert_timestamp } = req.body; // Destructure the values
+
+  const insertQuery = `
+    INSERT INTO EMERGENCY_ALERT (Alert_timestamp, Blood_type, Hospital_ID, Medical_ID)
+    VALUES (STR_TO_DATE(?, '%Y-%m-%dT%H:%i:%s.%fZ'), ?, ?, ?)
+    `;
+
+  // Assign unique values for Alert_ID, Alert_timestamp, Hospital_ID, and Medical_ID
+  const values = [
+    // Assign unique values for the following fields (modify as needed)
+    Alert_timestamp,
+    Blood_type,
+    1,
+    1,
+  ];
+
+  // Execute the query (modify as needed based on your database library)
+  connection.query(insertQuery, values, (err, results) => {
+    if (err) {
+      console.error("Error inserting alert: " + err.message);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      console.log("Alert inserted with ID " + results.insertId);
+      res.status(200).json({ message: "Alert submitted successfully" });
+    }
+  });
+});
+
 // =================================================================================================================
 // API endpoint to handle feedback submissions
 app.post("/submit-feedback", (req, res) => {
