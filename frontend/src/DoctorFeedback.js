@@ -51,7 +51,8 @@ const DoctorFeedback = () => {
           <thead>
             <tr>
               <th>Feedback ID</th>
-              {/* <th>User ID</th> */}
+              <th>Username</th>
+              <th>Date</th>
               <th>Rating</th>
               <th>Feedback</th>
             </tr>
@@ -60,9 +61,10 @@ const DoctorFeedback = () => {
             {feedbackList.map((feedback) => (
               <tr key={feedback.Feedback_ID}>
                 <td>{feedback.Feedback_ID}</td>
-                {/* <td>{feedback.User_ID}</td> */}
+                <td>{feedback.Username}</td>
+                <td>{feedback.Feedback_Date.split("T")[0]}</td>
                 <td>{feedback.Rating}</td>
-                <td>{feedback.Feedback}</td>
+                <td>{feedback.Comment}</td>
               </tr>
             ))}
           </tbody>

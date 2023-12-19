@@ -183,7 +183,7 @@ const Users = () => {
         console.log("User deleted successfully!");
 
         // Fetch updated user list from the server
-        const res = await axios.get("http://localhost:3000/user");
+        const res = axios.get("http://localhost:3000/user");
         setUsers(res.data);
 
         // Reset selected user and user information

@@ -334,6 +334,9 @@ app.delete("/user", async (req, res) => {
   try {
     // Delete associated records first
 
+    // Delete from FEEDBACK table
+    connection.query("DELETE FROM FEEDBACK WHERE User_ID = ?", [userId]);
+
     // Delete from DONOR table
     connection.query("DELETE FROM DONOR WHERE Donor_ID = ?", [userId]);
 
@@ -578,54 +581,22 @@ app.put("/inventory", (req, res) => {
 });
 
 // =================================================================================================================
-// API endpoint to handle feedback submissions
-app.post("/submit-feedback", (req, res) => {
-  const { Rating, Feedback } = req.body;
-
-  const insertQuery = "INSERT INTO Feedback (Rating, Feedback) VALUES (?, ?)";
-  connection.query(insertQuery, [Rating, Feedback], (err, results) => {
-    if (err) {
-      console.error("Error inserting feedback: " + err.message);
-      res.status(500).json({ error: "Internal Server Error" });
-    } else {
-      console.log("Feedback inserted with ID " + results.insertId);
-      res.status(200).json({ message: "Feedback submitted successfully" });
-    }
-  });
-});
-// PUT route to update feedback
-app.put("/Feedback", (req, res) => {
-  const { Rating, Feedback } = req.body;
-
-  // Validating required fields
-  if (!Rating || !Feedback) {
-    res.status(400).send("All required fields must be provided.");
-    return;
-  }
-  // SQL query for updating feedback
-  const updateQuery = `
-  UPDATE Feedback
-  SET Rating = ?
-  WHERE Feedback = ?
+// API endpoint to fetch all feedback with username instead of user ID
+app.get("/get-feedback", (req, res) => {
+  const selectQuery = `
+    SELECT
+      F.Feedback_ID,
+      F.User_ID,
+      F.Feedback_Date,
+      U.Username,
+      F.Comment,
+      F.Rating
+    FROM
+      FEEDBACK F
+    JOIN
+      USER U ON F.User_ID = U.User_ID
   `;
 
-  const values = [No_of_units, Blood_type];
-
-  // Executing the update query
-  connection.query(updateQuery, values, (err, results) => {
-    if (err) {
-      console.error("Error updating feedback: " + err.stack);
-      res.status(500).send("Error updating feedback.");
-      return;
-    }
-
-    res.send("Feedback updated successfully.");
-  });
-});
-
-// API endpoint to fetch all feedback
-app.get("/get-feedback", (req, res) => {
-  const selectQuery = "SELECT * FROM Feedback";
   connection.query(selectQuery, (err, results) => {
     if (err) {
       console.error("Error fetching feedback: " + err.message);

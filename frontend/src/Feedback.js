@@ -12,8 +12,11 @@ const Feedback = () => {
   const submitFeedback = () => {
     // Prepare the data to be sent to the server
     const feedbackData = {
+      User_ID: 20, // Replace with the actual user ID
+      Feedback_Date: new Date().toISOString().split("T")[0], // Format as 'YYYY-MM-DD'
+      Details: "Additional details if needed", // Add details if applicable
+      Comment: feedbackText,
       Rating: rating,
-      Feedback: feedbackText,
     };
 
     // Make a POST request to the server
