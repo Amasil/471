@@ -92,7 +92,7 @@ const Inventory = () => {
       ...prevSendAlert,
       [bloodType]: true,
     }));
-    alert("Alert sent!");
+    alert("Alert sent! Blood Type: " + bloodType);
   };
 
   const handleUpdateQuantity = (bloodType) => {
