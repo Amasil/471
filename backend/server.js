@@ -321,8 +321,8 @@ app.post("/user", async (req, res) => {
   }
 });
 
-// DELETE route to delete a user
-app.delete("/user", (req, res) => {
+// DELETE route to delete a user and associated records
+app.delete("/user", async (req, res) => {
   const userId = req.body.User_ID;
 
   // Validating required fields
@@ -331,58 +331,41 @@ app.delete("/user", (req, res) => {
     return;
   }
 
-  // SQL query for deleting a user
-  const deleteQuery = `
-    DELETE FROM User
-    WHERE User_ID = ?
-  `;
+  try {
+    // Delete associated records first
 
-  connection.query(deleteQuery, [userId], async (err, results) => {
-    if (err) {
-      console.error("Error deleting from the database: " + err.stack);
-      res.status(500).send("Error deleting from the database.");
-      return;
-    }
+    // Delete from DONOR table
+    connection.query("DELETE FROM DONOR WHERE Donor_ID = ?", [userId]);
+
+    // Delete from RECIPIENT table
+    connection.query("DELETE FROM RECIPIENT WHERE Recipient_ID = ?", [userId]);
+
+    // Delete from MEDICAL_STAFF table
+    connection.query("DELETE FROM MEDICAL_STAFF WHERE Medical_ID = ?", [
+      userId,
+    ]);
+
+    // Delete from GENERAL_PUBLIC table
+    connection.query("DELETE FROM GENERAL_PUBLIC WHERE Public_ID = ?", [
+      userId,
+    ]);
+
+    // Delete from USER table
+    const deleteUserQuery = "DELETE FROM User WHERE User_ID = ?";
+    const deleteResult = await connection.query(deleteUserQuery, [userId]);
 
     // Checking if the user was found and deleted
-    if (results.affectedRows === 0) {
+    if (deleteResult.affectedRows === 0) {
       res.status(404).send("User not found.");
     } else {
-      // Also delete associated records in other tables
-      try {
-        const deletePublicQuery = `
-          DELETE FROM GENERAL_PUBLIC
-          WHERE Public_ID = ?
-        `;
-        const deleteDonorQuery = `
-          DELETE FROM DONOR
-          WHERE Donor_ID = ?
-        `;
-        const deleteRecipientQuery = `
-          DELETE FROM RECIPIENT
-          WHERE Recipient_ID = ?
-        `;
-        const deleteStaffQuery = `
-          DELETE FROM MEDICAL_STAFF
-          WHERE Medical_ID = ?
-        `;
-
-        // Execute the deletion queries for associated records
-        await Promise.all([
-          connection.query(deletePublicQuery, [userId]),
-          connection.query(deleteDonorQuery, [userId]),
-          connection.query(deleteRecipientQuery, [userId]),
-          connection.query(deleteStaffQuery, [userId]),
-        ]);
-
-        res.send("User and associated records deleted successfully.");
-      } catch (error) {
-        console.error("Error deleting associated records: " + error.stack);
-        res.status(500).send("Error deleting associated records.");
-      }
+      res.send("User and associated records deleted successfully.");
     }
-  });
+  } catch (error) {
+    console.error("Error deleting user and associated records: " + error.stack);
+    res.status(500).send("Error deleting user and associated records.");
+  }
 });
+
 // =================================================================================================================
 
 // POST route for user login
