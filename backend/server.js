@@ -13,6 +13,25 @@ const app = express();
 app.use(bodyParser.json()); // Parse JSON requests
 app.use(cors()); // Enable Cross-Origin Resource Sharing (CORS)
 
+// // Define requireAuth middleware
+// const requireAuth = (req, res, next) => {
+//   const token = req.cookies.jwt;
+
+//   if (!token) {
+//     res.redirect("/donor-login");
+//     return;
+//   }
+
+//   jwt.verify(token, "your-secret-key", (err, decodedToken) => {
+//     if (err) {
+//       console.log(err.message);
+//       res.redirect("/donor-login");
+//     } else {
+//       console.log(decodedToken);
+//       next();
+//     }
+//   });
+// };
 // =================================================================================================================
 
 // Establishing a connection to the MySQL database
@@ -34,7 +53,6 @@ connection.connect((err) => {
   }
   console.log("Connected to the database.");
 });
-
 // =================================================================================================================
 
 // GET route to fetch all users
@@ -402,7 +420,6 @@ app.post("/login", async (req, res) => {
       const passwordMatch = await bcrypt.compare(password, storedPassword);
 
       if (passwordMatch) {
-        // You may want to include other user information in the token
         const token = jwt.sign(
           { user_id: User_ID, username, userType: storedUserType },
           "your-secret-key",
