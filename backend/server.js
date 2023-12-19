@@ -176,7 +176,49 @@ app.post("/user", async (req, res) => {
         res.status(500).send("Error inserting into the database.");
         return;
       }
-      res.send("User inserted successfully.");
+
+      // Retrieve the User_ID from the results
+      const User_ID = results.insertId;
+
+      if (User_Type == "Donor") {
+        const insertPublic = `
+          INSERT INTO GENERAL_PUBLIC (
+            Public_ID,
+            Blood_Type
+          ) VALUES (?, ?)
+        `;
+        const publicValues = [User_ID, Blood_Group];
+
+        connection.query(insertPublic, publicValues, (err, results) => {
+          if (err) {
+            console.error("Error inserting into the database: " + err.stack);
+            res.status(500).send("Error inserting into the database.");
+            return;
+          }
+
+          const insertDonor = `
+            INSERT INTO Donor (
+              Donor_ID,
+              No_of_Donations
+            ) VALUES (?, ?)
+          `;
+          const donorValues = [User_ID, 2];
+
+          connection.query(insertDonor, donorValues, (err, results) => {
+            if (err) {
+              console.error("Error inserting into the database: " + err.stack);
+              res.status(500).send("Error inserting into the database.");
+              return;
+            }
+
+            // Send a single response at the end
+            res.send("User and related records inserted successfully.");
+          });
+        });
+      } else {
+        // Send a single response at the end
+        res.send("User inserted successfully.");
+      }
     });
   } catch (error) {
     console.error("Error hashing password: " + error.stack);
@@ -242,7 +284,11 @@ app.post("/login", async (req, res) => {
       return;
     }
 
-    const { User_ID, Password: storedPassword, User_Type: storedUserType } = results[0];
+    const {
+      User_ID,
+      Password: storedPassword,
+      User_Type: storedUserType,
+    } = results[0];
 
     try {
       // Use bcrypt.compare to compare entered password with stored hashed password
@@ -268,7 +314,6 @@ app.post("/login", async (req, res) => {
     }
   });
 });
-
 
 // =================================================================================================================
 
