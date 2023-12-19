@@ -428,7 +428,7 @@ const Users = () => {
                                 <option value="Donor">Donor</option>
                                 <option value="Receipient">Receipient</option>
                                 <option value="Doctor">Doctor</option>
-                                <option value="Recipient">Doctor</option>
+                                <option value="Recipient">Recipient</option>
                               </select>
                             </label>
                             <br />
