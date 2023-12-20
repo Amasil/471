@@ -164,7 +164,6 @@ const Users = () => {
     handleDeleteUser(userId);
   };
 
-
   // Handler for deleting a user
   const handleDeleteUser = async () => {
     try {
@@ -231,9 +230,6 @@ const Users = () => {
     }
   };
 
-
-
-
   // Rendering UI for user management
   return (
     <div className="admin-dashboard">
@@ -244,7 +240,11 @@ const Users = () => {
             <tr>
               <td colSpan="11">User List</td>
               <td colSpan="2" className="action">
-                <button onClick={handleRefreshUsers} className="refresh-button" style={{ width: '100%' }}>
+                <button
+                  onClick={handleRefreshUsers}
+                  className="refresh-button"
+                  style={{ width: "100%" }}
+                >
                   Refresh
                 </button>
               </td>
@@ -298,8 +298,8 @@ const Users = () => {
                       <button onClick={() => handleUserSelect(user.User_ID)}>
                         {/* Display "Cancel" or "Edit" based on editing state */}
                         {isEditing &&
-                          selectedUser &&
-                          selectedUser.User_ID === user.User_ID
+                        selectedUser &&
+                        selectedUser.User_ID === user.User_ID
                           ? "Cancel"
                           : "Edit"}
                       </button>
@@ -440,7 +440,7 @@ const Users = () => {
                               Last Donation Date
                               <input
                                 type="date"
-                                value={newUserInfo.Last_Donation_Date || ''}
+                                value={newUserInfo.Last_Donation_Date || ""}
                                 onChange={(e) =>
                                   setNewUserInfo({
                                     ...newUserInfo,
@@ -461,7 +461,6 @@ const Users = () => {
                                   })
                                 }
                               >
-                                <option value="">Select</option>
                                 <option value="MD">MD</option>
                                 <option value="PhD">PhD</option>
                                 <option value="Other">Other</option>
@@ -479,12 +478,11 @@ const Users = () => {
                                   })
                                 }
                               >
-                                <option value="">Select</option>
-                                <option value="1 - Cardiology">Cardiology</option>
-                                <option value="2 - Neurology">Neurology</option>
-                                <option value="3 - Orthopedics">Orthopedics</option>
-                                <option value="4 - Radiology">Radiology</option>
-                                <option value="5 - Other">Other</option>
+                                <option value="1">1 - Cardiology</option>
+                                <option value="2">2 - Neurology</option>
+                                <option value="3">3 - Orthopedics</option>
+                                <option value="4">4 - Radiology</option>
+                                <option value="5">5 - Other</option>
                               </select>
                             </label>
                             <br />

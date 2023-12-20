@@ -41,9 +41,24 @@ connection.connect((err) => {
 app.get("/user", (req, res) => {
   // Query to fetch all users with degree and department information
   const query = `
-    SELECT U.*, MS.Degree, MS.Department_ID
-    FROM User U
-    LEFT JOIN MEDICAL_STAFF MS ON U.User_ID = MS.Medical_ID
+    SELECT 
+    U.User_ID, 
+    U.First_Name, 
+    U. Middle_Name, 
+    U.Last_Name, 
+    U.Username,
+    U.Password,
+    U.Email, 
+    U.Phone_No,
+    U.Blood_Group,
+    U.Last_Donation_Date, 
+    U.User_Type, 
+    MS.Degree, 
+    MS.Department_ID
+    FROM 
+      User U
+    JOIN 
+      MEDICAL_STAFF MS ON U.User_ID = MS.Medical_ID
   `;
 
   connection.query(query, (err, results) => {
@@ -58,7 +73,7 @@ app.get("/user", (req, res) => {
 });
 
 // Update user information
-app.put('/user/:id', async (req, res) => {
+app.put("/user/:id", async (req, res) => {
   const userId = req.params.id;
   const {
     First_Name,
@@ -79,22 +94,19 @@ app.put('/user/:id', async (req, res) => {
     // Check if there are changes to update
     if (Object.keys(req.body).length > 0) {
       // Include User_Type in the payload
-      const updatedInfoWithUserType = { ...req.body, User_Type: req.body.User_Type };
-
-      // If the user type is "Doctor," include Degree and Department_ID in the payload
-      const updatedInfoWithDoctorFields =
-        req.body.User_Type === 'Doctor'
-          ? { ...updatedInfoWithUserType, Degree, Department_ID }
-          : updatedInfoWithUserType;
+      const updatedInfoWithUserType = {
+        ...req.body,
+        User_Type: req.body.User_Type,
+      };
 
       // Hash the password if provided
-      if (Password !== undefined && Password !== '') {
+      if (Password !== undefined && Password !== "") {
         const hashedPassword = await bcrypt.hash(Password, 10);
-        updatedInfoWithDoctorFields.Password = hashedPassword;
+        updatedInfoWithUserType.Password = hashedPassword;
       }
 
-      // Build the update query dynamically based on non-empty fields
-      const updateFields = {
+      // Build the update query for the User table dynamically based on non-empty fields
+      const updateUserFields = {
         First_Name,
         Middle_Name,
         Last_Name,
@@ -104,41 +116,47 @@ app.put('/user/:id', async (req, res) => {
         Blood_Group,
         Last_Donation_Date,
         User_Type,
-        ...updatedInfoWithDoctorFields,
       };
 
-      // Retrieve Department name based on Department_ID
-      const departmentQuery = 'SELECT Department_Name FROM DEPARTMENT WHERE Department_ID = ?';
-      const [departmentRows] = await connection.query(departmentQuery, [Department_ID]);
-
-      if (departmentRows.length === 0) {
-        return res.status(400).json({ message: 'Invalid Department_ID' });
+      // Check if there are fields to update in the User table
+      if (Object.keys(updateUserFields).length > 0) {
+        // Update user information in the User table
+        const updateUserQuery = "UPDATE User SET ? WHERE User_ID = ?";
+        connection.query(updateUserQuery, [updateUserFields, userId]);
+        console.log("User info updated successfully!");
       }
 
-      const departmentName = departmentRows[0].Department_Name;
-      updateFields.Medical_Staff = departmentName;
+      // Build the update query for the MEDICAL_STAFF table dynamically based on non-empty fields
+      const updateMedicalStaffFields = {
+        Degree,
+        Department_ID,
+      };
 
-      // Check if there are fields to update
-      if (Object.keys(updateFields).length > 0) {
-        // Update user information in the database
-        const updateQuery = 'UPDATE User SET ? WHERE User_ID = ?';
-        await connection.query(updateQuery, [updateFields, userId]);
-        console.log('User info updated successfully!');
-      } else {
-        console.log('No changes to update.');
-        res.status(400).json({ message: 'No changes to update.' });
+      // Check if there are fields to update in the MEDICAL_STAFF table
+      if (Object.keys(updateMedicalStaffFields).length > 0) {
+        // Update medical staff information in the MEDICAL_STAFF table
+        const updateMedicalStaffQuery =
+          "UPDATE MEDICAL_STAFF SET ? WHERE Medical_ID = ?";
+        connection.query(updateMedicalStaffQuery, [
+          updateMedicalStaffFields,
+          userId,
+        ]);
+        console.log("Medical staff info updated successfully!");
       }
+
+      // Respond with a success message
+      res
+        .status(200)
+        .json({ message: "User and medical staff info updated successfully!" });
     } else {
-      console.log('No changes to update.');
-      res.status(400).json({ message: 'No changes to update.' });
+      console.log("No changes to update.");
+      res.status(400).json({ message: "No changes to update." });
     }
   } catch (err) {
-    console.error('Error updating user info:', err);
-    res.status(500).json({ message: 'Internal Server Error' });
+    console.error("Error updating user info:", err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
-
-
 
 // POST route to insert a new user
 app.post("/user", async (req, res) => {
@@ -713,8 +731,6 @@ app.post("/schedule-appointment", (req, res) => {
     }
   );
 });
-
-
 
 // Define the route to get all appointments for a specific user
 app.get("/get-appointments/:userId", (req, res) => {
