@@ -135,7 +135,9 @@
 .user-table td.blood-group,
 .user-table td.last-donation-date,
 .user-table td.user-type,
-.user-table td.action .user-table td.doctor-degree .user-table td.department {
+.user-table td.action,
+.user-table td.degree,
+.user-table td.department-id {
   max-width: 150px;
   overflow: hidden;
   text-overflow: ellipsis;
