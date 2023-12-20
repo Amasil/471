@@ -18,9 +18,9 @@ const updateWebpageTitle = (title) => {
   document.title = title;
 };
 
-//needs to be changed to reflect new database
+
 const CreateUser = () => {
-  const [user, setUser] = useState({
+  const initialUserState = {
     First_Name: "",
     Middle_Name: "",
     Last_Name: "",
@@ -30,34 +30,43 @@ const CreateUser = () => {
     Phone_No: "",
     Blood_Group: "",
     Last_Donation_Date: "",
-    User_Type: "Donor", // Set the default user type to "Donor"
-  });
+    User_Type: "Donor",
+  };
+
+  const [user, setUser] = useState(initialUserState);
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleChange = (e) => {
     setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-  const Navigate = useNavigate();
+
   const handleRegistration = async (e) => {
     e.preventDefault();
 
     try {
       await axios.post("http://localhost:3000/user", user);
-      Navigate("/donor-login");
+      setShowPopup(true);
+      window.alert(`Username ${user.Username} signed up!`);
+      setUser(initialUserState); // Reset the form fields
     } catch (error) {
       console.error(error);
     }
   };
 
+  const shouldShowBloodGroupAndDate =
+    user.User_Type === "Donor" || user.User_Type === "Recipient";
+
   useEffect(() => {
     updateFavicon(
       "https://cdn.iconscout.com/icon/free/png-512/free-user-add-plus-contact-account-new-create-7-3318.png?f=webp&w=512"
     );
-    updateWebpageTitle("Donor Registration");
+    updateWebpageTitle("User Registration");
   }, []);
+
   return (
     <div>
       <div className="login-container">
-        <h2>Donor Registration</h2>
+        <h2>User Registration</h2>
         <form id="registrationForm" onSubmit={handleRegistration}>
           <label htmlFor="registerFirstName" className="required">
             First Name:
@@ -67,6 +76,8 @@ const CreateUser = () => {
             id="register-firstName"
             onChange={handleChange}
             name="First_Name"
+            value={user.First_Name}
+            defaultValue=""
             required
           />
           <br />
@@ -77,6 +88,9 @@ const CreateUser = () => {
             id="register-middleName"
             onChange={handleChange}
             name="Middle_Name"
+
+            value={user.Middle_Name}
+            defaultValue=""
           />
           <br />
 
@@ -88,6 +102,8 @@ const CreateUser = () => {
             id="register-lastName"
             onChange={handleChange}
             name="Last_Name"
+            value={user.Last_Name}
+            defaultValue=""
             required
           />
           <br />
@@ -100,6 +116,8 @@ const CreateUser = () => {
             id="register-username"
             onChange={handleChange}
             name="Username"
+            value={user.Username}
+            defaultValue=""
             required
           />
           <span id="usernameAvailability"></span>
@@ -113,6 +131,8 @@ const CreateUser = () => {
             id="register-password"
             onChange={handleChange}
             name="Password"
+            value={user.Password}
+            defaultValue=""
             required
           />
           <br />
@@ -125,6 +145,8 @@ const CreateUser = () => {
             id="register-email"
             onChange={handleChange}
             name="Email"
+            value={user.Email}
+            defaultValue=""
             required
           />
           <br />
@@ -138,6 +160,8 @@ const CreateUser = () => {
             type="tel"
             id="register-phone"
             name="Phone_No"
+            value={user.Phone_No}
+            defaultValue=""
             onChange={handleChange}
             required
           />
@@ -145,33 +169,6 @@ const CreateUser = () => {
           <span id="telAvailability"></span>
           <br />
 
-          <label htmlFor="registerBloodGroup" className="required">
-            Blood Group:
-          </label>
-          <select
-            id="register-bloodGroup"
-            onChange={handleChange}
-            name="Blood_Group"
-          >
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
-            <option value="Unknown">Unknown</option>
-          </select>
-          <br />
-
-          <label htmlFor="registerLastDonationDate">Last Donation Date:</label>
-          <input
-            type="date"
-            id="register-lastDonationDate"
-            onChange={handleChange}
-            name="Last_Donation_Date"
-          />
           <label htmlFor="registerUserType" className="required">
             User Type:
           </label>
@@ -179,15 +176,56 @@ const CreateUser = () => {
             id="register-userType"
             onChange={handleChange}
             name="User_Type"
+            value={user.User_Type}
+            defaultValue="Admin"
             required
           >
             <option value="Admin">Admin</option>
             <option value="Doctor">Doctor</option>
             <option value="Donor">Donor</option>
-            <option value="Recipient">Receipient</option>
+            <option value="Recipient">Recipient</option>
           </select>
           <br />
-          <p className="note">Leave empty if unsure</p>
+
+          {["Donor", "Recipient"].includes(user.User_Type) && (
+            <>
+              <label htmlFor="registerBloodGroup" className="required">
+                Blood Group:
+              </label>
+              <select
+                id="register-bloodGroup"
+                onChange={handleChange}
+                name="Blood_Group"
+              >
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="Unknown">Unknown</option>
+              </select>
+              <br />
+
+              <label htmlFor="registerLastDonationDate">
+                Last Donation Date:
+              </label>
+              <input
+                type="date"
+                id="register-lastDonationDate"
+                onChange={handleChange}
+                name="Last_Donation_Date"
+                value={user.Last_Donation_Date}
+                defaultValue=""
+              />
+              <br />
+            </>
+          )}
+
+          {/* ... (remaining input fields) */}
+
           <button type="submit" id="registerButton">
             Register
           </button>

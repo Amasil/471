@@ -1,5 +1,3 @@
-// Doctor_Dashboard.js
-
 import React from "react";
 import { Routes, Route, useParams } from "react-router-dom";
 import DoctorSidebar from "./DoctorSidebar.js";
@@ -18,7 +16,6 @@ const DoctorDashboard = () => {
           <Route path="/create" element={<DoctorCreate />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/doctor-feedback" element={<DoctorFeedback />} />
-          {/* Add more routes as needed */}
         </Routes>
       </div>
     </div>
