@@ -21,7 +21,7 @@
 }
 
 /* Header styling */
-header {
+.header {
   background-color: #333;
   color: #fff;
   padding: 20px;
@@ -135,22 +135,9 @@ header {
 .user-table td.blood-group,
 .user-table td.last-donation-date,
 .user-table td.user-type,
-.user-table td.action {
+.user-table td.action .user-table td.doctor-degree .user-table td.department {
   max-width: 150px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-/* Style for the refresh button container */
-.refresh-button-container {
-  margin-top: 20px;
-  text-align: center;
-}
-
-/* Style for the refresh button */
-.refresh-button {
-  padding: 10px;
-  font-size: 16px;
-  cursor: pointer;
 }
