@@ -94,23 +94,22 @@ app.put('/user/:id', async (req, res) => {
       }
 
       // Build the update query dynamically based on non-empty fields
-      const updateFields = {};
-      if (First_Name !== undefined && First_Name !== '') updateFields.First_Name = First_Name;
-      if (Middle_Name !== undefined && Middle_Name !== '') updateFields.Middle_Name = Middle_Name;
-      if (Last_Name !== undefined && Last_Name !== '') updateFields.Last_Name = Last_Name;
-      if (Username !== undefined && Username !== '') updateFields.Username = Username;
-      if (Email !== undefined && Email !== '') updateFields.Email = Email;
-      if (Phone_No !== undefined && Phone_No !== '') updateFields.Phone_No = Phone_No;
-      if (Blood_Group !== undefined && Blood_Group !== '') updateFields.Blood_Group = Blood_Group;
-      if (Last_Donation_Date !== undefined && Last_Donation_Date !== '') updateFields.Last_Donation_Date = Last_Donation_Date;
-      if (Degree !== undefined && Degree !== '') updateFields.Degree = Degree;
-      if (Department_ID !== undefined && Department_ID !== '') updateFields.Department_ID = Department_ID;
-      if (User_Type !== undefined && User_Type !== '') updateFields.User_Type = User_Type;
+      const updateFields = {
+        First_Name,
+        Middle_Name,
+        Last_Name,
+        Username,
+        Email,
+        Phone_No,
+        Blood_Group,
+        Last_Donation_Date,
+        User_Type,
+        ...updatedInfoWithDoctorFields,
+      };
 
       // Retrieve Department name based on Department_ID
-      const [departmentRows, _] = connection.query('SELECT Department_Name FROM DEPARTMENT WHERE Department_ID = ?', [
-        Department_ID,
-      ]);
+      const departmentQuery = 'SELECT Department_Name FROM DEPARTMENT WHERE Department_ID = ?';
+      const [departmentRows] = await connection.query(departmentQuery, [Department_ID]);
 
       if (departmentRows.length === 0) {
         return res.status(400).json({ message: 'Invalid Department_ID' });
@@ -122,7 +121,8 @@ app.put('/user/:id', async (req, res) => {
       // Check if there are fields to update
       if (Object.keys(updateFields).length > 0) {
         // Update user information in the database
-        connection.query('UPDATE User SET ? WHERE User_ID = ?', [updateFields, userId]);
+        const updateQuery = 'UPDATE User SET ? WHERE User_ID = ?';
+        await connection.query(updateQuery, [updateFields, userId]);
         console.log('User info updated successfully!');
       } else {
         console.log('No changes to update.');
@@ -137,6 +137,8 @@ app.put('/user/:id', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
+
 
 // POST route to insert a new user
 app.post("/user", async (req, res) => {
