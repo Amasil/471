@@ -161,11 +161,21 @@ const Users = () => {
     // Call handleDeleteUser function with userId
     handleDeleteUser(userId);
   };
+
+
   // Handler for deleting a user
   const handleDeleteUser = async () => {
     try {
       // Check if a user is selected for deletion
       if (selectedUser && selectedUser.User_ID) {
+        const loggedInUserId = parseInt(localStorage.getItem("userId"), 10);
+        // Check if the selected user is the same as the logged-in user
+        if (selectedUser.User_ID === loggedInUserId) {
+          // Display a message or perform some action to inform the user
+          window.alert("You cannot delete yourself!");
+          return;
+        }
+
         // Display a confirmation pop-up only if cancelClicked state is false
         if (!cancelClicked) {
           const userConfirmed = window.confirm(
@@ -179,7 +189,7 @@ const Users = () => {
           }
         }
 
-        // If user confirms, proceed with deletion
+        // If user confirms and the selected user is not the logged-in user, proceed with deletion
         await axios.delete("http://localhost:3000/user", {
           data: { User_ID: selectedUser.User_ID },
         });
@@ -217,6 +227,7 @@ const Users = () => {
       console.error("Error deleting user:", err);
     }
   };
+
 
   // Rendering UI for user management
   return (
