@@ -5,14 +5,17 @@ const Feedback = () => {
   const [rating, setRating] = useState(0);
   const [feedbackText, setFeedbackText] = useState("");
 
+  // Retrieve user ID from localStorage
+  const userId = localStorage.getItem("userId");
+
   const handleRatingChange = (event) => {
     setRating(Number(event.target.value));
   };
 
-  const submitFeedback = () => {
+  const submitFeedback = async () => {
     // Prepare the data to be sent to the server
     const feedbackData = {
-      User_ID: 20, // Replace with the actual user ID
+      User_ID: userId, // Use the retrieved user ID
       Feedback_Date: new Date().toISOString().split("T")[0], // Format as 'YYYY-MM-DD'
       Details: "Additional details if needed", // Add details if applicable
       Comment: feedbackText,
