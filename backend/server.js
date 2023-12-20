@@ -87,22 +87,11 @@ app.put('/user/:id', async (req, res) => {
           ? { ...updatedInfoWithUserType, Degree, Department_ID }
           : updatedInfoWithUserType;
 
-      // Check if the Department_ID is valid by querying the DEPARTMENT table
-      if (updatedInfoWithDoctorFields.User_Type === 'Doctor' && updatedInfoWithDoctorFields.Department_ID) {
-        const [departmentRows] = connection.query('SELECT * FROM DEPARTMENT WHERE Department_ID = ?', [
-          updatedInfoWithDoctorFields.Department_ID,
-        ]);
-
-        if (departmentRows.length === 0) {
-          return res.status(400).json({ message: 'Invalid Department_ID' });
-        }
-      }
-
       // Hash the password if provided
-      // if (Password !== undefined && Password !== '') {
-      //   const hashedPassword = await bcrypt.hash(Password, 10);
-      //   updatedInfoWithDoctorFields.Password = hashedPassword;
-      // }
+      if (Password !== undefined && Password !== '') {
+        const hashedPassword = await bcrypt.hash(Password, 10);
+        updatedInfoWithDoctorFields.Password = hashedPassword;
+      }
 
       // Build the update query dynamically based on non-empty fields
       const updateFields = {};
@@ -116,12 +105,19 @@ app.put('/user/:id', async (req, res) => {
       if (Last_Donation_Date !== undefined && Last_Donation_Date !== '') updateFields.Last_Donation_Date = Last_Donation_Date;
       if (Degree !== undefined && Degree !== '') updateFields.Degree = Degree;
       if (Department_ID !== undefined && Department_ID !== '') updateFields.Department_ID = Department_ID;
+      if (User_Type !== undefined && User_Type !== '') updateFields.User_Type = User_Type;
 
-      // Hash the password if provided
-      if (Password !== undefined && Password !== '') {
-        const hashedPassword = await bcrypt.hash(Password, 10); // 10 is the cost factor, you can adjust it
-        updateFields.Password = hashedPassword;
+      // Retrieve Department name based on Department_ID
+      const [departmentRows, _] = connection.query('SELECT Department_Name FROM DEPARTMENT WHERE Department_ID = ?', [
+        Department_ID,
+      ]);
+
+      if (departmentRows.length === 0) {
+        return res.status(400).json({ message: 'Invalid Department_ID' });
       }
+
+      const departmentName = departmentRows[0].Department_Name;
+      updateFields.Medical_Staff = departmentName;
 
       // Check if there are fields to update
       if (Object.keys(updateFields).length > 0) {
@@ -132,7 +128,6 @@ app.put('/user/:id', async (req, res) => {
         console.log('No changes to update.');
         res.status(400).json({ message: 'No changes to update.' });
       }
-
     } else {
       console.log('No changes to update.');
       res.status(400).json({ message: 'No changes to update.' });
@@ -142,7 +137,6 @@ app.put('/user/:id', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
-
 
 // POST route to insert a new user
 app.post("/user", async (req, res) => {
