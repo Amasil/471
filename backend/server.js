@@ -760,22 +760,24 @@ app.post("/schedule-transfusion-appointment", (req, res) => {
     Volume,
     Type,
     Transfusion_date,
-    Appointment_Time,
+    Transfusion_Time,
     Recipient_ID,
   } = req.body;
 
-  console.log(req.body)
+  console.log(req.body);
+
   // Validate input
-  if (!Medical_ID || !Volume || !Type || !Transfusion_date || !Recipient_ID) {
+  if (!Medical_ID || !Volume || !Type || !Transfusion_date || !Transfusion_Time || !Recipient_ID) {
     console.log("Missing required fields");
     return res.status(400).json({ error: "Missing required fields" });
   }
 
   const insertQuery =
-    "INSERT INTO TRANSFUSION_APPOINTMENT (MEDICAL_ID, Volume, Type, Transfusion_Date, Recipient_Id) VALUES (?, ?, ?, ?, ?)";
+    "INSERT INTO TRANSFUSION_APPOINTMENT (MEDICAL_ID, Volume, Type, Transfusion_Date, Transfusion_Time, Recipient_Id) VALUES (?, ?, ?, ?, ?, ?)";
+  
   connection.query(
     insertQuery,
-    [Medical_ID, Volume, Type, Transfusion_date, Recipient_ID],
+    [Medical_ID, Volume, Type, Transfusion_date, Transfusion_Time, Recipient_ID],
     (err, results) => {
       if (err) {
         console.error("Error scheduling transfusion appointment:", err.message);
@@ -793,6 +795,7 @@ app.post("/schedule-transfusion-appointment", (req, res) => {
           Volume,
           Type,
           Transfusion_date,
+          Transfusion_Time, 
           Recipient_ID,
         },
       });
@@ -820,6 +823,7 @@ app.get("/get-transfusion-appointments/:doctorId", (req, res) => {
     }
   });
 });
+
 
 
 // let departmentTableInitialized = false;

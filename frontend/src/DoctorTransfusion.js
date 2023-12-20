@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 
 const TransfusionAppt = () => {
@@ -62,9 +61,8 @@ const TransfusionAppt = () => {
       const appointmentData = {
         Medical_ID: selectedDoctor,
         Recipient_ID: selectedRecipient,
-        Status: "Scheduled",
         Transfusion_date: selectedDate,
-        Transfusion_time: selectedTime,
+        Transfusion_Time: selectedTime,
         Volume: selectedVolume,
         Type: selectedBloodType,
       };
@@ -93,7 +91,6 @@ const TransfusionAppt = () => {
                 Appointment_ID: appointmentID,
                 Medical_ID: selectedDoctor,
                 Recipient_ID: selectedRecipient,
-                Status: "Scheduled",
                 Transfusion_date: selectedDate,
                 Transfusion_Time: selectedTime,
                 Volume: selectedVolume,
@@ -237,7 +234,6 @@ const TransfusionAppt = () => {
           <thead>
             <tr>
               <th>Appointment ID</th>
-              <th>Status</th>
               <th>Appointment Date</th>
               <th>Appointment Time</th>
               <th>Volume</th>
@@ -248,9 +244,8 @@ const TransfusionAppt = () => {
             {appointments.map((appointment) => (
               <tr key={appointment.Appointment_ID}>
                 <td>{appointment.Appointment_ID}</td>
-                <td>{appointment.Status}</td>
                 <td>{appointment.Transfusion_date.split("T")[0]}</td>
-                <td>{appointment.Transfusion_time}</td>
+                <td>{appointment.Transfusion_Time}</td>
                 <td>{appointment.Volume}</td>
                 <td>{appointment.Type}</td>
               </tr>
