@@ -223,9 +223,21 @@ const Users = () => {
     <div className="admin-dashboard">
       <div className="users-container">
         <header>
-          {" "}
           <h1>User List</h1>
-        </header>{" "}
+        </header>
+        <table className="refresh-button-table" border="0">
+          <tbody>
+            {/* Empty rows */}
+            <tr>
+              <td colSpan="11"></td>
+              <td colSpan="2" className="action">
+                <button onClick={handleRefreshUsers} className="refresh-button" style={{ width: '100%' }}>
+                  Refresh
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
         {users.length === 0 ? (
           <div>
             <p>No users found. Click the "Refresh" button to fetch users.</p>
@@ -244,8 +256,8 @@ const Users = () => {
                 <th className="phone">Phone</th>
                 <th className="blood-group">Blood Group</th>
                 <th className="last-donation-date">Last Donation Date</th>
-                <td className="degree">Doctor Degree</td>
-                <td className="department-id">Doctor Department</td>
+                <th className="degree">Doctor Degree</th>
+                <th className="department-id">Doctor Department</th>
                 <th className="user-type">User Type</th>
                 <th className="action">Action</th>
               </tr>
@@ -274,8 +286,8 @@ const Users = () => {
                       <button onClick={() => handleUserSelect(user.User_ID)}>
                         {/* Display "Cancel" or "Edit" based on editing state */}
                         {isEditing &&
-                        selectedUser &&
-                        selectedUser.User_ID === user.User_ID
+                          selectedUser &&
+                          selectedUser.User_ID === user.User_ID
                           ? "Cancel"
                           : "Edit"}
                       </button>
@@ -508,12 +520,6 @@ const Users = () => {
             </tbody>
           </table>
         )}
-        {/* Add the refresh button */}
-        <div className="refresh-button-container">
-          <button onClick={handleRefreshUsers} className="refresh-button">
-            Refresh
-          </button>
-        </div>
       </div>
     </div>
   );
