@@ -18,7 +18,6 @@ const updateWebpageTitle = (title) => {
   document.title = title;
 };
 
-
 const CreateUser = () => {
   const initialUserState = {
     First_Name: "",
@@ -38,6 +37,19 @@ const CreateUser = () => {
 
   const handleChange = (e) => {
     setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const selectedValue = e.target.value;
+    const [department_id, department_name] = selectedValue.split(" - ");
+
+    // Use department_id and department_name as needed
+    console.log("Selected Department ID:", department_id);
+    console.log("Selected Department Name:", department_name);
+
+    setUser((prev) => ({
+      ...prev,
+      // Add department_id and department_name to the user state
+      Department_ID: department_id,
+      Department_Name: department_name,
+    }));
   };
 
   const handleRegistration = async (e) => {
@@ -88,7 +100,6 @@ const CreateUser = () => {
             id="register-middleName"
             onChange={handleChange}
             name="Middle_Name"
-
             value={user.Middle_Name}
             defaultValue=""
           />
@@ -209,7 +220,7 @@ const CreateUser = () => {
               </select>
               <br />
 
-              <label htmlFor="registerLastDonationDate">
+              <label htmlFor="registerLastDonationDate" className="required">
                 Last Donation Date:
               </label>
               <input
@@ -223,9 +234,38 @@ const CreateUser = () => {
               <br />
             </>
           )}
-
-          {/* ... (remaining input fields) */}
-
+          {["Doctor", "Admin"].includes(user.User_Type) && (
+            <>
+              <label htmlFor="resgisterDoctorDegree" className="required">
+                Doctor Degree:
+              </label>
+              <select
+                id="register-doctorDegree"
+                onChange={handleChange}
+                name="Doctor_Degree"
+              >
+                <option value="MD">MD</option>
+                <option value="PhD">PhD</option>
+                <option value="Other">Other</option>
+              </select>
+              <br />
+              <label htmlFor="registerDoctorDepartment">
+                Doctor Department:
+              </label>
+              <select
+                id="register-doctorDepartment"
+                onChange={handleChange}
+                name="Doctor_Department"
+              >
+                <option value="1 - Cardiology">Cardiology</option>
+                <option value="2 - Neurology">Neurology</option>
+                <option value="3 - Orthopedics">Orthopedics</option>
+                <option value="4 - Radiology">Radiology</option>
+                <option value="5 - Other">Other</option>
+              </select>
+              <br />
+            </>
+          )}
           <button type="submit" id="registerButton">
             Register
           </button>

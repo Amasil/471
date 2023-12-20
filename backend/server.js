@@ -57,13 +57,20 @@ connection.connect((err) => {
 
 // GET route to fetch all users
 app.get("/user", (req, res) => {
-  // Query to fetch all users from the User table
-  connection.query("SELECT * FROM User", (err, results) => {
+  // Query to fetch all users with degree and department information
+  const query = `
+    SELECT U.*, MS.Degree, MS.Department_ID
+    FROM User U
+    LEFT JOIN MEDICAL_STAFF MS ON U.User_ID = MS.Medical_ID
+  `;
+
+  connection.query(query, (err, results) => {
     if (err) {
       console.error("Error querying the database: " + err.stack);
       res.status(500).send("Error querying the database.");
       return;
     }
+
     res.send(results);
   });
 });
@@ -83,6 +90,9 @@ app.put("/user", async (req, res) => {
     Blood_Group,
     Last_Donation_Date,
     User_Type,
+    Doctor_Department,
+    Department_ID,
+    Department_Name,
   } = req.body;
 
   try {
@@ -138,6 +148,7 @@ app.put("/user", async (req, res) => {
 // POST route to insert a new user
 app.post("/user", async (req, res) => {
   const {
+    User_ID,
     First_Name,
     Middle_Name,
     Last_Name,
@@ -148,6 +159,10 @@ app.post("/user", async (req, res) => {
     Blood_Group,
     Last_Donation_Date,
     User_Type,
+    Doctor_Degree,
+    Doctor_Department,
+    Department_ID,
+    Department_Name,
   } = req.body;
 
   // Generate a random salt
@@ -268,7 +283,7 @@ app.post("/user", async (req, res) => {
             res.send("Recipient inserted successfully.");
           });
         });
-      } else if (User_Type == "Doctor") {
+      } else if (User_Type == "Doctor" || "Admin") {
         const insertStaff = `
           INSERT INTO MEDICAL_STAFF (
             Medical_ID,
@@ -277,28 +292,7 @@ app.post("/user", async (req, res) => {
             Alert_ID
           ) VALUES (?, ?, ?, ?)
         `;
-        const staffValues = [User_ID, "BioScience", 1, 2];
-
-        connection.query(insertStaff, staffValues, (err, results) => {
-          if (err) {
-            console.error("Error inserting into the database: " + err.stack);
-            res.status(500).send("Error inserting into the database.");
-            return;
-          }
-
-          // Send a single response at the end
-          res.send("Staff inserted successfully.");
-        });
-      } else if (User_Type == "Admin") {
-        const insertStaff = `
-          INSERT INTO MEDICAL_STAFF (
-            Medical_ID,
-            Degree,
-            Department_ID,
-            Alert_ID
-          ) VALUES (?, ?, ?, ?)
-        `;
-        const staffValues = [User_ID, "Admin", 5, 3];
+        const staffValues = [User_ID, Doctor_Degree, Department_ID, 2];
 
         connection.query(insertStaff, staffValues, (err, results) => {
           if (err) {
