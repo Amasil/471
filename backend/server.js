@@ -346,7 +346,7 @@ app.delete("/user", async (req, res) => {
 
     // Delete from USER table
     const deleteUserQuery = "DELETE FROM User WHERE User_ID = ?";
-    const deleteResult = await connection.query(deleteUserQuery, [userId]);
+    const deleteResult = connection.query(deleteUserQuery, [userId]);
 
     // Checking if the user was found and deleted
     if (deleteResult.affectedRows === 0) {

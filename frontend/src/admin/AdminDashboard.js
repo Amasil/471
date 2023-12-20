@@ -197,7 +197,7 @@ const Users = () => {
         console.log("User deleted successfully!");
 
         // Fetch updated user list from the server
-        const res = axios.get("http://localhost:3000/user");
+        const res = await axios.get("http://localhost:3000/user");
         setUsers(res.data);
 
         // Reset selected user and user information
@@ -220,6 +220,7 @@ const Users = () => {
         // Disable editing mode and reset button states
         setIsEditing(false);
         setIsDeleteButtonDisabled(true);
+        setCancelClicked(false); // Reset cancelClicked state
       } else {
         console.log("No user selected to delete.");
       }
@@ -227,6 +228,8 @@ const Users = () => {
       console.error("Error deleting user:", err);
     }
   };
+
+
 
 
   // Rendering UI for user management
