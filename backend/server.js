@@ -730,6 +730,60 @@ app.get("/get-appointments/:userId", (req, res) => {
 });
 // =================================================================================================================
 
+// Hardcoded data for DEPARTMENT table
+const departmentData = [
+  {
+    Department_ID: 1,
+    Department_name: 'Cardiology',
+    Location: 'Hospital Wing A',
+    Contact_info: '123-456-7890',
+    Emergency_Protocol: 'In case of emergency, call 911',
+  },
+  {
+    Department_ID: 2,
+    Department_name: 'Neurology',
+    Location: 'Hospital Wing B',
+    Contact_info: '987-654-3210',
+    Emergency_Protocol: 'In case of emergency, call 911',
+  },
+  // Add more departments as needed...
+];
+
+// Initialize DEPARTMENT table with hardcoded data
+const initializeDepartmentTable = () => {
+  const insertQuery = `
+    INSERT INTO DEPARTMENT (
+    Department_ID,
+    Department_name,
+    Location,
+    Contact_info,
+    Emergency_Protocol
+    ) VALUES (?, ?, ?, ?, ?)
+  `;
+
+  // Loop through the hardcoded data and execute INSERT queries
+  departmentData.forEach(async (department) => {
+    const values = [
+      department.Department_ID,
+      department.Department_name,
+      department.Location,
+      department.Contact_info,
+      department.Emergency_Protocol,
+    ];
+
+    try {
+      // Execute the INSERT query
+      await connection.query(insertQuery, values);
+      console.log(`Department ${department.Department_name} inserted successfully.`);
+    } catch (error) {
+      console.error(`Error inserting department ${department.Department_name}: ${error.stack}`);
+    }
+  });
+};
+
+// Call the function to initialize the DEPARTMENT table
+initializeDepartmentTable();
+
 // Starting the server on port 3000
 app.listen(3000, () => {
   console.log("Server listening on port 3000.");
