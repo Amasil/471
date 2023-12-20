@@ -9,36 +9,18 @@ const bcrypt = require("bcrypt");
 // Creating an Express application
 const app = express();
 
-// Middleware setup
-app.use(bodyParser.json()); // Parse JSON requests
-app.use(cors()); // Enable Cross-Origin Resource Sharing (CORS)
+app.use(bodyParser.json());
+app.use(cors());
 
-// // Define requireAuth middleware
-// const requireAuth = (req, res, next) => {
-//   const token = req.cookies.jwt;
-
-//   if (!token) {
-//     res.redirect("/donor-login");
-//     return;
-//   }
-
-//   jwt.verify(token, "your-secret-key", (err, decodedToken) => {
-//     if (err) {
-//       console.log(err.message);
-//       res.redirect("/donor-login");
-//     } else {
-//       console.log(decodedToken);
-//       next();
-//     }
-//   });
-// };
 // =================================================================================================================
 
 // Establishing a connection to the MySQL database
+// In a real world application, these would be stored in environment variables.
+
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "sZ10O84<", // Consider using environment variables for sensitive information
+  password: "sZ10O84<",
   database: "Website",
   authPlugins: {
     mysql_clear_password: () => () => Buffer.from("sZ10O84<"),
@@ -90,13 +72,12 @@ app.put("/user", async (req, res) => {
     Blood_Group,
     Last_Donation_Date,
     User_Type,
-    Degree,
-    Department_ID,
   } = req.body;
 
   try {
     // Hash the password with automatically generated salt
-    const hashedPassword = await bcrypt.hash(Password, 10); // 10 is the cost factor, you can adjust it
+    // 10 is the number of salt rounds
+    const hashedPassword = await bcrypt.hash(Password, 10);
 
     // SQL query for updating user information
     const updateQuery = `
@@ -120,7 +101,7 @@ app.put("/user", async (req, res) => {
       Middle_Name,
       Last_Name,
       Username,
-      hashedPassword, // Store the hashed password
+      hashedPassword,
       Email,
       Phone_No,
       Blood_Group,
