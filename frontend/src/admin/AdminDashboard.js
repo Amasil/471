@@ -236,14 +236,11 @@ const Users = () => {
   return (
     <div className="admin-dashboard">
       <div className="users-container">
-        <header>
-          <h1>User List</h1>
-        </header>
         <table className="refresh-button-table" border="0">
           <tbody>
             {/* Empty rows */}
             <tr>
-              <td colSpan="11"></td>
+              <td colSpan="11">User List</td>
               <td colSpan="2" className="action">
                 <button onClick={handleRefreshUsers} className="refresh-button" style={{ width: '100%' }}>
                   Refresh
@@ -255,7 +252,6 @@ const Users = () => {
         {users.length === 0 ? (
           <div>
             <p>No users found. Click the "Refresh" button to fetch users.</p>
-            <button onClick={handleRefreshUsers}>Refresh</button>
           </div>
         ) : (
           <table className="user-table">

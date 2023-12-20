@@ -23,7 +23,7 @@ const AdminSidebar = () => {
           location.pathname.startsWith("/admin-dashboard/users") ? "active" : ""
         }
       >
-        Users
+        Manage Users
       </Link>
       {/* Link to the Create User section with an "active" class if it's part of the current route */}
       <Link
@@ -34,7 +34,7 @@ const AdminSidebar = () => {
             : ""
         }
       >
-        Create User
+        Create Users
       </Link>
       {/* Link to the Inventory section with an "active" class if it's part of the current route */}
       <Link
@@ -43,7 +43,7 @@ const AdminSidebar = () => {
           location.pathname.startsWith("/admin-dashboard/") ? "active" : ""
         }
       >
-        Inventory
+        Inventory Status
       </Link>
       {/* Link to the Admin Login section with an "active" class if it's part of the current route */}
       <Link
