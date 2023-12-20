@@ -39,9 +39,9 @@ connection.connect((err) => {
 
 // GET route to fetch all users
 app.get("/user", (req, res) => {
-  // Query to fetch all users with degree and department information
+  // Query to fetch all users with department information
   const query = `
-    SELECT U.*, MS.Degree, MS.Department_ID
+    SELECT U.*, MS.Department_ID
     FROM User U
     LEFT JOIN MEDICAL_STAFF MS ON U.User_ID = MS.Medical_ID
   `;
@@ -58,7 +58,7 @@ app.get("/user", (req, res) => {
 });
 
 // Update user information
-app.put('/user/:id', async (req, res) => {
+app.put("/user/:id", async (req, res) => {
   const userId = req.params.id;
   const {
     First_Name,
@@ -71,7 +71,6 @@ app.put('/user/:id', async (req, res) => {
     Blood_Group,
     Last_Donation_Date,
     User_Type,
-    Degree,
     Department_ID,
   } = req.body;
 
@@ -79,16 +78,19 @@ app.put('/user/:id', async (req, res) => {
     // Check if there are changes to update
     if (Object.keys(req.body).length > 0) {
       // Include User_Type in the payload
-      const updatedInfoWithUserType = { ...req.body, User_Type: req.body.User_Type };
+      const updatedInfoWithUserType = {
+        ...req.body,
+        User_Type: req.body.User_Type,
+      };
 
-      // If the user type is "Doctor," include Degree and Department_ID in the payload
+      // If the user type is "Doctor," include Department_ID in the payload
       const updatedInfoWithDoctorFields =
-        req.body.User_Type === 'Doctor'
-          ? { ...updatedInfoWithUserType, Degree, Department_ID }
+        req.body.User_Type === "Doctor"
+          ? { ...updatedInfoWithUserType, Department_ID }
           : updatedInfoWithUserType;
 
       // Hash the password if provided
-      if (Password !== undefined && Password !== '') {
+      if (Password !== undefined && Password !== "") {
         const hashedPassword = await bcrypt.hash(Password, 10);
         updatedInfoWithDoctorFields.Password = hashedPassword;
       }
@@ -108,11 +110,14 @@ app.put('/user/:id', async (req, res) => {
       };
 
       // Retrieve Department name based on Department_ID
-      const departmentQuery = 'SELECT Department_Name FROM DEPARTMENT WHERE Department_ID = ?';
-      const [departmentRows] = await connection.query(departmentQuery, [Department_ID]);
+      const departmentQuery =
+        "SELECT Department_Name FROM DEPARTMENT WHERE Department_ID = ?";
+      const [departmentRows] = await connection.query(departmentQuery, [
+        Department_ID,
+      ]);
 
       if (departmentRows.length === 0) {
-        return res.status(400).json({ message: 'Invalid Department_ID' });
+        return res.status(400).json({ message: "Invalid Department_ID" });
       }
 
       const departmentName = departmentRows[0].Department_Name;
@@ -121,24 +126,22 @@ app.put('/user/:id', async (req, res) => {
       // Check if there are fields to update
       if (Object.keys(updateFields).length > 0) {
         // Update user information in the database
-        const updateQuery = 'UPDATE User SET ? WHERE User_ID = ?';
+        const updateQuery = "UPDATE User SET ? WHERE User_ID = ?";
         await connection.query(updateQuery, [updateFields, userId]);
-        console.log('User info updated successfully!');
+        console.log("User info updated successfully!");
       } else {
-        console.log('No changes to update.');
-        res.status(400).json({ message: 'No changes to update.' });
+        console.log("No changes to update.");
+        res.status(400).json({ message: "No changes to update." });
       }
     } else {
-      console.log('No changes to update.');
-      res.status(400).json({ message: 'No changes to update.' });
+      console.log("No changes to update.");
+      res.status(400).json({ message: "No changes to update." });
     }
   } catch (err) {
-    console.error('Error updating user info:', err);
-    res.status(500).json({ message: 'Internal Server Error' });
+    console.error("Error updating user info:", err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
-
-
 
 // POST route to insert a new user
 app.post("/user", async (req, res) => {
@@ -154,7 +157,6 @@ app.post("/user", async (req, res) => {
     Blood_Group,
     Last_Donation_Date,
     User_Type,
-    Degree,
     Department_ID,
   } = req.body;
 
@@ -276,16 +278,15 @@ app.post("/user", async (req, res) => {
             res.send("Recipient inserted successfully.");
           });
         });
-      } else if (User_Type == "Doctor" || "Admin") {
+      } else if (User_Type === "Doctor") {
         const insertStaff = `
           INSERT INTO MEDICAL_STAFF (
             Medical_ID,
-            Degree,
             Department_ID,
             Alert_ID
-          ) VALUES (?, ?, ?, ?)
+          ) VALUES (?, ?, ?)
         `;
-        const staffValues = [User_ID, Degree, Department_ID, 2];
+        const staffValues = [User_ID, Department_ID, 2];
 
         connection.query(insertStaff, staffValues, (err, results) => {
           if (err) {
@@ -295,7 +296,27 @@ app.post("/user", async (req, res) => {
           }
 
           // Send a single response at the end
-          res.send("Staff inserted successfully.");
+          res.send("Doctor inserted successfully.");
+        });
+      } else if (User_Type === "Admin") {
+        const insertStaff = `
+          INSERT INTO MEDICAL_STAFF (
+            Medical_ID,
+            Department_ID,
+            Alert_ID
+          ) VALUES (?, ?, ?)
+        `;
+        const staffValues = [User_ID, Department_ID, 2];
+
+        connection.query(insertStaff, staffValues, (err, results) => {
+          if (err) {
+            console.error("Error inserting into the database: " + err.stack);
+            res.status(500).send("Error inserting into the database.");
+            return;
+          }
+
+          // Send a single response at the end
+          res.send("Admin inserted successfully.");
         });
       } else {
         // Send a single response at the end

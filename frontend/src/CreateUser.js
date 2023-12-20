@@ -37,17 +37,20 @@ const CreateUser = () => {
 
   const handleChange = (e) => {
     setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+
     const selectedValue = e.target.value;
-    // const [department_id] = selectedValue.split(" - ");
 
-    // // Use department_id as needed
-    // console.log("Selected Department ID:", department_id);
-
-    setUser((prev) => ({
-      ...prev,
-      // Add department_id to the user state
-      // Department_ID: department_id,
-    }));
+    if (user.User_Type === "Doctor") {
+      // Handle Doctor related fields
+      if (e.target.name === "Doctor_Department") {
+        // Handle Doctor Department field if needed
+        const [department_id] = selectedValue.split(" - ");
+        setUser((prev) => ({
+          ...prev,
+          Department_ID: department_id,
+        }));
+      }
+    }
   };
 
   const handleRegistration = async (e) => {
@@ -234,19 +237,6 @@ const CreateUser = () => {
           )}
           {["Doctor"].includes(user.User_Type) && (
             <>
-              <label htmlFor="resgisterDoctorDegree" className="required">
-                Doctor Degree:
-              </label>
-              <select
-                id="register-doctorDegree"
-                onChange={handleChange}
-                name="Doctor_Degree"
-              >
-                <option value="MD">MD</option>
-                <option value="PhD">PhD</option>
-                <option value="Other">Other</option>
-              </select>
-              <br />
               <label htmlFor="registerDoctorDepartment">
                 Doctor Department:
               </label>
@@ -255,11 +245,11 @@ const CreateUser = () => {
                 onChange={handleChange}
                 name="Doctor_Department"
               >
-                <option value="1">Cardiology</option>
-                <option value="2">Neurology</option>
-                <option value="3">Orthopedics</option>
-                <option value="4">Radiology</option>
-                <option value="5">Other</option>
+                <option value="1 - Cardiology">Cardiology</option>
+                <option value="2 - Neurology">Neurology</option>
+                <option value="3 - Orthopedics">Orthopedics</option>
+                <option value="4 - Radiology">Radiology</option>
+                <option value="5 - Other">Other</option>
               </select>
               <br />
             </>

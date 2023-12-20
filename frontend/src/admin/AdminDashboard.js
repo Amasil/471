@@ -62,7 +62,6 @@ const Users = () => {
     Phone_No: "",
     Blood_Group: "",
     Last_Donation_Date: "",
-    Degree: "",
     Department_ID: "",
   });
   const [isEditing, setIsEditing] = useState(false);
@@ -110,7 +109,6 @@ const Users = () => {
       Phone_No: selected.Phone_No || "",
       Blood_Group: selected.Blood_Group || "",
       Last_Donation_Date: selected.Last_Donation_Date || "",
-      Degree: selected.Degree || "",
       Department_ID: selected.Department_ID || "",
       User_Type: selected.User_Type || "",
     });
@@ -214,7 +212,6 @@ const Users = () => {
           Phone_No: "",
           Blood_Group: "",
           Last_Donation_Date: "",
-          Degree: "",
           Department_ID: "",
         });
 
@@ -268,7 +265,6 @@ const Users = () => {
                 <th className="phone">Phone</th>
                 <th className="blood-group">Blood Group</th>
                 <th className="last-donation-date">Last Donation Date</th>
-                <th className="degree">Doctor Degree</th>
                 <th className="department-id">Doctor Department</th>
                 <th className="user-type">User Type</th>
                 <th className="action">Action</th>
@@ -290,7 +286,6 @@ const Users = () => {
                     <td className="last-donation-date">
                       {user.Last_Donation_Date}
                     </td>
-                    <td className="degree">{user.Degree}</td>
                     <td className="department-id">{user.Department_ID}</td>
                     <td className="user-type">{user.User_Type}</td>
                     <td className="action">
@@ -448,23 +443,6 @@ const Users = () => {
                                   })
                                 }
                               />
-                            </label>
-                            <br />
-                            <label>
-                              Doctor Degree
-                              <select
-                                value={newUserInfo.Degree}
-                                onChange={(e) =>
-                                  setNewUserInfo({
-                                    ...newUserInfo,
-                                    Degree: e.target.value,
-                                  })
-                                }
-                              >
-                                <option value="MD">MD</option>
-                                <option value="PhD">PhD</option>
-                                <option value="Other">Other</option>
-                              </select>
                             </label>
                             <br />
                             <label>
