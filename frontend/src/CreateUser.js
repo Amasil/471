@@ -39,10 +39,10 @@ const CreateUser = () => {
     setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     const selectedValue = e.target.value;
     const [department_id] = selectedValue.split(" - ");
-  
+
     // Use department_id as needed
     console.log("Selected Department ID:", department_id);
-  
+
     setUser((prev) => ({
       ...prev,
       // Add department_id to the user state
@@ -232,7 +232,7 @@ const CreateUser = () => {
               <br />
             </>
           )}
-          {["Doctor", "Admin"].includes(user.User_Type) && (
+          {["Doctor"].includes(user.User_Type) && (
             <>
               <label htmlFor="resgisterDoctorDegree" className="required">
                 Doctor Degree:
