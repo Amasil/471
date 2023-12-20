@@ -324,26 +324,24 @@ app.delete("/user", async (req, res) => {
 
   try {
     // Delete associated records first
-    console.log("0");
     // Delete from FEEDBACK table
     connection.query("DELETE FROM FEEDBACK WHERE User_ID = ?", [userId]);
-    console.log("1");
+    // Delete from DONATION_APPOINTMENT table
+    connection.query("DELETE FROM DONATION_APPOINTMENT WHERE USER_ID = ?", [
+      userId,
+    ]);
     // Delete from DONOR table
     connection.query("DELETE FROM DONOR WHERE Donor_ID = ?", [userId]);
-    console.log("2");
     // Delete from RECIPIENT table
     connection.query("DELETE FROM RECIPIENT WHERE Recipient_ID = ?", [userId]);
-
     // Delete from MEDICAL_STAFF table
     connection.query("DELETE FROM MEDICAL_STAFF WHERE Medical_ID = ?", [
       userId,
     ]);
-
     // Delete from GENERAL_PUBLIC table
     connection.query("DELETE FROM GENERAL_PUBLIC WHERE Public_ID = ?", [
       userId,
     ]);
-
     // Delete from USER table
     const deleteUserQuery = "DELETE FROM User WHERE User_ID = ?";
     const deleteResult = connection.query(deleteUserQuery, [userId]);
