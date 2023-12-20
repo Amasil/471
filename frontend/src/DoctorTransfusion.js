@@ -60,15 +60,15 @@ const TransfusionAppt = () => {
 
       // Continue with scheduling if the date is in the future
       const appointmentData = {
-        DOCTOR_ID: selectedDoctor,
-        RECIPIENT_ID: selectedRecipient,
+        Medical_ID: selectedDoctor,
+        Recipient_ID: selectedRecipient,
         Status: "Scheduled",
-        Appointment_Date: selectedDate,
-        Appointment_Time: selectedTime,
+        Transfusion_date: selectedDate,
+        Transfusion_time: selectedTime,
         Volume: selectedVolume,
-        Blood_Type: selectedBloodType,
+        Type: selectedBloodType,
       };
-
+      console.log(appointmentData);
       fetch("http://localhost:3000/schedule-transfusion-appointment", {
         method: "POST",
         headers: {
@@ -92,13 +92,13 @@ const TransfusionAppt = () => {
               ...prevAppointments,
               {
                 Appointment_ID: appointmentID,
-                DOCTOR_ID: selectedDoctor,
-                RECIPIENT_ID: selectedRecipient,
+                Medical_ID: selectedDoctor,
+                Recipient_ID: selectedRecipient,
                 Status: "Scheduled",
-                Appointment_Date: selectedDate,
-                Appointment_Time: selectedTime,
+                Transfusion_date: selectedDate,
+                Transfusion_Time: selectedTime,
                 Volume: selectedVolume,
-                Blood_Type: selectedBloodType,
+                Type: selectedBloodType,
               },
             ]);
 
@@ -249,10 +249,10 @@ const TransfusionAppt = () => {
               <tr key={appointment.Appointment_ID}>
                 <td>{appointment.Appointment_ID}</td>
                 <td>{appointment.Status}</td>
-                <td>{appointment.Appointment_Date.split("T")[0]}</td>
-                <td>{appointment.Appointment_Time}</td>
+                <td>{appointment.Transfusion_date.split("T")[0]}</td>
+                <td>{appointment.Transfusion_time}</td>
                 <td>{appointment.Volume}</td>
-                <td>{appointment.Blood_Type}</td>
+                <td>{appointment.Type}</td>
               </tr>
             ))}
           </tbody>

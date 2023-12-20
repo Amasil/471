@@ -760,17 +760,19 @@ app.post("/schedule-transfusion-appointment", (req, res) => {
     Volume,
     Type,
     Transfusion_date,
+    Appointment_Time,
     Recipient_ID,
   } = req.body;
 
+  console.log(req.body)
   // Validate input
   if (!Medical_ID || !Volume || !Type || !Transfusion_date || !Recipient_ID) {
+    console.log("Missing required fields");
     return res.status(400).json({ error: "Missing required fields" });
   }
 
   const insertQuery =
-    "INSERT INTO TRANSFUSION_APPOINTMENT (Medical_ID, Volume, Type, Transfusion_date, Recipient_ID) VALUES (?, ?, ?, ?, ?)";
-
+    "INSERT INTO TRANSFUSION_APPOINTMENT (MEDICAL_ID, Volume, Type, Transfusion_Date, Recipient_Id) VALUES (?, ?, ?, ?, ?)";
   connection.query(
     insertQuery,
     [Medical_ID, Volume, Type, Transfusion_date, Recipient_ID],
@@ -797,6 +799,28 @@ app.post("/schedule-transfusion-appointment", (req, res) => {
     }
   );
 });
+
+
+// Define the route to get all transfusion appointments for a specific doctor
+app.get("/get-transfusion-appointments/:doctorId", (req, res) => {
+  const doctorId = req.params.doctorId;
+
+  // Query to retrieve transfusion appointments for the specified doctor
+  const sql = `
+    SELECT * 
+    FROM TRANSFUSION_APPOINTMENT 
+    WHERE Medical_ID = ?`;
+
+  connection.query(sql, [doctorId], (err, results) => {
+    if (err) {
+      console.error("MySQL query error:", err);
+      res.status(500).send("Internal Server Error");
+    } else {
+      res.json(results);
+    }
+  });
+});
+
 
 // let departmentTableInitialized = false;
 
