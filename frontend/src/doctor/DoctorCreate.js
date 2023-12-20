@@ -31,17 +31,16 @@ const CreateUser = () => {
     Last_Donation_Date: "",
     User_Type: "Donor", // Set the default user type to "Donor"
   });
-
+  const [showPopup, setShowPopup] = useState(false);
   const handleChange = (e) => {
     setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-  const Navigate = useNavigate();
   const handleRegistration = async (e) => {
-    e.preventDefault();
-
     try {
       await axios.post("http://localhost:3000/user", user);
-      Navigate("/doctor-login");
+      setShowPopup(true);
+      window.alert(`Username ${user.Username} signed up!`);
+      setUser(user); // Reset the form fields
     } catch (error) {
       console.error(error);
     }
