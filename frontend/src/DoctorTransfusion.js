@@ -159,7 +159,7 @@ const TransfusionAppt = () => {
         <h1>Transfusion Appointment</h1>
       </header>
       <div className="recipient-selection-container">
-        <p>Select a recipient for the transfusion appointment:</p>
+        <p>Enter the recipient ID:</p>
         <input
           type="text"
           value={selectedRecipient}
@@ -186,7 +186,7 @@ const TransfusionAppt = () => {
         />
       </div>
       <div className="volume-selection-container">
-        <p>Select a volume for the transfusion appointment:</p>
+        <p>Volume needed for transfusion in mL:</p>
         <input
           type="text"
           value={selectedVolume}
@@ -195,7 +195,7 @@ const TransfusionAppt = () => {
         />
       </div>
       <div className="blood-type-selection-container">
-        <p>Select a blood type for the transfusion appointment:</p>
+        <p>Blood type:</p>
         <input
           type="text"
           value={selectedBloodType}
