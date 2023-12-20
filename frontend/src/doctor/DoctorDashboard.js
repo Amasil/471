@@ -5,6 +5,7 @@ import "./DoctorDashboard.css";
 import Inventory from "../Inventory.js";
 import DoctorCreate from "./DoctorCreate.js";
 import DoctorFeedback from "../DoctorFeedback.js";
+import DoctorTransfusion from "../DoctorTransfusion.js";
 
 const DoctorDashboard = () => {
   return (
@@ -16,6 +17,7 @@ const DoctorDashboard = () => {
           <Route path="/create" element={<DoctorCreate />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/doctor-feedback" element={<DoctorFeedback />} />
+          <Route path="/doctor-transfusion" element={<DoctorTransfusion />} />
         </Routes>
       </div>
     </div>

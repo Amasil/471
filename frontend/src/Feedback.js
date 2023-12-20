@@ -13,16 +13,16 @@ const Feedback = () => {
   };
 
   const submitFeedback = async () => {
-    // Prepare the data to be sent to the server
+    //prepare the data to be sent to the server
     const feedbackData = {
-      User_ID: userId, // Use the retrieved user ID
-      Feedback_Date: new Date().toISOString().split("T")[0], // Format as 'YYYY-MM-DD'
-      Details: "Additional details if needed", // Add details if applicable
+      User_ID: userId, //use retrieved user ID
+      Feedback_Date: new Date().toISOString().split("T")[0], //format as 'YYYY-MM-DD'
+      Details: "Additional details if needed", 
       Comment: feedbackText,
       Rating: rating,
     };
 
-    // Make a POST request to the server
+    //POST request to the server
     fetch("http://localhost:3000/submit-feedback", {
       method: "POST",
       headers: {
@@ -38,7 +38,6 @@ const Feedback = () => {
       })
       .then((data) => {
         alert("Your feedback has been recorded.");
-        // You can also perform any additional actions after successful submission
       })
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", error);

@@ -23,7 +23,7 @@ const DoctorSidebar = () => {
         Create User
       </Link>
       <Link
-        to="/doctor-dashboard/transfusion-appointment"
+        to="/doctor-dashboard/doctor-transfusion"
         className={
           location.pathname.startsWith("/doctor-dashboard/transfusion")
             ? "active"
