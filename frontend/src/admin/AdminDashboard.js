@@ -126,8 +126,6 @@ const Users = () => {
     try {
       // Check if there are changes to update
       if (JSON.stringify(updatedInfo) !== "{}") {
-        console.log("Updated user info:", JSON.stringify(updatedInfo));
-
         await axios.put(`http://localhost:3000/user/${User_ID}`, updatedInfo);
         console.log("User info updated successfully!");
 
@@ -235,7 +233,7 @@ const Users = () => {
           <tbody>
             {/* Empty rows */}
             <tr>
-              <td colSpan="11">User List</td>
+              <td colSpan="10">User List</td>
               <td colSpan="2" className="action">
                 <button
                   onClick={handleRefreshUsers}
@@ -305,7 +303,7 @@ const Users = () => {
                     selectedUser &&
                     selectedUser.User_ID === user.User_ID && (
                       <tr>
-                        <td colSpan="13">
+                        <td colSpan="12">
                           <div>
                             <h2>Edit User Information</h2>
                             {/* Input fields for editing user information */}

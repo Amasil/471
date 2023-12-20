@@ -60,6 +60,7 @@ app.get("/user", (req, res) => {
 // Update user information
 app.put("/user/:id", async (req, res) => {
   const userId = req.params.id;
+  console.log("User ID:", userId);
   const {
     First_Name,
     Middle_Name,
@@ -112,7 +113,7 @@ app.put("/user/:id", async (req, res) => {
       // Retrieve Department name based on Department_ID
       const departmentQuery =
         "SELECT Department_Name FROM DEPARTMENT WHERE Department_ID = ?";
-      const [departmentRows] = await connection.query(departmentQuery, [
+      const [departmentRows] = connection.query(departmentQuery, [
         Department_ID,
       ]);
 
@@ -127,7 +128,7 @@ app.put("/user/:id", async (req, res) => {
       if (Object.keys(updateFields).length > 0) {
         // Update user information in the database
         const updateQuery = "UPDATE User SET ? WHERE User_ID = ?";
-        await connection.query(updateQuery, [updateFields, userId]);
+        connection.query(updateQuery, [updateFields, userId]);
         console.log("User info updated successfully!");
       } else {
         console.log("No changes to update.");
@@ -774,7 +775,7 @@ app.post("/schedule-transfusion-appointment", (req, res) => {
 
   const insertQuery =
     "INSERT INTO TRANSFUSION_APPOINTMENT (MEDICAL_ID, Volume, Type, Transfusion_Date, Transfusion_Time, Recipient_Id) VALUES (?, ?, ?, ?, ?, ?)";
-  
+
   connection.query(
     insertQuery,
     [Medical_ID, Volume, Type, Transfusion_date, Transfusion_Time, Recipient_ID],
@@ -795,7 +796,7 @@ app.post("/schedule-transfusion-appointment", (req, res) => {
           Volume,
           Type,
           Transfusion_date,
-          Transfusion_Time, 
+          Transfusion_Time,
           Recipient_ID,
         },
       });
