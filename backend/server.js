@@ -57,11 +57,10 @@ app.get("/user", (req, res) => {
   });
 });
 
-// PUT route to update user information
-app.put("/user", async (req, res) => {
-  // Extracting user data from the request body
+// Update user information
+app.put('/user/:id', async (req, res) => {
+  const userId = req.params.id;
   const {
-    User_ID,
     First_Name,
     Middle_Name,
     Last_Name,
@@ -72,58 +71,78 @@ app.put("/user", async (req, res) => {
     Blood_Group,
     Last_Donation_Date,
     User_Type,
+    Degree,
+    Department_ID,
   } = req.body;
 
   try {
-    // Hash the password with automatically generated salt
-    // 10 is the number of salt rounds
-    const hashedPassword = await bcrypt.hash(Password, 10);
+    // Check if there are changes to update
+    if (Object.keys(req.body).length > 0) {
+      // Include User_Type in the payload
+      const updatedInfoWithUserType = { ...req.body, User_Type: req.body.User_Type };
 
-    // SQL query for updating user information
-    const updateQuery = `
-      UPDATE User
-      SET
-        First_Name = ?,
-        Middle_Name = ?,
-        Last_Name = ?,
-        Username = ?,
-        Password = ?,
-        Email = ?,
-        Phone_No = ?,
-        Blood_Group = ?,
-        Last_Donation_Date = ?,
-        User_Type = ?
-      WHERE User_ID = ?
-    `;
+      // If the user type is "Doctor," include Degree and Department_ID in the payload
+      const updatedInfoWithDoctorFields =
+        req.body.User_Type === 'Doctor'
+          ? { ...updatedInfoWithUserType, Degree, Department_ID }
+          : updatedInfoWithUserType;
 
-    const values = [
-      First_Name,
-      Middle_Name,
-      Last_Name,
-      Username,
-      hashedPassword,
-      Email,
-      Phone_No,
-      Blood_Group,
-      Last_Donation_Date,
-      User_Type,
-      User_ID,
-    ];
+      // Check if the Department_ID is valid by querying the DEPARTMENT table
+      if (updatedInfoWithDoctorFields.User_Type === 'Doctor' && updatedInfoWithDoctorFields.Department_ID) {
+        const [departmentRows] = connection.query('SELECT * FROM DEPARTMENT WHERE Department_ID = ?', [
+          updatedInfoWithDoctorFields.Department_ID,
+        ]);
 
-    // Executing the update query
-    connection.query(updateQuery, values, (err, results) => {
-      if (err) {
-        console.error("Error updating the database: " + err.stack);
-        res.status(500).send("Error updating the database.");
-        return;
+        if (departmentRows.length === 0) {
+          return res.status(400).json({ message: 'Invalid Department_ID' });
+        }
       }
-      res.send("User updated successfully.");
-    });
-  } catch (error) {
-    console.error("Error hashing password: " + error.stack);
-    res.status(500).send("Error hashing password.");
+
+      // Hash the password if provided
+      // if (Password !== undefined && Password !== '') {
+      //   const hashedPassword = await bcrypt.hash(Password, 10);
+      //   updatedInfoWithDoctorFields.Password = hashedPassword;
+      // }
+
+      // Build the update query dynamically based on non-empty fields
+      const updateFields = {};
+      if (First_Name !== undefined && First_Name !== '') updateFields.First_Name = First_Name;
+      if (Middle_Name !== undefined && Middle_Name !== '') updateFields.Middle_Name = Middle_Name;
+      if (Last_Name !== undefined && Last_Name !== '') updateFields.Last_Name = Last_Name;
+      if (Username !== undefined && Username !== '') updateFields.Username = Username;
+      if (Email !== undefined && Email !== '') updateFields.Email = Email;
+      if (Phone_No !== undefined && Phone_No !== '') updateFields.Phone_No = Phone_No;
+      if (Blood_Group !== undefined && Blood_Group !== '') updateFields.Blood_Group = Blood_Group;
+      if (Last_Donation_Date !== undefined && Last_Donation_Date !== '') updateFields.Last_Donation_Date = Last_Donation_Date;
+      if (Degree !== undefined && Degree !== '') updateFields.Degree = Degree;
+      if (Department_ID !== undefined && Department_ID !== '') updateFields.Department_ID = Department_ID;
+
+      // Hash the password if provided
+      if (Password !== undefined && Password !== '') {
+        const hashedPassword = await bcrypt.hash(Password, 10); // 10 is the cost factor, you can adjust it
+        updateFields.Password = hashedPassword;
+      }
+
+      // Check if there are fields to update
+      if (Object.keys(updateFields).length > 0) {
+        // Update user information in the database
+        connection.query('UPDATE User SET ? WHERE User_ID = ?', [updateFields, userId]);
+        console.log('User info updated successfully!');
+      } else {
+        console.log('No changes to update.');
+        res.status(400).json({ message: 'No changes to update.' });
+      }
+
+    } else {
+      console.log('No changes to update.');
+      res.status(400).json({ message: 'No changes to update.' });
+    }
+  } catch (err) {
+    console.error('Error updating user info:', err);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
 
 // POST route to insert a new user
 app.post("/user", async (req, res) => {
@@ -305,13 +324,13 @@ app.delete("/user", async (req, res) => {
 
   try {
     // Delete associated records first
-
+    console.log("0");
     // Delete from FEEDBACK table
     connection.query("DELETE FROM FEEDBACK WHERE User_ID = ?", [userId]);
-
+    console.log("1");
     // Delete from DONOR table
     connection.query("DELETE FROM DONOR WHERE Donor_ID = ?", [userId]);
-
+    console.log("2");
     // Delete from RECIPIENT table
     connection.query("DELETE FROM RECIPIENT WHERE Recipient_ID = ?", [userId]);
 
@@ -372,7 +391,6 @@ app.post("/login", async (req, res) => {
       Password: storedPassword,
       User_Type: storedUserType,
     } = results[0];
-
     try {
       // Use bcrypt.compare to compare entered password with stored hashed password
       const passwordMatch = await bcrypt.compare(password, storedPassword);

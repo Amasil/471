@@ -105,7 +105,7 @@ const Users = () => {
       Middle_Name: selected.Middle_Name || "",
       Last_Name: selected.Last_Name || "",
       Username: selected.Username || "",
-      Password: selected.Password || "",
+      Password: "",
       Email: selected.Email || "",
       Phone_No: selected.Phone_No || "",
       Blood_Group: selected.Blood_Group || "",
@@ -128,7 +128,9 @@ const Users = () => {
     try {
       // Check if there are changes to update
       if (JSON.stringify(updatedInfo) !== "{}") {
-        await axios.put(`http://localhost:3000/user`, newUserInfo);
+        console.log("Updated user info:", JSON.stringify(updatedInfo));
+
+        await axios.put(`http://localhost:3000/user/${User_ID}`, updatedInfo);
         console.log("User info updated successfully!");
 
         // Fetch updated user list from the server
@@ -420,6 +422,7 @@ const Users = () => {
                                   })
                                 }
                               >
+                                <option value="">Select</option>
                                 <option value="A+">A+</option>
                                 <option value="A-">A-</option>
                                 <option value="B+">B+</option>
@@ -431,12 +434,13 @@ const Users = () => {
                                 <option value="Unknown">Unknown</option>
                               </select>
                             </label>
+
                             <br />
                             <label>
                               Last Donation Date
                               <input
                                 type="date"
-                                value={newUserInfo.Last_Donation_Date}
+                                value={newUserInfo.Last_Donation_Date || ''}
                                 onChange={(e) =>
                                   setNewUserInfo({
                                     ...newUserInfo,
@@ -457,6 +461,7 @@ const Users = () => {
                                   })
                                 }
                               >
+                                <option value="">Select</option>
                                 <option value="MD">MD</option>
                                 <option value="PhD">PhD</option>
                                 <option value="Other">Other</option>
@@ -474,6 +479,7 @@ const Users = () => {
                                   })
                                 }
                               >
+                                <option value="">Select</option>
                                 <option value="1 - Cardiology">Cardiology</option>
                                 <option value="2 - Neurology">Neurology</option>
                                 <option value="3 - Orthopedics">Orthopedics</option>
@@ -493,12 +499,14 @@ const Users = () => {
                                   })
                                 }
                               >
+                                <option value="">Select</option>
                                 <option value="Donor">Donor</option>
-                                <option value="Receipient">Receipient</option>
+                                <option value="Recipient">Recipient</option>
                                 <option value="Doctor">Doctor</option>
                                 <option value="Recipient">Recipient</option>
                               </select>
                             </label>
+
                             <br />
                             <button onClick={handleChangeUserInfo}>
                               Save Changes
