@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 const RecipientAppointments = () => {
     const [appointments, setAppointments] = useState([]);
     const [recipientId, setRecipientId] = useState(""); 
