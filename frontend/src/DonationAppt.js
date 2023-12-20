@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
 
 const DonationAppt = () => {
-  const [selectedUser, setSelectedUser] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [appointments, setAppointments] = useState([]);
   const [selectedAppointmentID, setSelectedAppointmentID] = useState(null);
 
-  const handleUserChange = (event) => {
-    setSelectedUser(event.target.value);
-  };
-
+  // Retrieve USER_ID from localStorage
+  const storedUserID = localStorage.getItem("userId");
+  const [selectedUser, setSelectedUser] = useState(storedUserID || "");
   const handleDateChange = (event) => {
     setSelectedDate(event.target.value);
   };
@@ -41,7 +39,7 @@ const DonationAppt = () => {
         Appointment_Date: selectedDate,
         Appointment_Time: selectedTime,
       };
-
+      console.log("appointmentData:", appointmentData);
       fetch("http://localhost:3000/schedule-appointment", {
         method: "POST",
         headers: {
@@ -56,26 +54,32 @@ const DonationAppt = () => {
           return response.json();
         })
         .then((data) => {
-          setSelectedAppointmentID(data.Appointment_ID);
 
-          setAppointments((prevAppointments) => [
-            ...prevAppointments,
-            {
-              Appointment_ID: data.Appointment_ID,
-              USER_ID: selectedUser,
-              Status: "Scheduled",
-              Appointment_Date: selectedDate,
-              Appointment_Time: selectedTime,
-            },
-          ]);
+          const appointmentID = data && data.appointment && data.appointment.Appointment_ID;
+          console.log("appointmentID:", appointmentID);
+          if (appointmentID) {
+            setSelectedAppointmentID(appointmentID);
 
-          setSelectedUser("");
-          setSelectedDate("");
-          setSelectedTime("");
+            setAppointments((prevAppointments) => [
+              ...prevAppointments,
+              {
+                Appointment_ID: appointmentID,
+                USER_ID: selectedUser,
+                Status: "Scheduled",
+                Appointment_Date: selectedDate,
+                Appointment_Time: selectedTime,
+              },
+            ]);
 
-          alert(
-            `Appointment scheduled successfully. Appointment ID: ${data.Appointment_ID}`
-          );
+            setSelectedDate("");
+            setSelectedTime("");
+
+            alert(
+              `Appointment scheduled successfully. Appointment ID: ${appointmentID}`
+            );
+          } else {
+            throw new Error("Appointment ID not found in the response data");
+          }
         })
         .catch((error) => {
           console.error("There was a problem with the fetch operation:", error);
@@ -91,10 +95,13 @@ const DonationAppt = () => {
 
   const fetchAppointments = async () => {
     try {
-      const response = await fetch("http://localhost:3000/get-appointments");
+      // Fetch appointments for the specific user
+      const response = await fetch(`http://localhost:3000/get-appointments/${selectedUser}`);
+
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
+
       const data = await response.json();
       setAppointments(data);
     } catch (error) {
@@ -130,15 +137,6 @@ const DonationAppt = () => {
       <header>
         <h1>Donation Appointment</h1>
       </header>
-      <div className="user-selection-container">
-        <p>Enter your User_ID:</p>
-        <input
-          type="text"
-          value={selectedUser}
-          onChange={handleUserChange}
-          className="user-selector"
-        />
-      </div>
       <div className="date-selection-container">
         <p>Select a date for your donation appointment:</p>
         <input
@@ -159,7 +157,6 @@ const DonationAppt = () => {
       </div>
       <button
         disabled={
-          selectedUser.trim() === "" ||
           selectedDate.trim() === "" ||
           selectedTime.trim() === ""
         }
@@ -167,22 +164,21 @@ const DonationAppt = () => {
       >
         Schedule Appointment
       </button>
-      <button
-        disabled={selectedUser.trim() === ""}
-        onClick={handleFetchUserAppointments}
-      >
-        Fetch Appointments for User
-      </button>
       <div className="appointments-container">
-        <h2>Your Appointments:</h2>
-        <button className="refresh-button" onClick={handleRefresh}>
-          Refresh
-        </button>
+        <table>
+          <thead>
+            <tr>
+              <th colSpan="3">Your Appointments</th>
+              <th> <button className="refresh-button" onClick={handleRefresh} style={{ width: '100%' }}>
+                Refresh
+              </button></th>
+            </tr>
+          </thead>
+        </table>
         <table>
           <thead>
             <tr>
               <th>Appointment ID</th>
-              <th>User ID</th>
               <th>Status</th>
               <th>Appointment Date</th>
               <th>Appointment Time</th>
@@ -192,7 +188,6 @@ const DonationAppt = () => {
             {appointments.map((appointment) => (
               <tr key={appointment.Appointment_ID}>
                 <td>{appointment.Appointment_ID}</td>
-                <td>{appointment.USER_ID}</td>
                 <td>{appointment.Status}</td>
                 <td>{appointment.Appointment_Date.split("T")[0]}</td>
                 <td>{appointment.Appointment_Time}</td>

@@ -668,6 +668,11 @@ app.get("/get-feedback", (req, res) => {
 app.post("/schedule-appointment", (req, res) => {
   const { USER_ID, Status, Appointment_Date, Appointment_Time } = req.body;
 
+  // Validate input data
+  if (!USER_ID || !Status || !Appointment_Date || !Appointment_Time) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+
   const insertQuery =
     "INSERT INTO DONATION_APPOINTMENT (USER_ID, Status, Appointment_Date, Appointment_Time) VALUES (?, ?, ?, ?)";
 
@@ -682,20 +687,29 @@ app.post("/schedule-appointment", (req, res) => {
 
       const insertedAppointmentId = results.insertId;
       console.log("Appointment scheduled with ID:", insertedAppointmentId);
-      res.status(200).json({
+
+      res.status(201).json({
         message: "Appointment scheduled successfully",
-        Appointment_ID: insertedAppointmentId,
+        appointment: {
+          Appointment_ID: insertedAppointmentId,
+          USER_ID,
+          Status,
+          Appointment_Date,
+          Appointment_Time,
+        },
       });
     }
   );
 });
+
+
 
 // Define the route to get all appointments for a specific user
 app.get("/get-appointments/:userId", (req, res) => {
   const userId = req.params.userId;
 
   // Query to retrieve appointments for the specified user
-  const sql = `SELECT * FROM DONATION_APPOINTMENT WHERE USER_ID = ?`;
+  const sql = `SELECT Appointment_ID, Status, Appointment_Date, Appointment_Time FROM DONATION_APPOINTMENT WHERE USER_ID = ?`;
 
   connection.query(sql, [userId], (err, results) => {
     if (err) {
@@ -706,6 +720,7 @@ app.get("/get-appointments/:userId", (req, res) => {
     }
   });
 });
+
 // =================================================================================================================
 
 let departmentTableInitialized = false;
