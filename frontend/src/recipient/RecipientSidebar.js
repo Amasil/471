@@ -9,7 +9,7 @@ const RecipientSidebar = () => {
   return (
     <div className="recipient-sidebar">
       <Link
-        to="/-dashboard"
+        to="/recipient-dashboard"
         className={location.pathname === "/recipient-dashboard" ? "active" : ""}
       >
         Dashboard
