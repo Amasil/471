@@ -38,15 +38,15 @@ const CreateUser = () => {
   const handleChange = (e) => {
     setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     const selectedValue = e.target.value;
-    const [department_id] = selectedValue.split(" - ");
+    // const [department_id] = selectedValue.split(" - ");
 
-    // Use department_id as needed
-    console.log("Selected Department ID:", department_id);
+    // // Use department_id as needed
+    // console.log("Selected Department ID:", department_id);
 
     setUser((prev) => ({
       ...prev,
       // Add department_id to the user state
-      Department_ID: department_id,
+      // Department_ID: department_id,
     }));
   };
 
@@ -255,11 +255,11 @@ const CreateUser = () => {
                 onChange={handleChange}
                 name="Doctor_Department"
               >
-                <option value="1 - Cardiology">Cardiology</option>
-                <option value="2 - Neurology">Neurology</option>
-                <option value="3 - Orthopedics">Orthopedics</option>
-                <option value="4 - Radiology">Radiology</option>
-                <option value="5 - Other">Other</option>
+                <option value="1">Cardiology</option>
+                <option value="2">Neurology</option>
+                <option value="3">Orthopedics</option>
+                <option value="4">Radiology</option>
+                <option value="5">Other</option>
               </select>
               <br />
             </>

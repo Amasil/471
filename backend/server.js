@@ -41,24 +41,9 @@ connection.connect((err) => {
 app.get("/user", (req, res) => {
   // Query to fetch all users with degree and department information
   const query = `
-    SELECT 
-    U.User_ID, 
-    U.First_Name, 
-    U. Middle_Name, 
-    U.Last_Name, 
-    U.Username,
-    U.Password,
-    U.Email, 
-    U.Phone_No,
-    U.Blood_Group,
-    U.Last_Donation_Date, 
-    U.User_Type, 
-    MS.Degree, 
-    MS.Department_ID
-    FROM 
-      User U
-    JOIN 
-      MEDICAL_STAFF MS ON U.User_ID = MS.Medical_ID
+    SELECT U.*, MS.Degree, MS.Department_ID
+    FROM User U
+    LEFT JOIN MEDICAL_STAFF MS ON U.User_ID = MS.Medical_ID
   `;
 
   connection.query(query, (err, results) => {
@@ -73,7 +58,7 @@ app.get("/user", (req, res) => {
 });
 
 // Update user information
-app.put("/user/:id", async (req, res) => {
+app.put('/user/:id', async (req, res) => {
   const userId = req.params.id;
   const {
     First_Name,
@@ -94,19 +79,22 @@ app.put("/user/:id", async (req, res) => {
     // Check if there are changes to update
     if (Object.keys(req.body).length > 0) {
       // Include User_Type in the payload
-      const updatedInfoWithUserType = {
-        ...req.body,
-        User_Type: req.body.User_Type,
-      };
+      const updatedInfoWithUserType = { ...req.body, User_Type: req.body.User_Type };
+
+      // If the user type is "Doctor," include Degree and Department_ID in the payload
+      const updatedInfoWithDoctorFields =
+        req.body.User_Type === 'Doctor'
+          ? { ...updatedInfoWithUserType, Degree, Department_ID }
+          : updatedInfoWithUserType;
 
       // Hash the password if provided
-      if (Password !== undefined && Password !== "") {
+      if (Password !== undefined && Password !== '') {
         const hashedPassword = await bcrypt.hash(Password, 10);
-        updatedInfoWithUserType.Password = hashedPassword;
+        updatedInfoWithDoctorFields.Password = hashedPassword;
       }
 
-      // Build the update query for the User table dynamically based on non-empty fields
-      const updateUserFields = {
+      // Build the update query dynamically based on non-empty fields
+      const updateFields = {
         First_Name,
         Middle_Name,
         Last_Name,
@@ -116,47 +104,41 @@ app.put("/user/:id", async (req, res) => {
         Blood_Group,
         Last_Donation_Date,
         User_Type,
+        ...updatedInfoWithDoctorFields,
       };
 
-      // Check if there are fields to update in the User table
-      if (Object.keys(updateUserFields).length > 0) {
-        // Update user information in the User table
-        const updateUserQuery = "UPDATE User SET ? WHERE User_ID = ?";
-        connection.query(updateUserQuery, [updateUserFields, userId]);
-        console.log("User info updated successfully!");
+      // Retrieve Department name based on Department_ID
+      const departmentQuery = 'SELECT Department_Name FROM DEPARTMENT WHERE Department_ID = ?';
+      const [departmentRows] = await connection.query(departmentQuery, [Department_ID]);
+
+      if (departmentRows.length === 0) {
+        return res.status(400).json({ message: 'Invalid Department_ID' });
       }
 
-      // Build the update query for the MEDICAL_STAFF table dynamically based on non-empty fields
-      const updateMedicalStaffFields = {
-        Degree,
-        Department_ID,
-      };
+      const departmentName = departmentRows[0].Department_Name;
+      updateFields.Medical_Staff = departmentName;
 
-      // Check if there are fields to update in the MEDICAL_STAFF table
-      if (Object.keys(updateMedicalStaffFields).length > 0) {
-        // Update medical staff information in the MEDICAL_STAFF table
-        const updateMedicalStaffQuery =
-          "UPDATE MEDICAL_STAFF SET ? WHERE Medical_ID = ?";
-        connection.query(updateMedicalStaffQuery, [
-          updateMedicalStaffFields,
-          userId,
-        ]);
-        console.log("Medical staff info updated successfully!");
+      // Check if there are fields to update
+      if (Object.keys(updateFields).length > 0) {
+        // Update user information in the database
+        const updateQuery = 'UPDATE User SET ? WHERE User_ID = ?';
+        await connection.query(updateQuery, [updateFields, userId]);
+        console.log('User info updated successfully!');
+      } else {
+        console.log('No changes to update.');
+        res.status(400).json({ message: 'No changes to update.' });
       }
-
-      // Respond with a success message
-      res
-        .status(200)
-        .json({ message: "User and medical staff info updated successfully!" });
     } else {
-      console.log("No changes to update.");
-      res.status(400).json({ message: "No changes to update." });
+      console.log('No changes to update.');
+      res.status(400).json({ message: 'No changes to update.' });
     }
   } catch (err) {
-    console.error("Error updating user info:", err);
-    res.status(500).json({ message: "Internal Server Error" });
+    console.error('Error updating user info:', err);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
+
 
 // POST route to insert a new user
 app.post("/user", async (req, res) => {
@@ -751,85 +733,85 @@ app.get("/get-appointments/:userId", (req, res) => {
 
 // =================================================================================================================
 
-let departmentTableInitialized = false;
+// let departmentTableInitialized = false;
 
-if (!departmentTableInitialized) {
-  // Hardcoded data for DEPARTMENT table
-  const departmentData = [
-    {
-      Department_ID: 1,
-      Department_name: "Cardiology",
-      Location: "Hospital Wing A",
-      Contact_info: "123-456-7890",
-      Emergency_Protocol: "In case of emergency, call 911",
-    },
-    {
-      Department_ID: 2,
-      Department_name: "Neurology",
-      Location: "Hospital Wing B",
-      Contact_info: "987-654-3210",
-      Emergency_Protocol: "In case of emergency, call 911",
-    },
-    {
-      Department_ID: 3,
-      Department_name: "Orthopedics",
-      Location: "Hospital Wing C",
-      Contact_info: "555-555-5555",
-      Emergency_Protocol: "In case of emergency, call 911",
-    },
-    {
-      Department_ID: 4,
-      Department_name: "Radiology",
-      Location: "Hospital Wing D",
-      Contact_info: "111-222-3333",
-      Emergency_Protocol: "In case of emergency, call 911",
-    },
-    {
-      Department_ID: 5,
-      Department_name: "Other",
-      Location: "Hospital Wing E",
-      Contact_info: "999-888-7777",
-      Emergency_Protocol: "In case of emergency, call 911",
-    },
-  ];
+// if (!departmentTableInitialized) {
+//   // Hardcoded data for DEPARTMENT table
+//   const departmentData = [
+//     {
+//       Department_ID: 1,
+//       Department_name: "Cardiology",
+//       Location: "Hospital Wing A",
+//       Contact_info: "123-456-7890",
+//       Emergency_Protocol: "In case of emergency, call 911",
+//     },
+//     {
+//       Department_ID: 2,
+//       Department_name: "Neurology",
+//       Location: "Hospital Wing B",
+//       Contact_info: "987-654-3210",
+//       Emergency_Protocol: "In case of emergency, call 911",
+//     },
+//     {
+//       Department_ID: 3,
+//       Department_name: "Orthopedics",
+//       Location: "Hospital Wing C",
+//       Contact_info: "555-555-5555",
+//       Emergency_Protocol: "In case of emergency, call 911",
+//     },
+//     {
+//       Department_ID: 4,
+//       Department_name: "Radiology",
+//       Location: "Hospital Wing D",
+//       Contact_info: "111-222-3333",
+//       Emergency_Protocol: "In case of emergency, call 911",
+//     },
+//     {
+//       Department_ID: 5,
+//       Department_name: "Other",
+//       Location: "Hospital Wing E",
+//       Contact_info: "999-888-7777",
+//       Emergency_Protocol: "In case of emergency, call 911",
+//     },
+//   ];
 
-  // Initialize DEPARTMENT table with hardcoded data
-  const initializeDepartmentTable = () => {
-    const insertQuery = `
-      INSERT INTO DEPARTMENT (
-        Department_name,
-        Location,
-        Contact_info,
-        Emergency_Protocol
-      ) VALUES (?, ?, ?, ?)
-    `;
+//   // Initialize DEPARTMENT table with hardcoded data
+//   const initializeDepartmentTable = () => {
+//     const insertQuery = `
+//       INSERT INTO DEPARTMENT (
+//         Department_name,
+//         Location,
+//         Contact_info,
+//         Emergency_Protocol
+//       ) VALUES (?, ?, ?, ?)
+//     `;
 
-    for (const department of departmentData) {
-      const values = [
-        department.Department_name,
-        department.Location,
-        department.Contact_info,
-        department.Emergency_Protocol,
-      ];
+//     for (const department of departmentData) {
+//       const values = [
+//         department.Department_name,
+//         department.Location,
+//         department.Contact_info,
+//         department.Emergency_Protocol,
+//       ];
 
-      try {
-        // Execute the INSERT query
-        connection.query(insertQuery, values);
-        console.log(
-          `Department ${department.Department_name} inserted successfully.`
-        );
-      } catch (error) {
-        console.error(
-          `Error inserting department ${department.Department_name}: ${error.stack}`
-        );
-      }
-    }
+//       try {
+//         // Execute the INSERT query
+//         connection.query(insertQuery, values);
+//         console.log(
+//           `Department ${department.Department_name} inserted successfully.`
+//         );
+//       } catch (error) {
+//         console.error(
+//           `Error inserting department ${department.Department_name}: ${error.stack}`
+//         );
+//       }
+//     }
 
-    // Set the flag after all data is inserted
-    departmentTableInitialized = true;
-  };
-  initializeDepartmentTable();
-}
+//     // Set the flag after all data is inserted
+//     departmentTableInitialized = true;
+//   };
+//   initializeDepartmentTable();
+// }
 
 // Starting the server on port 3000
 app.listen(3000, () => {
