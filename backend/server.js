@@ -672,7 +672,7 @@ app.get("/get-feedback", (req, res) => {
       F.Feedback_ID,
       F.User_ID,
       F.Feedback_Date,
-      U.User_Name,
+      U.Username,
       F.Comment,
       F.Rating
     FROM

@@ -50,6 +50,8 @@ const Users = () => {
   // State variables for managing user data and editing state
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [doctorDegree, setDoctorDegree] = useState("");
+  const [department, setDepartment] = useState("");
   const [newUserInfo, setNewUserInfo] = useState({
     // Initial state for user information
     User_ID: "",
@@ -62,6 +64,8 @@ const Users = () => {
     Phone_No: "",
     Blood_Group: "",
     Last_Donation_Date: "",
+    Doctor_Degree: "",
+    Doctor_Department: "",
   });
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = useState(true);
@@ -108,6 +112,8 @@ const Users = () => {
       Phone_No: selected.Phone_No || "",
       Blood_Group: selected.Blood_Group || "",
       Last_Donation_Date: selected.Last_Donation_Date || "",
+      Doctor_Degree: selected.Doctor_Degree || "",
+      Doctor_Department: selected.Doctor_Department || "",
       User_Type: selected.User_Type || "",
     });
 
@@ -199,6 +205,8 @@ const Users = () => {
           Phone_No: "",
           Blood_Group: "",
           Last_Donation_Date: "",
+          Doctor_Degree: "",
+          Doctor_Department: "",
         });
 
         // Disable editing mode and reset button states
@@ -238,6 +246,8 @@ const Users = () => {
                 <th className="phone">Phone</th>
                 <th className="blood-group">Blood Group</th>
                 <th className="last-donation-date">Last Donation Date</th>
+                <td className="doctor-degree">Doctor Degree</td>
+                <td className="department">Doctor Department</td>
                 <th className="user-type">User Type</th>
                 <th className="action">Action</th>
               </tr>
@@ -258,6 +268,8 @@ const Users = () => {
                     <td className="last-donation-date">
                       {user.Last_Donation_Date}
                     </td>
+                    <td className="doctor-degree">{user.Doctor_Degree}</td>
+                    <td className="department">{user.Department}</td>
                     <td className="user-type">{user.User_Type}</td>
                     <td className="action">
                       {/* Button to select a user for editing */}
@@ -412,6 +424,44 @@ const Users = () => {
                                   })
                                 }
                               />
+                            </label>
+                            <br />
+                            <label>
+                              Doctor Degree
+                              <select
+                                value={newUserInfo.Doctor_Degree}
+                                onChange={(e) =>
+                                  setNewUserInfo({
+                                    ...newUserInfo,
+                                    Doctor_Degree: e.target.value,
+                                  })
+                                }
+                              >
+                                <option value="">Select Degree</option>
+                                <option value="MD">MD</option>
+                                <option value="PhD">PhD</option>
+                                <option value="Other">Other</option>
+                              </select>
+                            </label>
+                            <br />
+                            <label>
+                              Doctor Department
+                              <select
+                                value={newUserInfo.Doctor_Department}
+                                onChange={(e) =>
+                                  setNewUserInfo({
+                                    ...newUserInfo,
+                                    Doctor_Department: e.target.value,
+                                  })
+                                }
+                              >
+                                <option value="">Select Department</option>
+                                <option value="Cardiology">Cardiology</option>
+                                <option value="Neurology">Neurology</option>
+                                <option value="Orthopedics">Orthopedics</option>
+                                <option value="Radiology">Radiology</option>
+                                <option value="Other">Other</option>
+                              </select>
                             </label>
                             <br />
                             <label>
