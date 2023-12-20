@@ -78,16 +78,15 @@ const TransfusionAppt = () => {
       })
         .then((response) => {
           if (!response.ok) {
+            console.log(response);
             throw new Error("Network response was not ok");
           }
           return response.json();
         })
         .then((data) => {
-          const appointmentID =
-            data && data.appointment && data.appointment.Appointment_ID;
+          const appointmentID = data && data.appointment && data.appointment.Transfusion_ID;
           if (appointmentID) {
             setSelectedAppointmentID(appointmentID);
-
             setAppointments((prevAppointments) => [
               ...prevAppointments,
               {
@@ -101,6 +100,7 @@ const TransfusionAppt = () => {
                 Type: selectedBloodType,
               },
             ]);
+            console.log(appointments);
 
             setSelectedDate("");
             setSelectedTime("");
@@ -136,7 +136,7 @@ const TransfusionAppt = () => {
       const response = await fetch(
         `http://localhost:3000/get-transfusion-appointments/${selectedDoctor}`
       );
-
+      console.log(response);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }

@@ -39,7 +39,6 @@ const DonationAppt = () => {
         Appointment_Date: selectedDate,
         Appointment_Time: selectedTime,
       };
-      console.log("appointmentData:", appointmentData);
       fetch("http://localhost:3000/schedule-appointment", {
         method: "POST",
         headers: {
@@ -54,7 +53,6 @@ const DonationAppt = () => {
           return response.json();
         })
         .then((data) => {
-
           const appointmentID = data && data.appointment && data.appointment.Appointment_ID;
           console.log("appointmentID:", appointmentID);
           if (appointmentID) {
@@ -104,6 +102,7 @@ const DonationAppt = () => {
 
       const data = await response.json();
       setAppointments(data);
+      console.log("appointments:", data);
     } catch (error) {
       console.error("Error fetching appointments:", error);
     }
