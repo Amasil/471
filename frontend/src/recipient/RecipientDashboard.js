@@ -1,10 +1,9 @@
-//Recipient_Dashboard.js
-
 import React from "react";
 import { Routes, Route, useParams } from "react-router-dom";
 import RecipientSidebar from "./RecipientSidebar.js";
 import "./RecipientDashboard.css";
 import Feedback from "../Feedback.js";
+import RecipientAppointments from "../RecipientTransfusion.js";
 
 //change to functions for recipients - donation appointment switches to view transfusion appointment 
 const RecipientDashboard = () => {
@@ -15,6 +14,7 @@ const RecipientDashboard = () => {
         <Routes>
           <Route path="/" element={<DashboardHome />} />
           <Route path="/feedback" element={<Feedback />} />
+          <Route path="/appointment" element={<RecipientAppointments />} />
         </Routes>
       </div>
     </div>

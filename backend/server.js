@@ -733,6 +733,80 @@ app.get("/get-appointments/:userId", (req, res) => {
 
 // =================================================================================================================
 
+app.post("/schedule-transfusion-appointment", (req, res) => {
+  const {
+    Medical_ID, 
+    Recipient_ID,
+    Appointment_Date,
+    Appointment_Time,
+    Volume,
+    Blood_Type,
+  } = req.body;
+
+  //validate input
+  if (
+    !Medical_ID ||
+    !Recipient_ID ||
+    !Appointment_Date ||
+    !Appointment_Time ||
+    !Volume ||
+    !Blood_Type
+  ) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+
+  const insertQuery =
+    "INSERT INTO TRANSFUSION_APPOINTMENT (Medical_ID, Recipient_ID, Status, Appointment_Date, Appointment_Time, Volume, Type) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+  connection.query(
+    insertQuery,
+    [Medical_ID, Recipient_ID, Status, Appointment_Date, Appointment_Time, Volume, Blood_Type],
+    (err, results) => {
+      if (err) {
+        console.error("Error scheduling transfusion appointment:", err.message);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      const insertedAppointmentId = results.insertId;
+      console.log("Transfusion appointment scheduled with ID:", insertedAppointmentId);
+
+      res.status(201).json({
+        message: "Transfusion appointment scheduled successfully",
+        appointment: {
+          Transfusion_ID: insertedAppointmentId,
+          Medical_ID, 
+          Recipient_ID,
+          Appointment_Date,
+          Appointment_Time,
+          Volume,
+          Blood_Type,
+        },
+      });
+    }
+  );
+});
+
+//get all transfusion appointments for a specific doctor
+app.get("/get-transfusion-appointments/:doctorId", (req, res) => {
+  const doctorId = req.params.doctorId;
+
+  //retrieve transfusion appointments for the specified doctor
+  const sql = `
+    SELECT Appointment_ID, RECIPIENT_ID, Status, Appointment_Date, Appointment_Time, Volume, Blood_Type
+    FROM TRANSFUSION_APPOINTMENT
+    WHERE DOCTOR_ID = ?
+  `;
+
+  connection.query(sql, [doctorId], (err, results) => {
+    if (err) {
+      console.error("MySQL query error:", err);
+      res.status(500).send("Internal Server Error");
+    } else {
+      res.json(results);
+    }
+  });
+});
+
 // let departmentTableInitialized = false;
 
 // if (!departmentTableInitialized) {
