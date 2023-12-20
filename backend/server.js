@@ -735,32 +735,24 @@ app.get("/get-appointments/:userId", (req, res) => {
 
 app.post("/schedule-transfusion-appointment", (req, res) => {
   const {
-    Medical_ID, 
-    Recipient_ID,
-    Appointment_Date,
-    Appointment_Time,
+    Medical_ID,
     Volume,
-    Blood_Type,
+    Type,
+    Transfusion_date,
+    Recipient_ID,
   } = req.body;
 
-  //validate input
-  if (
-    !Medical_ID ||
-    !Recipient_ID ||
-    !Appointment_Date ||
-    !Appointment_Time ||
-    !Volume ||
-    !Blood_Type
-  ) {
+  // Validate input
+  if (!Medical_ID || !Volume || !Type || !Transfusion_date || !Recipient_ID) {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
   const insertQuery =
-    "INSERT INTO TRANSFUSION_APPOINTMENT (Medical_ID, Recipient_ID, Status, Appointment_Date, Appointment_Time, Volume, Type) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO TRANSFUSION_APPOINTMENT (Medical_ID, Volume, Type, Transfusion_date, Recipient_ID) VALUES (?, ?, ?, ?, ?)";
 
   connection.query(
     insertQuery,
-    [Medical_ID, Recipient_ID, Status, Appointment_Date, Appointment_Time, Volume, Blood_Type],
+    [Medical_ID, Volume, Type, Transfusion_date, Recipient_ID],
     (err, results) => {
       if (err) {
         console.error("Error scheduling transfusion appointment:", err.message);
@@ -774,37 +766,15 @@ app.post("/schedule-transfusion-appointment", (req, res) => {
         message: "Transfusion appointment scheduled successfully",
         appointment: {
           Transfusion_ID: insertedAppointmentId,
-          Medical_ID, 
-          Recipient_ID,
-          Appointment_Date,
-          Appointment_Time,
+          Medical_ID,
           Volume,
-          Blood_Type,
+          Type,
+          Transfusion_date,
+          Recipient_ID,
         },
       });
     }
   );
-});
-
-//get all transfusion appointments for a specific doctor
-app.get("/get-transfusion-appointments/:doctorId", (req, res) => {
-  const doctorId = req.params.doctorId;
-
-  //retrieve transfusion appointments for the specified doctor
-  const sql = `
-    SELECT Appointment_ID, RECIPIENT_ID, Status, Appointment_Date, Appointment_Time, Volume, Blood_Type
-    FROM TRANSFUSION_APPOINTMENT
-    WHERE DOCTOR_ID = ?
-  `;
-
-  connection.query(sql, [doctorId], (err, results) => {
-    if (err) {
-      console.error("MySQL query error:", err);
-      res.status(500).send("Internal Server Error");
-    } else {
-      res.json(results);
-    }
-  });
 });
 
 // let departmentTableInitialized = false;
