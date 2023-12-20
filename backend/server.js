@@ -90,9 +90,8 @@ app.put("/user", async (req, res) => {
     Blood_Group,
     Last_Donation_Date,
     User_Type,
-    Doctor_Department,
+    Degree,
     Department_ID,
-    Department_Name,
   } = req.body;
 
   try {
@@ -159,10 +158,8 @@ app.post("/user", async (req, res) => {
     Blood_Group,
     Last_Donation_Date,
     User_Type,
-    Doctor_Degree,
-    Doctor_Department,
+    Degree,
     Department_ID,
-    Department_Name,
   } = req.body;
 
   // Generate a random salt
@@ -292,7 +289,7 @@ app.post("/user", async (req, res) => {
             Alert_ID
           ) VALUES (?, ?, ?, ?)
         `;
-        const staffValues = [User_ID, Doctor_Degree, Department_ID, 2];
+        const staffValues = [User_ID, Degree, Department_ID, 2];
 
         connection.query(insertStaff, staffValues, (err, results) => {
           if (err) {
@@ -730,59 +727,85 @@ app.get("/get-appointments/:userId", (req, res) => {
 });
 // =================================================================================================================
 
-// Hardcoded data for DEPARTMENT table
-const departmentData = [
-  {
-    Department_ID: 1,
-    Department_name: 'Cardiology',
-    Location: 'Hospital Wing A',
-    Contact_info: '123-456-7890',
-    Emergency_Protocol: 'In case of emergency, call 911',
-  },
-  {
-    Department_ID: 2,
-    Department_name: 'Neurology',
-    Location: 'Hospital Wing B',
-    Contact_info: '987-654-3210',
-    Emergency_Protocol: 'In case of emergency, call 911',
-  },
-  // Add more departments as needed...
-];
+let departmentTableInitialized = false;
 
-// Initialize DEPARTMENT table with hardcoded data
-const initializeDepartmentTable = () => {
-  const insertQuery = `
-    INSERT INTO DEPARTMENT (
-    Department_ID,
-    Department_name,
-    Location,
-    Contact_info,
-    Emergency_Protocol
-    ) VALUES (?, ?, ?, ?, ?)
-  `;
+if (!departmentTableInitialized) {
+  // Hardcoded data for DEPARTMENT table
+  const departmentData = [
+    {
+      Department_ID: 1,
+      Department_name: "Cardiology",
+      Location: "Hospital Wing A",
+      Contact_info: "123-456-7890",
+      Emergency_Protocol: "In case of emergency, call 911",
+    },
+    {
+      Department_ID: 2,
+      Department_name: "Neurology",
+      Location: "Hospital Wing B",
+      Contact_info: "987-654-3210",
+      Emergency_Protocol: "In case of emergency, call 911",
+    },
+    {
+      Department_ID: 3,
+      Department_name: "Orthopedics",
+      Location: "Hospital Wing C",
+      Contact_info: "555-555-5555",
+      Emergency_Protocol: "In case of emergency, call 911",
+    },
+    {
+      Department_ID: 4,
+      Department_name: "Radiology",
+      Location: "Hospital Wing D",
+      Contact_info: "111-222-3333",
+      Emergency_Protocol: "In case of emergency, call 911",
+    },
+    {
+      Department_ID: 5,
+      Department_name: "Other",
+      Location: "Hospital Wing E",
+      Contact_info: "999-888-7777",
+      Emergency_Protocol: "In case of emergency, call 911",
+    },
+  ];
 
-  // Loop through the hardcoded data and execute INSERT queries
-  departmentData.forEach(async (department) => {
-    const values = [
-      department.Department_ID,
-      department.Department_name,
-      department.Location,
-      department.Contact_info,
-      department.Emergency_Protocol,
-    ];
+  // Initialize DEPARTMENT table with hardcoded data
+  const initializeDepartmentTable = () => {
+    const insertQuery = `
+      INSERT INTO DEPARTMENT (
+        Department_name,
+        Location,
+        Contact_info,
+        Emergency_Protocol
+      ) VALUES (?, ?, ?, ?)
+    `;
 
-    try {
-      // Execute the INSERT query
-      await connection.query(insertQuery, values);
-      console.log(`Department ${department.Department_name} inserted successfully.`);
-    } catch (error) {
-      console.error(`Error inserting department ${department.Department_name}: ${error.stack}`);
+    for (const department of departmentData) {
+      const values = [
+        department.Department_name,
+        department.Location,
+        department.Contact_info,
+        department.Emergency_Protocol,
+      ];
+
+      try {
+        // Execute the INSERT query
+        connection.query(insertQuery, values);
+        console.log(
+          `Department ${department.Department_name} inserted successfully.`
+        );
+      } catch (error) {
+        console.error(
+          `Error inserting department ${department.Department_name}: ${error.stack}`
+        );
+      }
     }
-  });
-};
 
-// Call the function to initialize the DEPARTMENT table
-initializeDepartmentTable();
+    // Set the flag after all data is inserted
+    departmentTableInitialized = true;
+  };
+  initializeDepartmentTable();
+}
 
 // Starting the server on port 3000
 app.listen(3000, () => {

@@ -38,17 +38,15 @@ const CreateUser = () => {
   const handleChange = (e) => {
     setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     const selectedValue = e.target.value;
-    const [department_id, department_name] = selectedValue.split(" - ");
-
-    // Use department_id and department_name as needed
+    const [department_id] = selectedValue.split(" - ");
+  
+    // Use department_id as needed
     console.log("Selected Department ID:", department_id);
-    console.log("Selected Department Name:", department_name);
-
+  
     setUser((prev) => ({
       ...prev,
-      // Add department_id and department_name to the user state
+      // Add department_id to the user state
       Department_ID: department_id,
-      Department_Name: department_name,
     }));
   };
 
